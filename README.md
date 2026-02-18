@@ -18,3 +18,9 @@ Developers who are comfortable with Python, git, and basic CI/CD, and want to ad
 | 6 | [Customising Safely](lessons/06-customizing-safely.md) | Extend Rhiza-managed projects without fighting the sync |
 
 Work through the lessons in order — each one builds on the last.
+
+## Appendices
+
+| # | Appendix | What you'll learn |
+|---|----------|-------------------|
+| A1 | [GitLab Users](lessons/A1-gitlab-users.md) | What changes when your project lives on GitLab instead of GitHub |
