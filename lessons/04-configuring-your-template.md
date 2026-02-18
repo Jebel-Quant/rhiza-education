@@ -10,7 +10,7 @@ repository: Jebel-Quant/rhiza
 ref: v0.8.0
 
 include: |
-  bundles:
+  templates:
     - core
     - github
     - tests
@@ -51,11 +51,11 @@ For production projects, always pin to a tag.
 
 The `include` block tells Rhiza which files to copy from the template repository. You can write it two ways:
 
-**Using bundles (recommended):**
+**Using templates (recommended):**
 
 ```yaml
 include: |
-  bundles:
+  templates:
     - core
     - github
     - tests
