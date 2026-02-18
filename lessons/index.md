@@ -14,6 +14,7 @@ Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, 
 | 5 | [Configuring Your Template](05-configuring-your-template.md) | Every field in `.rhiza/template.yml` explained |
 | 6 | [The Sync Lifecycle](06-the-sync-lifecycle.md) | What triggers a sync PR, what it contains, and how to handle it |
 | 7 | [Customising Safely](07-customizing-safely.md) | How to modify Rhiza-managed files without conflicting with future syncs |
+| 8 | [The Rhiza Ecosystem](08-the-rhiza-ecosystem.md) | rhiza-cli, rhiza-hooks, rhiza-tools, rhiza-go, rhiza-manager, and repo-monitor |
 
 ## Appendices
 
@@ -24,6 +25,6 @@ Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, 
 
 ## How to use this curriculum
 
-Work through lessons 0–7 in order on your first pass. Each lesson builds on the previous one. The appendices are self-contained — read whichever applies to your setup.
+Work through lessons 0–8 in order on your first pass. Each lesson builds on the previous one. The appendices are self-contained — read whichever applies to your setup.
 
 Lesson 4 is hands-on: you will need a GitHub (or GitLab) account and the ability to create a repository.

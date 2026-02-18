@@ -31,6 +31,7 @@ nav:
   - '5 — Configuring Your Template': 05-configuring-your-template.md
   - '6 — The Sync Lifecycle': 06-the-sync-lifecycle.md
   - '7 — Customising Safely': 07-customizing-safely.md
+  - '8 — The Rhiza Ecosystem': 08-the-rhiza-ecosystem.md
   - Appendices:
     - 'A1 — GitLab Users': A1-gitlab-users.md
     - 'A2 — Marimushka': A2-marimushka.md

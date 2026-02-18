@@ -20,6 +20,7 @@ Developers who are comfortable with Python, git, and basic CI/CD, and want to ad
 | 5 | [Configuring Your Template](lessons/05-configuring-your-template.md) | Anatomy of `template.yml`, bundles, include/exclude patterns |
 | 6 | [The Sync Lifecycle](lessons/06-the-sync-lifecycle.md) | How automated sync PRs work and how to review them |
 | 7 | [Customising Safely](lessons/07-customizing-safely.md) | Extend Rhiza-managed projects without fighting the sync |
+| 8 | [The Rhiza Ecosystem](lessons/08-the-rhiza-ecosystem.md) | rhiza-cli, rhiza-hooks, rhiza-tools, rhiza-go, rhiza-manager, and repo-monitor |
 
 Work through the lessons in order — each one builds on the last.
 

@@ -79,4 +79,6 @@ This pattern scales well: one place to manage standards, automated propagation t
 
 ---
 
-You have now completed the Rhiza training curriculum. Return to the [README](../README.md) for a full overview, or revisit any lesson you want to go deeper on.
+---
+
+**Next:** [Lesson 8 — The Rhiza Ecosystem](./08-the-rhiza-ecosystem.md)
