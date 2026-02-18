@@ -13,13 +13,13 @@ Developers who are comfortable with Python, git, and basic CI/CD, and want to ad
 | # | Lesson | What you'll learn |
 |---|--------|-------------------|
 | 0 | [uv and uvx](lessons/00-uv-and-uvx.md) | The package manager and tool runner that underpins the Rhiza ecosystem |
-| 0b | [Python Project Conventions](lessons/00b-python-project-conventions.md) | src layout, PEP 621 `pyproject.toml`, and `tests/` structure |
-| 1 | [Why Rhiza?](lessons/01-why-rhiza.md) | The problem with one-shot scaffolding and how Rhiza solves it |
-| 2 | [Core Concepts](lessons/02-core-concepts.md) | The key abstractions: template repos, materialisation, and the sync loop |
-| 3 | [Getting Started](lessons/03-getting-started.md) | Install Rhiza, initialise a project, and run your first materialise |
-| 4 | [Configuring Your Template](lessons/04-configuring-your-template.md) | Anatomy of `template.yml`, bundles, include/exclude patterns |
-| 5 | [The Sync Lifecycle](lessons/05-the-sync-lifecycle.md) | How automated sync PRs work and how to review them |
-| 6 | [Customising Safely](lessons/06-customizing-safely.md) | Extend Rhiza-managed projects without fighting the sync |
+| 1 | [Python Project Conventions](lessons/01-python-project-conventions.md) | src layout, PEP 621 `pyproject.toml`, and `tests/` structure |
+| 2 | [Why Rhiza?](lessons/02-why-rhiza.md) | The problem with one-shot scaffolding and how Rhiza solves it |
+| 3 | [Core Concepts](lessons/03-core-concepts.md) | The key abstractions: template repos, materialisation, and the sync loop |
+| 4 | [Getting Started](lessons/04-getting-started.md) | Install Rhiza, initialise a project, and run your first materialise |
+| 5 | [Configuring Your Template](lessons/05-configuring-your-template.md) | Anatomy of `template.yml`, bundles, include/exclude patterns |
+| 6 | [The Sync Lifecycle](lessons/06-the-sync-lifecycle.md) | How automated sync PRs work and how to review them |
+| 7 | [Customising Safely](lessons/07-customizing-safely.md) | Extend Rhiza-managed projects without fighting the sync |
 
 Work through the lessons in order — each one builds on the last.
 

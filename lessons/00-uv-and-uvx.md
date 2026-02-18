@@ -87,4 +87,4 @@ uv python install 3.12
 
 ---
 
-**Next:** [Lesson 1 — Why Rhiza?](./01-why-rhiza.md)
+**Next:** [Lesson 2 — Why Rhiza?](./02-why-rhiza.md)

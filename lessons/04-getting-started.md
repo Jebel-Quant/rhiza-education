@@ -1,4 +1,4 @@
-# Lesson 3 — Getting Started
+# Lesson 4 — Getting Started
 
 This lesson walks you through setting up Rhiza in a new project from scratch.
 
@@ -93,8 +93,8 @@ Your project now has:
 - **Pre-commit hooks** that enforce code quality on every commit.
 - **A sync workflow** (`rhiza_sync.yml`) that runs on a schedule and opens PRs when the template is updated.
 
-None of this required manual configuration. It came from the template, and it will stay up to date via the sync mechanism described in Lesson 5.
+None of this required manual configuration. It came from the template, and it will stay up to date via the sync mechanism described in Lesson 6.
 
 ---
 
-**Next:** [Lesson 4 — Configuring Your Template](./04-configuring-your-template.md)
+**Next:** [Lesson 5 — Configuring Your Template](./05-configuring-your-template.md)

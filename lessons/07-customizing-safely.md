@@ -1,4 +1,4 @@
-# Lesson 6 — Customising Safely
+# Lesson 7 — Customising Safely
 
 Rhiza manages a set of files in your project. This raises an obvious question: what if you need to change something that Rhiza controls? This lesson covers the right ways to customise a Rhiza-managed project without getting into conflicts with the sync.
 

@@ -96,4 +96,4 @@ The `renovate` bundle works on GitLab too. Renovate supports GitLab natively and
 
 ---
 
-**Back to:** [Lesson 6 — Customising Safely](./06-customizing-safely.md) | [README](../README.md)
+**Back to:** [Lesson 7 — Customising Safely](./07-customizing-safely.md) | [README](../README.md)

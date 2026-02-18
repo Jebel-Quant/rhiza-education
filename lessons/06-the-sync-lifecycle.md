@@ -1,4 +1,4 @@
-# Lesson 5 — The Sync Lifecycle
+# Lesson 6 — The Sync Lifecycle
 
 Once Rhiza is set up, you largely stop thinking about it — until a sync PR appears. This lesson explains what drives those PRs, what they contain, and how to handle them.
 
@@ -59,7 +59,7 @@ Occasionally a sync PR will have a merge conflict — usually because you edited
 2. **Keep your local version and exclude the file**: Add the file to `exclude:` in `template.yml` so future syncs skip it. Resolve the conflict in favour of your version.
 3. **Merge both sets of changes manually**: Edit the file to incorporate what you need from both the template and your local version, then mark the conflict resolved.
 
-The cleanest long-term approach is to avoid editing template-managed files directly. If you need custom behaviour, use the extension points described in Lesson 6.
+The cleanest long-term approach is to avoid editing template-managed files directly. If you need custom behaviour, use the extension points described in Lesson 7.
 
 ## Triggering sync manually
 
@@ -77,4 +77,4 @@ This writes updated files to disk. Review the changes with `git diff`, commit th
 
 ---
 
-**Next:** [Lesson 6 — Customising Safely](./06-customizing-safely.md)
+**Next:** [Lesson 7 — Customising Safely](./07-customizing-safely.md)

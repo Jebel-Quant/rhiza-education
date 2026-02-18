@@ -1,4 +1,4 @@
-# Lesson 2 — Core Concepts
+# Lesson 3 — Core Concepts
 
 Before you run any commands, it helps to have a clear picture of the moving parts. This lesson walks through the key abstractions in Rhiza.
 
@@ -37,7 +37,7 @@ exclude: |                        # Files to never overwrite locally
 ```
 
 - `repository` — any GitHub repo, not just the canonical Rhiza repo.
-- `ref` — a tag or branch name. Tags are recommended because they enable automated version tracking (more on this in Lesson 5).
+- `ref` — a tag or branch name. Tags are recommended because they enable automated version tracking (more on this in Lesson 6).
 - `templates` — named bundles of files to copy from the template (e.g. `core`, `github`, `tests`).
 - `include` — explicit glob patterns for files not covered by a bundle (optional).
 - `exclude` — glob patterns that protect files from being overwritten by the sync.
@@ -58,7 +58,7 @@ Listing every file path in `include` by hand gets tedious. Rhiza provides **bund
 | `presentation` | Slide generation from Markdown (via Marp) |
 | `renovate` | Automated dependency update config |
 
-You reference a bundle by its name instead of listing files individually. You will see how this works in `template.yml` in Lesson 4.
+You reference a bundle by its name instead of listing files individually. You will see how this works in `template.yml` in Lesson 5.
 
 The `core` bundle is required. All others are optional.
 
@@ -85,4 +85,4 @@ This gives you **opt-in updates**: the template can evolve quickly without forci
 
 ---
 
-**Next:** [Lesson 3 — Getting Started](./03-getting-started.md)
+**Next:** [Lesson 4 — Getting Started](./04-getting-started.md)
