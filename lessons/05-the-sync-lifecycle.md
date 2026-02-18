@@ -17,6 +17,8 @@ This GitHub Actions workflow runs on a schedule (typically weekly) and does the 
 
 You can also trigger it manually from the GitHub Actions tab.
 
+> **Note:** The sync workflow falls back to the built-in `GITHUB_TOKEN` if no `PAT_TOKEN` secret is set, and this is enough to open PRs for most file types. However, if the sync includes changes to files under `.github/workflows/`, GitHub requires a Personal Access Token — the default `GITHUB_TOKEN` cannot write workflow files. If your project uses the `github` bundle (which includes workflow files), set a `PAT_TOKEN` secret in your repository to avoid silent failures.
+
 **2. Renovate**
 
 Renovate watches the `ref: vX.Y.Z` line in your `.rhiza/template.yml`. When the template repository publishes a new tag, Renovate opens a PR that bumps your `ref` to the new version — for example, changing `ref: v0.7.1` to `ref: v0.8.0`.

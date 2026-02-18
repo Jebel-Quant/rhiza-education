@@ -55,7 +55,7 @@ Set these in your GitLab project under **Settings > CI/CD > Variables**:
 
 | Variable | Required for | Notes |
 |----------|-------------|-------|
-| `PAT_TOKEN` | Sync workflow | A Project or Group Access Token with `api` scope. The sync workflow uses this to create merge requests — GitLab does not have an equivalent of GitHub's automatic `GITHUB_TOKEN` for creating MRs from CI. |
+| `PAT_TOKEN` | Sync workflow | A Project or Group Access Token with `api` scope. Needed for two reasons: (1) GitLab's `CI_JOB_TOKEN` cannot create merge requests, so without PAT_TOKEN the sync runs but no MR is opened; (2) pushing changes to workflow files requires a PAT on both GitHub and GitLab — the default job token lacks that permission. |
 | `PYPI_TOKEN` | Release workflow | Your PyPI API token. GitLab uses token-based authentication; OIDC Trusted Publishing is a GitHub-only feature. |
 
 Mark both as **Masked** in the variable settings so they are not exposed in pipeline logs.
