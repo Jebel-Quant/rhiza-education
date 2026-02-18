@@ -9,12 +9,11 @@ The file `.rhiza/template.yml` is the single source of configuration for Rhiza i
 repository: Jebel-Quant/rhiza
 ref: v0.8.0
 
-include: |
-  templates:
-    - core
-    - github
-    - tests
-    - renovate
+templates:
+  - core
+  - github
+  - tests
+  - renovate
 
 exclude: |
   .rhiza/scripts/customisations/*
@@ -47,23 +46,22 @@ This pins your project to a specific version of the template. It accepts:
 
 For production projects, always pin to a tag.
 
-## `include` — file patterns
+## `templates` — named bundles
 
-The `include` block tells Rhiza which files to copy from the template repository. You can write it two ways:
-
-**Using templates (recommended):**
+The `templates` key lists the named bundles you want from the template repository:
 
 ```yaml
-include: |
-  templates:
-    - core
-    - github
-    - tests
+templates:
+  - core
+  - github
+  - tests
 ```
 
 Bundles are named groups of files defined in the template repo. They are the easiest way to get a meaningful set of files without enumerating every path.
 
-**Using explicit glob patterns:**
+## `include` — explicit file patterns
+
+For finer control, `include` accepts explicit glob patterns:
 
 ```yaml
 include: |
@@ -73,9 +71,9 @@ include: |
   pytest.ini
 ```
 
-Use explicit patterns when you want only specific files from a bundle, or when you want to include files that are not part of any bundle.
+Use `include` when you want only specific files that are not covered by a bundle, or when you want to pull in individual files on top of your `templates` selection.
 
-You can mix both styles in the same `include` block.
+You can use `templates` and `include` together in the same config.
 
 ## `exclude` — protecting local files
 
@@ -105,7 +103,7 @@ Here is a quick guide:
 | Slide decks from Markdown | `+ presentation` |
 | GitLab instead of GitHub | replace `github` with `gitlab` |
 
-When in doubt, start with `core`, `github`, and `tests`. You can always add bundles later — just add them to `include` and re-run `uvx rhiza materialize`.
+When in doubt, start with `core`, `github`, and `tests`. You can always add bundles later — just add them to `templates` and re-run `uvx rhiza materialize`.
 
 ## Updating the config
 

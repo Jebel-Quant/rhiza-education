@@ -27,20 +27,20 @@ Every downstream project has exactly one Rhiza config file. Here is what it look
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
 ref: v0.7.1                      # Which version of the template to use
 
-include: |
-  .github/workflows/*.yml
-  .pre-commit-config.yaml
-  ruff.toml
-  Makefile
+templates:                        # Named bundles to include
+  - core
+  - github
+  - tests
 
-exclude: |
+exclude: |                        # Files to never overwrite locally
   .rhiza/scripts/customisations/*
 ```
 
 - `repository` — any GitHub repo, not just the canonical Rhiza repo.
 - `ref` — a tag or branch name. Tags are recommended because they enable automated version tracking (more on this in Lesson 5).
-- `include` — glob patterns that select which files to copy from the template.
-- `exclude` — glob patterns that protect files from being overwritten even if they match `include`.
+- `templates` — named bundles of files to copy from the template (e.g. `core`, `github`, `tests`).
+- `include` — explicit glob patterns for files not covered by a bundle (optional).
+- `exclude` — glob patterns that protect files from being overwritten by the sync.
 
 ## Bundles
 
