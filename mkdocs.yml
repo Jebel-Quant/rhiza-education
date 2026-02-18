@@ -23,6 +23,7 @@ theme:
 
 nav:
   - Home: index.md
+  - '0 — uv and uvx': 00-uv-and-uvx.md
   - '1 — Why Rhiza?': 01-why-rhiza.md
   - '2 — Core Concepts': 02-core-concepts.md
   - '3 — Getting Started': 03-getting-started.md
