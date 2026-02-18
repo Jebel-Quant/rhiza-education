@@ -2,6 +2,8 @@
 
 Training for and with [Rhiza](https://github.com/Jebel-Quant/rhiza) — the living template system for Python projects.
 
+The companion website (rendered, searchable) is at **https://jebel-quant.github.io/rhiza-education/**.
+
 ## Who this is for
 
 Developers who are comfortable with Python, git, and basic CI/CD, and want to adopt Rhiza in a new or existing project.
@@ -10,6 +12,8 @@ Developers who are comfortable with Python, git, and basic CI/CD, and want to ad
 
 | # | Lesson | What you'll learn |
 |---|--------|-------------------|
+| 0 | [uv and uvx](lessons/00-uv-and-uvx.md) | The package manager and tool runner that underpins the Rhiza ecosystem |
+| 0b | [Python Project Conventions](lessons/00b-python-project-conventions.md) | src layout, PEP 621 `pyproject.toml`, and `tests/` structure |
 | 1 | [Why Rhiza?](lessons/01-why-rhiza.md) | The problem with one-shot scaffolding and how Rhiza solves it |
 | 2 | [Core Concepts](lessons/02-core-concepts.md) | The key abstractions: template repos, materialisation, and the sync loop |
 | 3 | [Getting Started](lessons/03-getting-started.md) | Install Rhiza, initialise a project, and run your first materialise |
