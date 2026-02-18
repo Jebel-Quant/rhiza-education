@@ -7,6 +7,7 @@ Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, 
 | Lesson | Title | What you will learn |
 |--------|-------|---------------------|
 | 0 | [uv and uvx](00-uv-and-uvx.md) | The package manager and tool runner that underpins the whole Rhiza ecosystem |
+| 0b | [Python Project Conventions](00b-python-project-conventions.md) | The src layout, pyproject.toml (PEP 621), and tests folder structure Rhiza assumes |
 | 1 | [Why Rhiza?](01-why-rhiza.md) | The one-shot scaffolding problem and how Rhiza solves it |
 | 2 | [Core Concepts](02-core-concepts.md) | Templates, projects, the sync mechanism, and key abstractions |
 | 3 | [Getting Started](03-getting-started.md) | Setting up Rhiza in a new project from scratch |
