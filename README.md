@@ -28,3 +28,4 @@ Work through the lessons in order — each one builds on the last.
 | # | Appendix | What you'll learn |
 |---|----------|-------------------|
 | A1 | [GitLab Users](lessons/A1-gitlab-users.md) | What changes when your project lives on GitLab instead of GitHub |
+| A2 | [Marimushka](lessons/A2-marimushka.md) | Publishing marimo notebooks as a static site with the `marimo` bundle |

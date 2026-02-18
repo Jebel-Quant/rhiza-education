@@ -20,6 +20,7 @@ Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, 
 | Appendix | Title | Audience |
 |----------|-------|----------|
 | A1 | [Rhiza on GitLab](A1-gitlab-users.md) | Teams whose projects live on GitLab rather than GitHub |
+| A2 | [Publishing Notebooks with Marimushka](A2-marimushka.md) | Exporting marimo notebooks to a static site with the `marimo` bundle |
 
 ## How to use this curriculum
 
