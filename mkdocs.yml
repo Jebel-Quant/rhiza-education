@@ -4,6 +4,9 @@ site_url: https://jebel-quant.github.io/rhiza-education/
 repo_url: https://github.com/Jebel-Quant/rhiza-education
 repo_name: Jebel-Quant/rhiza-education
 docs_dir: lessons
+copyright: >
+  Copyright &copy; 2025 Jebel-Quant &mdash;
+  <a href="/rhiza-education/impressum/">Impressum</a>
 
 theme:
   name: material
