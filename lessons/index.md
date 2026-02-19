@@ -6,6 +6,7 @@ Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, 
 
 | Lesson | Title | What you will learn |
 |--------|-------|---------------------|
+| Preamble | [CI/CD Concepts](preamble-cicd.md) | Pipelines, jobs, triggers, GitHub Actions, secrets, matrix builds — the vocabulary Rhiza assumes |
 | 0 | [uv and uvx](00-uv-and-uvx.md) | The package manager and tool runner that underpins the whole Rhiza ecosystem |
 | 1 | [Python Project Conventions](01-python-project-conventions.md) | The src layout, pyproject.toml (PEP 621), and tests folder structure Rhiza assumes |
 | 2 | [Why Rhiza?](02-why-rhiza.md) | The one-shot scaffolding problem and how Rhiza solves it |
@@ -26,6 +27,6 @@ Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, 
 
 ## How to use this curriculum
 
-Work through lessons 0–8 in order on your first pass. Each lesson builds on the previous one. The appendices are self-contained — read whichever applies to your setup.
+Start with the Preamble if CI/CD is new to you, then work through lessons 0–8 in order. Each lesson builds on the previous one. The appendices are self-contained — read whichever applies to your setup.
 
 Lesson 4 is hands-on: you will need a GitHub (or GitLab) account and the ability to create a repository.

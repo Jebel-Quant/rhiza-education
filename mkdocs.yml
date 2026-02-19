@@ -23,6 +23,7 @@ theme:
 
 nav:
   - Home: index.md
+  - 'Preamble — CI/CD Concepts': preamble-cicd.md
   - '0 — uv and uvx': 00-uv-and-uvx.md
   - '1 — Python Project Conventions': 01-python-project-conventions.md
   - '2 — Why Rhiza?': 02-why-rhiza.md
