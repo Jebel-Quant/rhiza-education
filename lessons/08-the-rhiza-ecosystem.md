@@ -112,4 +112,4 @@ At the top is the template repo (Rhiza or a fork of it). `rhiza-cli` is how you 
 
 ---
 
-**Next:** [Appendix A1 — GitLab Users](./A1-gitlab-users.md) | [README](../README.md)
+**Next:** [Lesson 9 — Further Reading](./09-further-reading.md)

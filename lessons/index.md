@@ -16,6 +16,7 @@ Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, 
 | 6 | [The Sync Lifecycle](06-the-sync-lifecycle.md) | What triggers a sync PR, what it contains, and how to handle it |
 | 7 | [Customising Safely](07-customizing-safely.md) | How to modify Rhiza-managed files without conflicting with future syncs |
 | 8 | [The Rhiza Ecosystem](08-the-rhiza-ecosystem.md) | rhiza-cli, rhiza-hooks, rhiza-tools, rhiza-go, rhiza-manager, and repo-monitor |
+| 9 | [Further Reading](09-further-reading.md) | Direct links to every doc file across the Rhiza repos, organised by topic |
 
 ## Appendices
 
