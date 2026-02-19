@@ -1,4 +1,4 @@
-# Lesson 1b — The Repo Zoo Problem
+# Preamble — The Repo Zoo Problem
 
 Before understanding what Rhiza does, you need to understand the problem it was built to solve. That problem is not "how do I start a new Python project" — there are plenty of tools for that. The problem is what happens *after* you have started many Python projects.
 
@@ -68,4 +68,4 @@ The result: a zoo that stays in sync without becoming a monoculture.
 
 ---
 
-**Next:** [Lesson 2 — Why Rhiza?](./02-why-rhiza.md)
+**Next:** [Lesson 1 — CI/CD Concepts](./01-cicd-concepts.md)

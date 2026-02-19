@@ -1,4 +1,4 @@
-# Lesson 1 — Python Project Conventions
+# Lesson 3 — Python Project Conventions
 
 Rhiza manages your project's infrastructure files — CI workflows, Makefile, linting config, and so on. It does not touch your application code, but it does assume your project follows standard Python conventions. This lesson describes what those conventions look like so that the tools Rhiza provides work out of the box.
 
@@ -133,4 +133,4 @@ You can still adopt Rhiza, but you may need to adjust some tool configuration. T
 
 ---
 
-**Next:** [Lesson 1b — The Repo Zoo Problem](./01b-the-repo-zoo.md)
+**Next:** [Lesson 4 — Why Rhiza?](./04-why-rhiza.md)

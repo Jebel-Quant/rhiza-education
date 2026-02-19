@@ -126,4 +126,4 @@ Rhiza is open source and welcomes contributions. The best entry points are:
 
 ---
 
-**Back to:** [Lesson 9 — Further Reading](./09-further-reading.md) | [README](../README.md)
+**Back to:** [Lesson 11 — Further Reading](./11-further-reading.md) | [README](../README.md)

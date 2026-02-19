@@ -23,18 +23,18 @@ theme:
 
 nav:
   - Home: index.md
-  - 'Preamble — CI/CD Concepts': preamble-cicd.md
-  - '0 — uv and uvx': 00-uv-and-uvx.md
-  - '1 — Python Project Conventions': 01-python-project-conventions.md
-  - '1b — The Repo Zoo Problem': 01b-the-repo-zoo.md
-  - '2 — Why Rhiza?': 02-why-rhiza.md
-  - '3 — Core Concepts': 03-core-concepts.md
-  - '4 — Getting Started': 04-getting-started.md
-  - '5 — Configuring Your Template': 05-configuring-your-template.md
-  - '6 — The Sync Lifecycle': 06-the-sync-lifecycle.md
-  - '7 — Customising Safely': 07-customizing-safely.md
-  - '8 — The Rhiza Ecosystem': 08-the-rhiza-ecosystem.md
-  - '9 — Further Reading': 09-further-reading.md
+  - 'Preamble — The Repo Zoo Problem': preamble-repo-zoo.md
+  - '1 — CI/CD Concepts': 01-cicd-concepts.md
+  - '2 — uv and uvx': 02-uv-and-uvx.md
+  - '3 — Python Project Conventions': 03-python-project-conventions.md
+  - '4 — Why Rhiza?': 04-why-rhiza.md
+  - '5 — Core Concepts': 05-core-concepts.md
+  - '6 — Getting Started': 06-getting-started.md
+  - '7 — Configuring Your Template': 07-configuring-your-template.md
+  - '8 — The Sync Lifecycle': 08-the-sync-lifecycle.md
+  - '9 — Customising Safely': 09-customizing-safely.md
+  - '10 — The Rhiza Ecosystem': 10-the-rhiza-ecosystem.md
+  - '11 — Further Reading': 11-further-reading.md
   - Appendices:
     - 'A1 — GitLab Users': A1-gitlab-users.md
     - 'A2 — Marimushka': A2-marimushka.md

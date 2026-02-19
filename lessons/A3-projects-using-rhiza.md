@@ -4,7 +4,7 @@ The best evidence that a tool works is that its authors use it themselves. This 
 
 ## The Rhiza tools themselves
 
-The most direct proof of Rhiza's value is that the Rhiza ecosystem tools are all managed by Rhiza. Each one has a `.rhiza/template.yml` and receives sync PRs when the template is updated — the same workflow you set up in Lesson 4.
+The most direct proof of Rhiza's value is that the Rhiza ecosystem tools are all managed by Rhiza. Each one has a `.rhiza/template.yml` and receives sync PRs when the template is updated — the same workflow you set up in Lesson 6.
 
 ### rhiza-cli
 
@@ -96,7 +96,7 @@ exclude:
   - ruff.toml
 ```
 
-The `exclude: ruff.toml` is the most instructive part of this config. The project has custom linting rules that diverge from Rhiza's defaults — rather than fighting the sync, the author added `ruff.toml` to `exclude:` and manages it locally. This is exactly the pattern described in [Lesson 7](./07-customizing-safely.md).
+The `exclude: ruff.toml` is the most instructive part of this config. The project has custom linting rules that diverge from Rhiza's defaults — rather than fighting the sync, the author added `ruff.toml` to `exclude:` and manages it locally. This is exactly the pattern described in [Lesson 9](./09-customizing-safely.md).
 
 ---
 
@@ -170,4 +170,4 @@ Not every project here uses the current config format or best practices — and 
 
 ---
 
-**Back to:** [Lesson 8 — The Rhiza Ecosystem](./08-the-rhiza-ecosystem.md) | [README](../README.md)
+**Back to:** [Lesson 10 — The Rhiza Ecosystem](./10-the-rhiza-ecosystem.md) | [README](../README.md)

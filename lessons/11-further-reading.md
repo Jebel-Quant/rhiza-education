@@ -1,4 +1,4 @@
-# Lesson 9 — Further Reading
+# Lesson 11 — Further Reading
 
 The Rhiza repos contain detailed documentation beyond what fits in this curriculum. This lesson maps that material by topic so you can go deeper on whatever is most relevant to you.
 
@@ -12,7 +12,7 @@ These live in [`rhiza-cli`](https://github.com/Jebel-Quant/rhiza-cli) alongside 
 
 | Document | What it covers |
 |----------|---------------|
-| [GETTING_STARTED.md](https://github.com/Jebel-Quant/rhiza-cli/blob/main/GETTING_STARTED.md) | End-to-end walkthrough of adopting Rhiza in a new project — the narrative version of Lesson 4 |
+| [GETTING_STARTED.md](https://github.com/Jebel-Quant/rhiza-cli/blob/main/GETTING_STARTED.md) | End-to-end walkthrough of adopting Rhiza in a new project — the narrative version of Lesson 6 |
 | [CLI.md](https://github.com/Jebel-Quant/rhiza-cli/blob/main/CLI.md) | One-page command reference: every flag and subcommand with examples |
 | [USAGE.md](https://github.com/Jebel-Quant/rhiza-cli/blob/main/USAGE.md) | Practical tutorials and real-world usage patterns, including edge cases |
 
@@ -105,4 +105,4 @@ These live in `.rhiza/docs/` and are synced into every Rhiza-managed project via
 
 ---
 
-**Back to:** [Lesson 8 — The Rhiza Ecosystem](./08-the-rhiza-ecosystem.md) | [README](../README.md)
+**Back to:** [Lesson 10 — The Rhiza Ecosystem](./10-the-rhiza-ecosystem.md) | [README](../README.md)

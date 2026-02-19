@@ -110,4 +110,4 @@ The published index page links to all of them. Readers can open notebooks in edi
 
 ---
 
-**Back to:** [Lesson 7 — Customising Safely](./07-customizing-safely.md) | [README](../README.md)
+**Back to:** [Lesson 9 — Customising Safely](./09-customizing-safely.md) | [README](../README.md)

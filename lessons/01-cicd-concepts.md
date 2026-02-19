@@ -1,6 +1,6 @@
-# Preamble — CI/CD Concepts
+# Lesson 1 — CI/CD Concepts
 
-Rhiza exists to manage the files that make up a project's CI/CD pipeline. To get the most out of it, you need a solid mental model of what CI/CD is and how the pieces fit together. This preamble covers the concepts you will encounter throughout the curriculum.
+Rhiza exists to manage the files that make up a project's CI/CD pipeline. To get the most out of it, you need a solid mental model of what CI/CD is and how the pieces fit together. This lesson covers the concepts you will encounter throughout the curriculum.
 
 If you already work with GitHub Actions daily, skim this as a vocabulary check. If you are newer to CI/CD, read it carefully — the rest of the lessons will assume it.
 
@@ -189,4 +189,4 @@ When you run `uvx rhiza materialize`, you get a fully wired CI/CD pipeline commi
 
 ---
 
-**Next:** [Lesson 0 — uv and uvx](./00-uv-and-uvx.md)
+**Next:** [Lesson 2 — uv and uvx](./02-uv-and-uvx.md)

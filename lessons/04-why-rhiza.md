@@ -1,4 +1,4 @@
-# Lesson 2 — Why Rhiza?
+# Lesson 4 — Why Rhiza?
 
 ## The one-shot scaffolding problem
 
@@ -47,4 +47,4 @@ Once Rhiza is set up:
 
 ---
 
-**Next:** [Lesson 3 — Core Concepts](./03-core-concepts.md)
+**Next:** [Lesson 5 — Core Concepts](./05-core-concepts.md)

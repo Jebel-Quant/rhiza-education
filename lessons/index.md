@@ -6,18 +6,18 @@ Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, 
 
 | Lesson | Title | What you will learn |
 |--------|-------|---------------------|
-| Preamble | [CI/CD Concepts](preamble-cicd.md) | Pipelines, jobs, triggers, GitHub Actions, secrets, matrix builds — the vocabulary Rhiza assumes |
-| 0 | [uv and uvx](00-uv-and-uvx.md) | The package manager and tool runner that underpins the whole Rhiza ecosystem |
-| 1 | [Python Project Conventions](01-python-project-conventions.md) | The src layout, pyproject.toml (PEP 621), and tests folder structure Rhiza assumes |
-| 1b | [The Repo Zoo Problem](01b-the-repo-zoo.md) | What goes wrong when you have many repos, why template systems can't fix it, and when Rhiza was born |
-| 2 | [Why Rhiza?](02-why-rhiza.md) | The one-shot scaffolding problem and how Rhiza solves it |
-| 3 | [Core Concepts](03-core-concepts.md) | Templates, projects, the sync mechanism, and key abstractions |
-| 4 | [Getting Started](04-getting-started.md) | Setting up Rhiza in a new project from scratch |
-| 5 | [Configuring Your Template](05-configuring-your-template.md) | Every field in `.rhiza/template.yml` explained |
-| 6 | [The Sync Lifecycle](06-the-sync-lifecycle.md) | What triggers a sync PR, what it contains, and how to handle it |
-| 7 | [Customising Safely](07-customizing-safely.md) | How to modify Rhiza-managed files without conflicting with future syncs |
-| 8 | [The Rhiza Ecosystem](08-the-rhiza-ecosystem.md) | rhiza-cli, rhiza-hooks, rhiza-tools, rhiza-go, rhiza-manager, and repo-monitor |
-| 9 | [Further Reading](09-further-reading.md) | Direct links to every doc file across the Rhiza repos, organised by topic |
+| Preamble | [The Repo Zoo Problem](preamble-repo-zoo.md) | What goes wrong when you have many repos, why template systems can't fix it, and when Rhiza was born |
+| 1 | [CI/CD Concepts](01-cicd-concepts.md) | Pipelines, jobs, triggers, GitHub Actions, secrets, matrix builds — the vocabulary Rhiza assumes |
+| 2 | [uv and uvx](02-uv-and-uvx.md) | The package manager and tool runner that underpins the whole Rhiza ecosystem |
+| 3 | [Python Project Conventions](03-python-project-conventions.md) | The src layout, pyproject.toml (PEP 621), and tests folder structure Rhiza assumes |
+| 4 | [Why Rhiza?](04-why-rhiza.md) | The one-shot scaffolding problem and how Rhiza solves it |
+| 5 | [Core Concepts](05-core-concepts.md) | Templates, projects, the sync mechanism, and key abstractions |
+| 6 | [Getting Started](06-getting-started.md) | Setting up Rhiza in a new project from scratch |
+| 7 | [Configuring Your Template](07-configuring-your-template.md) | Every field in `.rhiza/template.yml` explained |
+| 8 | [The Sync Lifecycle](08-the-sync-lifecycle.md) | What triggers a sync PR, what it contains, and how to handle it |
+| 9 | [Customising Safely](09-customizing-safely.md) | How to modify Rhiza-managed files without conflicting with future syncs |
+| 10 | [The Rhiza Ecosystem](10-the-rhiza-ecosystem.md) | rhiza-cli, rhiza-hooks, rhiza-tools, rhiza-go, rhiza-manager, and repo-monitor |
+| 11 | [Further Reading](11-further-reading.md) | Direct links to every doc file across the Rhiza repos, organised by topic |
 
 ## Appendices
 
@@ -30,6 +30,6 @@ Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, 
 
 ## How to use this curriculum
 
-Start with the Preamble if CI/CD is new to you, then work through lessons 0–8 in order. Each lesson builds on the previous one. The appendices are self-contained — read whichever applies to your setup.
+Start with the Preamble if the repo-at-scale problem is new to you, then work through lessons 1–11 in order. Each lesson builds on the previous one. The appendices are self-contained — read whichever applies to your setup.
 
-Lesson 4 is hands-on: you will need a GitHub (or GitLab) account and the ability to create a repository.
+Lesson 6 is hands-on: you will need a GitHub (or GitLab) account and the ability to create a repository.

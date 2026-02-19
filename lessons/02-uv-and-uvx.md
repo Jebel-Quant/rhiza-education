@@ -1,4 +1,4 @@
-# Lesson 0 — uv and uvx
+# Lesson 2 — uv and uvx
 
 Rhiza is distributed as a `uvx` tool. Before you can run `uvx rhiza`, you need to understand what `uv` and `uvx` are and why the Rhiza ecosystem uses them.
 
@@ -87,4 +87,4 @@ uv python install 3.12
 
 ---
 
-**Next:** [Lesson 2 — Why Rhiza?](./02-why-rhiza.md)
+**Next:** [Lesson 3 — Python Project Conventions](./03-python-project-conventions.md)

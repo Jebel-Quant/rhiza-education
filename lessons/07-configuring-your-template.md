@@ -1,4 +1,4 @@
-# Lesson 5 — Configuring Your Template
+# Lesson 7 — Configuring Your Template
 
 The file `.rhiza/template.yml` is the single source of configuration for Rhiza in your project. This lesson explains each field and the decisions you will make when setting it up.
 
@@ -117,4 +117,4 @@ This applies any changes — new bundles, updated include/exclude patterns, or a
 
 ---
 
-**Next:** [Lesson 6 — The Sync Lifecycle](./06-the-sync-lifecycle.md)
+**Next:** [Lesson 8 — The Sync Lifecycle](./08-the-sync-lifecycle.md)
