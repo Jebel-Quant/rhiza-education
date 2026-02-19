@@ -1,4 +1,4 @@
-MARP    := uvx --from marp-cli marp
+MARP    := npx --yes @marp-team/marp-cli
 SRC     := rhiza-intro.md
 OUT_DIR := dist
 
