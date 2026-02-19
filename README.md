@@ -15,6 +15,7 @@ Developers who are comfortable with Python, git, and basic CI/CD, and want to ad
 | — | [Preamble — CI/CD Concepts](lessons/preamble-cicd.md) | Pipelines, jobs, triggers, GitHub Actions, matrix builds — the vocabulary the curriculum assumes |
 | 0 | [uv and uvx](lessons/00-uv-and-uvx.md) | The package manager and tool runner that underpins the Rhiza ecosystem |
 | 1 | [Python Project Conventions](lessons/01-python-project-conventions.md) | src layout, PEP 621 `pyproject.toml`, and `tests/` structure |
+| 1b | [The Repo Zoo Problem](lessons/01b-the-repo-zoo.md) | What goes wrong at scale, why template systems can't fix it, and when Rhiza was born |
 | 2 | [Why Rhiza?](lessons/02-why-rhiza.md) | The problem with one-shot scaffolding and how Rhiza solves it |
 | 3 | [Core Concepts](lessons/03-core-concepts.md) | The key abstractions: template repos, materialisation, and the sync loop |
 | 4 | [Getting Started](lessons/04-getting-started.md) | Install Rhiza, initialise a project, and run your first materialise |

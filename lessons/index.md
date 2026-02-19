@@ -9,6 +9,7 @@ Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, 
 | Preamble | [CI/CD Concepts](preamble-cicd.md) | Pipelines, jobs, triggers, GitHub Actions, secrets, matrix builds — the vocabulary Rhiza assumes |
 | 0 | [uv and uvx](00-uv-and-uvx.md) | The package manager and tool runner that underpins the whole Rhiza ecosystem |
 | 1 | [Python Project Conventions](01-python-project-conventions.md) | The src layout, pyproject.toml (PEP 621), and tests folder structure Rhiza assumes |
+| 1b | [The Repo Zoo Problem](01b-the-repo-zoo.md) | What goes wrong when you have many repos, why template systems can't fix it, and when Rhiza was born |
 | 2 | [Why Rhiza?](02-why-rhiza.md) | The one-shot scaffolding problem and how Rhiza solves it |
 | 3 | [Core Concepts](03-core-concepts.md) | Templates, projects, the sync mechanism, and key abstractions |
 | 4 | [Getting Started](04-getting-started.md) | Setting up Rhiza in a new project from scratch |

@@ -133,4 +133,4 @@ You can still adopt Rhiza, but you may need to adjust some tool configuration. T
 
 ---
 
-**Next:** [Lesson 2 — Why Rhiza?](./02-why-rhiza.md)
+**Next:** [Lesson 1b — The Repo Zoo Problem](./01b-the-repo-zoo.md)
