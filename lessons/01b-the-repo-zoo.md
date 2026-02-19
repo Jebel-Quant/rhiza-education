@@ -48,9 +48,11 @@ Template systems treat configuration as something you set up once. The repo zoo 
 
 ## When Rhiza was born
 
-Rhiza was created in **December 2025** at Jebel-Quant, a quantitative asset management firm. The repo was initialised on December 13, 2025; the first public release (v0.0.1) followed three days later on December 16.
+The idea for Rhiza came directly from lived experience. The author spent time embedded in the engineering organisation of a **large sovereign wealth fund** — one of the largest pools of managed capital in the world — and had full, unfiltered exposure to what a wild repo zoo looks like at institutional scale. Dozens of Python repositories, each maintained by different teams, each with its own vintage of CI configuration, its own pinned tool versions, its own informal conventions that had diverged from whatever standard had existed when the repo was created. The problem was not that people were careless. It was structural: there was no mechanism to keep the repositories aligned as the organisation's standards evolved.
 
-The context was exactly the repo zoo described above: a growing collection of Python projects for quantitative research and trading — backtesting frameworks, performance analytics, data pipelines, interactive notebooks — each of which needed consistent CI/CD workflows, linting rules, testing infrastructure, and release tooling. Keeping them aligned manually was not working.
+That experience made clear that the problem was not unique to any one team or any one firm. It is the default outcome whenever a growing engineering organisation relies on one-shot scaffolding. The question was whether there was a better approach.
+
+Rhiza was created in **December 2025** at Jebel-Quant, a quantitative asset management firm. The repo was initialised on December 13, 2025; the first public release (v0.0.1) followed three days later on December 16.
 
 The name is from the ancient Greek **ῥίζα** (*ree-ZAH*), meaning *root*. The metaphor is intentional: a root system connects and sustains many things from a single source, invisibly, continuously. That is what Rhiza does for your repos.
 
