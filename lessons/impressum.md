@@ -1,35 +1,14 @@
-# Impressum
+# Legal Notice
 
-Legal notice pursuant to § 5 TMG (Telemediengesetz) and § 55 Abs. 2 RStV.
+## Publisher
 
-## Responsible for this website
-
-**[Full legal name of person or entity]**
-[Street and number]
-[Postcode and city]
-[Country]
+**Jebel Quant Research**
+Abu Dhabi, United Arab Emirates
 
 ## Contact
 
-Email: [contact e-mail address]
-
-## Responsible for editorial content
-
-Pursuant to § 55 Abs. 2 RStV:
-
-[Name]
-[Address as above]
-
-## Company registration
-
-Registered at: [Registration court, e.g. Amtsgericht München]
-Registration number: [e.g. HRB 123456]
-
-## VAT identification number
-
-Pursuant to § 27a Umsatzsteuergesetz:
-[VAT ID, e.g. DE 123 456 789]
+Email: [contact@jqr.ae](mailto:contact@jqr.ae)
 
 ---
 
-*This site is published by [Jebel-Quant](https://github.com/Jebel-Quant) and serves educational purposes only. The content does not constitute financial or investment advice.*
+*This site serves educational purposes only. The content does not constitute financial or investment advice.*
