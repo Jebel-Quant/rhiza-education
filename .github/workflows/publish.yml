@@ -22,6 +22,9 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v7
 
+      - name: Build slides
+        run: npx --yes @marp-team/marp-cli --html --output lessons/slides/rhiza-intro.html slides/rhiza-intro.md
+
       - name: Build site
         run: uvx --with mkdocs-material mkdocs build
 
