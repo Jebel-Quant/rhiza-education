@@ -101,17 +101,9 @@ cookiecutter gh:my-org/python-template
 
 ---
 
-## The Repo Zoo
-
-> A collection of repositories that started identical and have since become
-> a collection of unique, inconsistent snowflakes —
-> each requiring its own maintenance.
-
-Every change made to one repo is a change **not** made to the others.
-
----
-
 ## The real cost
+
+> Every change made to one repo is a change **not** made to the others.
 
 **CVE in a GitHub Actions runner**
 You need to update 17 repos. You do 12, get distracted. Five months later, five are still vulnerable.
@@ -154,21 +146,9 @@ But configuration is not a one-time decision — it is ongoing infrastructure.
 
 ---
 
-## Where Rhiza came from
-
-The idea came from lived experience at a **large sovereign wealth fund** — one of the largest pools of managed capital in the world.
-
-Full, unfiltered exposure to a wild repo zoo at institutional scale:
-dozens of Python repositories, multiple teams, different vintages, no mechanism to stay aligned.
-
-The problem was not carelessness. It was **structural**: one-shot scaffolding is the default, and it produces drift by design.
-
-> Rhiza was created in **December 2025** at Jebel-Quant.
-> The name: ancient Greek **ῥίζα** *(ree-ZAH)* — *root*.
-
----
-
 ## The insight
+
+Born from experience at a **large sovereign wealth fund**: dozens of Python repos, multiple teams, no mechanism to stay aligned. The problem was not carelessness — it was **structural**. One-shot scaffolding produces drift by design.
 
 **Treat the update as a pull request, not a push.**
 
@@ -176,8 +156,7 @@ Instead of forcing changes into downstream repos, Rhiza **opens a PR** in each o
 
 - Clean diff of what changed in the template
 - Owner reviews, adapts if necessary, merges
-- Opt-in at the individual PR level
-- **Systematic** at the organisation level — every repo gets the PR, nothing is missed
+- Opt-in per repo — **systematic** across the organisation
 
 The sync is not a bulldozer. It is a proposal.
 
@@ -262,19 +241,22 @@ On-demand: `make sync` or `uvx rhiza materialize`.
 
 ---
 
-## Version pinning + Renovate
+## Renovate — closing the loop
+
+Without Renovate, the `ref:` pin is frozen. Projects drift behind the template silently.
 
 ```
-ref: v0.7.1   →  Renovate opens PR  →  ref: v0.8.0
+template ships v0.9.0
+      │
+      ▼
+Renovate opens PR: ref: v0.8.0 → v0.9.0   (one line diff)
+      │
+      ▼  (you merge)
+sync workflow runs → updated CI files, linting config, etc.
 ```
 
-- `ref:` pins your project to a specific template version
-- **Renovate** watches for new tags on the template repo
-- When a new tag is published, Renovate opens a PR bumping your `ref`
-- You review the Renovate PR and merge it
-- The next scheduled sync applies whatever changed in that version
-
-**Opt-in updates** — the template can evolve quickly without forcing anything on you.
+Two separate PRs: **should we upgrade?** then **here's what changed.**
+Opt-in per repo. Systematic across the organisation.
 
 ---
 
@@ -383,29 +365,13 @@ The PR description usually explains what changed at a high level.
 
 ## The Rhiza ecosystem
 
-```
-                ┌─────────────────────────────┐
-                │       template repo          │
-                │   (rhiza or rhiza-go)        │
-                └─────────────┬───────────────┘
-                              │ sync PRs
-              ┌───────────────┴──────────────────┐
-              │           your project            │
-              └──┬───────────────┬───────────────┘
-                 │               │
-    ┌────────────▼──┐  ┌─────────▼──────────┐
-    │   rhiza-cli   │  │    rhiza-hooks      │
-    │  init         │  │  check-rhiza-config │
-    │  materialize  │  │  check-py-versions  │
-    │  validate     │  │  update-readme-help │
-    └────────────┬──┘  └────────────────────┘
-                 │
-    ┌────────────▼──────────────────────────┐
-    │            rhiza-tools                │
-    │  bump · release · version-matrix      │
-    │  coverage-badge · analyze-benchmarks  │
-    └───────────────────────────────────────┘
-```
+| Tool | What it does |
+|------|-------------|
+| **rhiza-cli** | `uvx rhiza init / materialize / validate` — the tool you run |
+| **rhiza-hooks** | Pre-commit hooks: validate config, check version consistency |
+| **rhiza-tools** | `bump`, `release`, `version-matrix`, `coverage-badge` |
+| **rhiza-go** | The same living-template pattern for Go projects |
+| **repo-monitor** | Desktop dashboard: workflow status, open PRs, Renovate state |
 
 ---
 
@@ -440,21 +406,11 @@ The PR description usually explains what changed at a high level.
 
 <!-- _class: lead -->
 
-# Get started today
+# Get started
 
 ```bash
 uvx rhiza init
 ```
-
-**Curriculum:** https://jebel-quant.github.io/rhiza-education/
-
-**Template:** https://github.com/Jebel-Quant/rhiza
-
----
-
-<!-- _class: lead -->
-
-# Questions?
 
 *ῥίζα (ree-ZAH) — root*
 
