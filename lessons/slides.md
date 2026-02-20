@@ -8,10 +8,10 @@ Two presentations are available — choose based on your audience and time slot.
 
 A concise overview covering the Repo Zoo Problem, how Rhiza works, getting started, and the ecosystem.
 
-[Open full-screen](slides/rhiza-intro.html){ .md-button .md-button--primary target=_blank }
+[Open full-screen](rhiza-intro.html){ .md-button .md-button--primary target=_blank }
 
 <iframe
-  src="slides/rhiza-intro.html"
+  src="rhiza-intro.html"
   style="width:100%;height:85vh;border:0;"
   allowfullscreen>
 </iframe>
@@ -24,10 +24,10 @@ Source: [`slides/rhiza-intro.md`](https://github.com/Jebel-Quant/rhiza-education
 
 A comprehensive presentation covering everything in the 30-minute version plus: the hidden cost of drift, bundle internals, the `ref:` pin in depth, `rhiza init` walkthrough, PAT_TOKEN setup, OIDC publishing, conflict handling, customisation patterns, rhiza-hooks, rhiza-tools, GitLab support, and a full adoption guide.
 
-[Open full-screen](slides/rhiza-deep-dive.html){ .md-button .md-button--primary target=_blank }
+[Open full-screen](rhiza-deep-dive.html){ .md-button .md-button--primary target=_blank }
 
 <iframe
-  src="slides/rhiza-deep-dive.html"
+  src="rhiza-deep-dive.html"
   style="width:100%;height:85vh;border:0;"
   allowfullscreen>
 </iframe>
