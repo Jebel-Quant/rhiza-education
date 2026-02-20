@@ -129,7 +129,7 @@ This is the most extensive bundle selection of any external project here. The `d
 
 [github.com/janushendersonassetallocation/loman](https://github.com/janushendersonassetallocation/loman) · PyPI: `loman`
 
-**Loman** is a DAG-based computation manager for complex analytical workflows, developed by [Janus Henderson Investors](https://www.janushenderson.com/) — a global asset management firm. It tracks the state of computations and their dependencies, enabling intelligent partial recalculations: when an input changes, only the downstream nodes that depend on it are rerun. It is designed for data pipelines, real-time pricing systems, and research workflows where recomputing everything on each change is too expensive.
+**Loman** is a DAG-based computation manager for complex analytical workflows. It tracks the state of computations and their dependencies, enabling intelligent partial recalculations: when an input changes, only the downstream nodes that depend on it are rerun. It is designed for data pipelines, real-time pricing systems, and research workflows where recomputing everything on each change is too expensive.
 
 ```yaml
 # .rhiza/template.yml (janushendersonassetallocation/loman)
@@ -146,15 +146,9 @@ templates:
 
 exclude:
   - book/marimo/notebooks/rhiza.py
-```
+``` 
 
-Two things stand out. First, `template-branch: main` — this project tracks the template's `main` branch rather than a pinned tag, meaning it receives template changes as they land rather than via a Renovate version-bump PR. This gives faster access to fixes but removes the review step before changes arrive. Second, the `exclude` entry for `book/marimo/notebooks/rhiza.py` — this is a specific notebook inside the docs that the team manages locally, likely a Rhiza integration demo they have customised for their workflow.
-
-Most significantly: **Loman is a production tool at a real asset management firm.** Its adoption is the clearest signal that Rhiza works at professional scale.
-
-## What to look at in each repo
-
-When you visit any of these projects, the following are worth inspecting:
+When you visit any of these projects, the following are worth inspecting
 
 | What to look at | Where to find it |
 |-----------------|-----------------|
