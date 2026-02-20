@@ -53,10 +53,6 @@ Harry is the second-largest contributor to the ecosystem and has been involved a
 
 <img src="https://avatars.githubusercontent.com/u/5681211?v=4" width="80" style="border-radius: 50%; float: left; margin: 0 16px 16px 0;">
 
-**Janus Henderson Investors · London**
-
-Mark is a developer at Janus Henderson Investors and a contributor to `rhiza`. He is also connected to the [`loman`](https://github.com/janushendersonassetallocation/loman) project (covered in [Appendix A3](./A3-projects-using-rhiza.md)) — the DAG-based computation manager developed at Janus Henderson that is one of Rhiza's most prominent external adopters.
-
 | Repo | Contributions |
 |------|--------------|
 | rhiza | 15 |
@@ -102,9 +98,6 @@ Armaan contributed to the core `rhiza` template repo.
 
 <img src="https://avatars.githubusercontent.com/u/97458555?v=4" width="80" style="border-radius: 50%; float: left; margin: 0 16px 16px 0;">
 
-**Software Engineer · Theoretical Physics background · Janus Henderson · London**
-
-Ashley is a software engineer at Janus Henderson with a background in theoretical physics. Like Mark Richardson, he is part of the Janus Henderson engineering community that has adopted Rhiza via the `loman` project.
 
 | Repo | Contributions |
 |------|--------------|
