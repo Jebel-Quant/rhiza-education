@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="lessons/assets/rhiza-logo.svg" width="120" alt="Rhiza logo" />
+</p>
+
 # rhiza-education
 
 Training for and with [Rhiza](https://github.com/Jebel-Quant/rhiza) — the living template system for Python projects.
@@ -21,9 +25,10 @@ Developers who are comfortable with Python, git, and basic CI/CD, and want to ad
 | 6 | [Getting Started](lessons/06-getting-started.md) | Install Rhiza, initialise a project, and run your first materialise |
 | 7 | [Configuring Your Template](lessons/07-configuring-your-template.md) | Anatomy of `template.yml`, bundles, include/exclude patterns |
 | 8 | [The Sync Lifecycle](lessons/08-the-sync-lifecycle.md) | How automated sync PRs work and how to review them |
-| 9 | [Customising Safely](lessons/09-customizing-safely.md) | Extend Rhiza-managed projects without fighting the sync |
-| 10 | [The Rhiza Ecosystem](lessons/10-the-rhiza-ecosystem.md) | rhiza-cli, rhiza-hooks, rhiza-tools, rhiza-go, rhiza-manager, and repo-monitor |
-| 11 | [Further Reading](lessons/11-further-reading.md) | Direct links to every doc file across the Rhiza repos, organised by topic |
+| 9 | [Renovate](lessons/09-renovate.md) | How Renovate keeps your `ref:` pin current and why it is essential at scale |
+| 10 | [Customising Safely](lessons/10-customizing-safely.md) | Extend Rhiza-managed projects without fighting the sync |
+| 11 | [The Rhiza Ecosystem](lessons/11-the-rhiza-ecosystem.md) | rhiza-cli, rhiza-hooks, rhiza-tools, rhiza-go, rhiza-manager, and repo-monitor |
+| 12 | [Further Reading](lessons/12-further-reading.md) | Direct links to every doc file across the Rhiza repos, organised by topic |
 
 Work through the lessons in order — each one builds on the last.
 
@@ -35,3 +40,5 @@ Work through the lessons in order — each one builds on the last.
 | A2 | [Marimushka](lessons/A2-marimushka.md) | Publishing marimo notebooks as a static site with the `marimo` bundle |
 | A3 | [Projects Using Rhiza](lessons/A3-projects-using-rhiza.md) | Real repos using Rhiza — from Stanford's CVXGRP to Janus Henderson — with annotated `template.yml` files |
 | A4 | [Contributors](lessons/A4-contributors.md) | The people who built Rhiza and its ecosystem, with profiles and contribution counts |
+
+Work through the appendices that apply to your setup — each is self-contained.
