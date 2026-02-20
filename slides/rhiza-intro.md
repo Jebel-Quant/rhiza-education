@@ -26,9 +26,23 @@ style: |
   blockquote { border-left: 4px solid var(--color-accent); padding-left: 1em; color: #444; font-style: italic; }
   table { width: 100%; font-size: 0.9em; }
   footer { font-size: 0.65em; color: #888; }
+  section::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    width: 52px;
+    height: 52px;
+    background-image: url(assets/rhiza-logo.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  section.lead::before { display: none; }
 ---
 
 <!-- _class: lead -->
+
+![w:120](assets/rhiza-logo.svg)
 
 # Rhiza
 
