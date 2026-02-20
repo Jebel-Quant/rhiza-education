@@ -171,17 +171,21 @@ The sync is not a bulldozer. It is a proposal.
 
 ## Three actors
 
-<div style="display:flex;flex-direction:column;align-items:center;gap:0.9em;margin-top:1.2em;">
-  <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:8px;padding:0.75em 2.5em;text-align:center;min-width:52%;">
+<div style="display:flex;flex-direction:column;align-items:center;gap:0.8em;margin-top:1em;">
+  <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:8px;padding:0.7em 2.5em;text-align:center;min-width:52%;">
     <div style="font-weight:bold;color:#1a5276;">template repo</div>
     <div style="font-size:0.82em;color:#555;margin-top:0.2em;">Jebel-Quant/rhiza &nbsp;·&nbsp; or your org's fork</div>
   </div>
-  <div style="color:#2e86c1;font-size:0.95em;">↓ &nbsp; sync PRs</div>
-  <div style="background:#eaf4fc;border:2px solid #1a5276;border-radius:8px;padding:0.75em 2.5em;text-align:center;min-width:52%;">
+  <div style="color:#2e86c1;font-size:0.95em;">↓ &nbsp;sync PRs</div>
+  <div style="background:#eaf4fc;border:2px solid #1a5276;border-radius:8px;padding:0.7em 2.5em;text-align:center;min-width:52%;">
     <div style="font-weight:bold;color:#1a5276;">your project</div>
     <div style="font-size:0.82em;color:#555;margin-top:0.2em;">.rhiza/template.yml</div>
   </div>
-  <div style="color:#888;font-size:0.88em;">↑ &nbsp;<code style="background:#f0f0f0;padding:2px 8px;border-radius:4px;">uvx rhiza materialize</code></div>
+  <div style="color:#2e86c1;font-size:0.95em;">↑ &nbsp;materialise</div>
+  <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:8px;padding:0.7em 2.5em;text-align:center;min-width:52%;">
+    <div style="font-weight:bold;color:#1a5276;">uvx rhiza</div>
+    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">the materialiser — runs locally or in CI</div>
+  </div>
 </div>
 
 ---
