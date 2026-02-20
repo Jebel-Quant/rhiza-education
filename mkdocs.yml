@@ -11,6 +11,8 @@ copyright: >
 
 theme:
   name: material
+  logo: assets/rhiza-logo.svg
+  favicon: assets/rhiza-logo.svg
   palette:
     - scheme: default
       toggle:
