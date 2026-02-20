@@ -951,19 +951,18 @@ section::before {
 section.lead::before { display: none; }
 ;" data-marpit-pagination-total="28">
 <h2 id="three-actors">Three actors</h2>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code>┌──────────────────────────────┐
-│        template repo          │  Jebel-Quant/rhiza (or your org's fork)
-│  CI workflows · Makefile      │  The canonical source of truth
-│  linting config · hooks       │
-└──────────────┬───────────────┘
-               │  sync PRs
-┌──────────────▼───────────────┐
-│        your project           │  Has .rhiza/template.yml
-│                               │  Declares what it wants and at what version
-└──────────────────────────────┘
-               ▲
-          uvx rhiza  ← the materialiser
-</code></pre>
+<div style="display:flex;flex-direction:column;align-items:center;gap:0.9em;margin-top:1.2em;">
+  <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:8px;padding:0.75em 2.5em;text-align:center;min-width:52%;">
+    <div style="font-weight:bold;color:#1a5276;">template repo</div>
+    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">Jebel-Quant/rhiza &nbsp;·&nbsp; or your org's fork</div>
+  </div>
+  <div style="color:#2e86c1;font-size:0.95em;">↓ &nbsp; sync PRs</div>
+  <div style="background:#eaf4fc;border:2px solid #1a5276;border-radius:8px;padding:0.75em 2.5em;text-align:center;min-width:52%;">
+    <div style="font-weight:bold;color:#1a5276;">your project</div>
+    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">.rhiza/template.yml</div>
+  </div>
+  <div style="color:#888;font-size:0.88em;">↑ &nbsp;<code style="background:#f0f0f0;padding:2px 8px;border-radius:4px;">uvx rhiza materialize</code></div>
+</div>
 <footer>Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="13" data-paginate="true" data-footer="Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education" data-theme="default" data-style=":root {
@@ -1233,8 +1232,15 @@ section::before {
 section.lead::before { display: none; }
 ;" data-marpit-pagination-total="28">
 <h2 id="the-sync-loop">The sync loop</h2>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code>fetch  →  diff  →  review  →  commit
-</code></pre>
+<div style="display:flex;align-items:center;justify-content:center;gap:0.7em;margin:1em 0 1.2em;">
+  <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:7px;padding:0.45em 1.1em;font-weight:bold;color:#1a5276;">fetch</div>
+  <div style="color:#2e86c1;font-size:1.2em;">→</div>
+  <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:7px;padding:0.45em 1.1em;font-weight:bold;color:#1a5276;">diff</div>
+  <div style="color:#2e86c1;font-size:1.2em;">→</div>
+  <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:7px;padding:0.45em 1.1em;font-weight:bold;color:#1a5276;">review</div>
+  <div style="color:#2e86c1;font-size:1.2em;">→</div>
+  <div style="background:#1a5276;border-radius:7px;padding:0.45em 1.1em;font-weight:bold;color:#fff;">commit</div>
+</div>
 <ol>
 <li><strong>Fetch</strong> — reads <code>template.yml</code>, pulls matching files from the template repo at <code>ref</code></li>
 <li><strong>Diff</strong> — compares what was fetched against what's currently in your project</li>
@@ -1316,14 +1322,19 @@ section.lead::before { display: none; }
 ;" data-marpit-pagination-total="28">
 <h2 id="renovate--closing-the-loop">Renovate — closing the loop</h2>
 <p>Without Renovate, the <code>ref:</code> pin is frozen. Projects drift behind the template silently.</p>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code>template ships v0.9.0
-      │
-      ▼
-Renovate opens PR: ref: v0.8.0 → v0.9.0   (one line diff)
-      │
-      ▼  (you merge)
-sync workflow runs → updated CI files, linting config, etc.
-</code></pre>
+<div style="display:flex;flex-direction:column;gap:0.45em;margin:0.9em 0;font-size:0.93em;">
+  <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
+    template repo publishes <strong>v0.9.0</strong>
+  </div>
+  <div style="padding-left:1.1em;color:#2e86c1;">↓</div>
+  <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
+    Renovate opens PR: <code>ref: v0.8.0 → v0.9.0</code> &nbsp;<span style="color:#888;">(one line diff)</span>
+  </div>
+  <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you merge</span></div>
+  <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
+    sync workflow applies updated CI files, linting config, etc.
+  </div>
+</div>
 <p>Two separate PRs: <strong>should we upgrade?</strong> then <strong>here's what changed.</strong><br />
 Opt-in per repo. Systematic across the organisation.</p>
 <footer>Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education</footer>
@@ -2068,10 +2079,6 @@ section.lead::before { display: none; }
 <tr>
 <td><strong>rhiza-go</strong></td>
 <td>The same living-template pattern for Go projects</td>
-</tr>
-<tr>
-<td><strong>rhiza-manager</strong></td>
-<td>VS Code extension: sync PR status across all repos at a glance</td>
 </tr>
 <tr>
 <td><strong>repo-monitor</strong></td>

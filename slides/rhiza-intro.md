@@ -171,20 +171,18 @@ The sync is not a bulldozer. It is a proposal.
 
 ## Three actors
 
-```
-┌──────────────────────────────┐
-│        template repo          │  Jebel-Quant/rhiza (or your org's fork)
-│  CI workflows · Makefile      │  The canonical source of truth
-│  linting config · hooks       │
-└──────────────┬───────────────┘
-               │  sync PRs
-┌──────────────▼───────────────┐
-│        your project           │  Has .rhiza/template.yml
-│                               │  Declares what it wants and at what version
-└──────────────────────────────┘
-               ▲
-          uvx rhiza  ← the materialiser
-```
+<div style="display:flex;flex-direction:column;align-items:center;gap:0.9em;margin-top:1.2em;">
+  <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:8px;padding:0.75em 2.5em;text-align:center;min-width:52%;">
+    <div style="font-weight:bold;color:#1a5276;">template repo</div>
+    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">Jebel-Quant/rhiza &nbsp;·&nbsp; or your org's fork</div>
+  </div>
+  <div style="color:#2e86c1;font-size:0.95em;">↓ &nbsp; sync PRs</div>
+  <div style="background:#eaf4fc;border:2px solid #1a5276;border-radius:8px;padding:0.75em 2.5em;text-align:center;min-width:52%;">
+    <div style="font-weight:bold;color:#1a5276;">your project</div>
+    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">.rhiza/template.yml</div>
+  </div>
+  <div style="color:#888;font-size:0.88em;">↑ &nbsp;<code style="background:#f0f0f0;padding:2px 8px;border-radius:4px;">uvx rhiza materialize</code></div>
+</div>
 
 ---
 
@@ -227,9 +225,15 @@ One file. That's all Rhiza needs.
 
 ## The sync loop
 
-```
-fetch  →  diff  →  review  →  commit
-```
+<div style="display:flex;align-items:center;justify-content:center;gap:0.7em;margin:1em 0 1.2em;">
+  <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:7px;padding:0.45em 1.1em;font-weight:bold;color:#1a5276;">fetch</div>
+  <div style="color:#2e86c1;font-size:1.2em;">→</div>
+  <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:7px;padding:0.45em 1.1em;font-weight:bold;color:#1a5276;">diff</div>
+  <div style="color:#2e86c1;font-size:1.2em;">→</div>
+  <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:7px;padding:0.45em 1.1em;font-weight:bold;color:#1a5276;">review</div>
+  <div style="color:#2e86c1;font-size:1.2em;">→</div>
+  <div style="background:#1a5276;border-radius:7px;padding:0.45em 1.1em;font-weight:bold;color:#fff;">commit</div>
+</div>
 
 1. **Fetch** — reads `template.yml`, pulls matching files from the template repo at `ref`
 2. **Diff** — compares what was fetched against what's currently in your project
@@ -245,15 +249,19 @@ On-demand: `make sync` or `uvx rhiza materialize`.
 
 Without Renovate, the `ref:` pin is frozen. Projects drift behind the template silently.
 
-```
-template ships v0.9.0
-      │
-      ▼
-Renovate opens PR: ref: v0.8.0 → v0.9.0   (one line diff)
-      │
-      ▼  (you merge)
-sync workflow runs → updated CI files, linting config, etc.
-```
+<div style="display:flex;flex-direction:column;gap:0.45em;margin:0.9em 0;font-size:0.93em;">
+  <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
+    template repo publishes <strong>v0.9.0</strong>
+  </div>
+  <div style="padding-left:1.1em;color:#2e86c1;">↓</div>
+  <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
+    Renovate opens PR: <code>ref: v0.8.0 → v0.9.0</code> &nbsp;<span style="color:#888;">(one line diff)</span>
+  </div>
+  <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you merge</span></div>
+  <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
+    sync workflow applies updated CI files, linting config, etc.
+  </div>
+</div>
 
 Two separate PRs: **should we upgrade?** then **here's what changed.**
 Opt-in per repo. Systematic across the organisation.
