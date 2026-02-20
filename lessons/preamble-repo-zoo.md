@@ -14,7 +14,7 @@ The backtesting repo got a new pre-commit hook that the risk model repo never re
 
 Nobody did this on purpose. It just happens. Every change made to one repo is a change not made to the others.
 
-This is the **repo zoo problem**: a collection of repositories that started identical and have since become a collection of unique, inconsistent snowflakes, each requiring its own maintenance.
+This is the **repo zoo problem**: repositories that started identical and drifted into different breeds — incompatible with one another, living in separate enclosures, each expensive to maintain on its own terms.
 
 ## The real cost
 
