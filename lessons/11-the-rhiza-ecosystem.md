@@ -1,4 +1,4 @@
-# Lesson 10 — The Rhiza Ecosystem
+# Lesson 11 — The Rhiza Ecosystem
 
 The lessons so far have focused on the core workflow: configure `template.yml`, run `uvx rhiza materialize`, review sync PRs. But Rhiza is one piece of a larger set of tools built around the same philosophy — automate the boring parts of running Python (and Go) projects at scale. This lesson maps the full ecosystem so you know what exists and when to reach for it.
 
@@ -112,4 +112,4 @@ At the top is the template repo (Rhiza or a fork of it). `rhiza-cli` is how you 
 
 ---
 
-**Next:** [Lesson 11 — Further Reading](./11-further-reading.md)
+**Next:** [Lesson 12 — Further Reading](./12-further-reading.md)

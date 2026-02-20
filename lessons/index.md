@@ -15,9 +15,10 @@ Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, 
 | 6 | [Getting Started](06-getting-started.md) | Setting up Rhiza in a new project from scratch |
 | 7 | [Configuring Your Template](07-configuring-your-template.md) | Every field in `.rhiza/template.yml` explained |
 | 8 | [The Sync Lifecycle](08-the-sync-lifecycle.md) | What triggers a sync PR, what it contains, and how to handle it |
-| 9 | [Customising Safely](09-customizing-safely.md) | How to modify Rhiza-managed files without conflicting with future syncs |
-| 10 | [The Rhiza Ecosystem](10-the-rhiza-ecosystem.md) | rhiza-cli, rhiza-hooks, rhiza-tools, rhiza-go, rhiza-manager, and repo-monitor |
-| 11 | [Further Reading](11-further-reading.md) | Direct links to every doc file across the Rhiza repos, organised by topic |
+| 9 | [Renovate](09-renovate.md) | How Renovate keeps your `ref:` pin current, the two-part update flow, and how to configure it |
+| 10 | [Customising Safely](10-customizing-safely.md) | How to modify Rhiza-managed files without conflicting with future syncs |
+| 11 | [The Rhiza Ecosystem](11-the-rhiza-ecosystem.md) | rhiza-cli, rhiza-hooks, rhiza-tools, rhiza-go, rhiza-manager, and repo-monitor |
+| 12 | [Further Reading](12-further-reading.md) | Direct links to every doc file across the Rhiza repos, organised by topic |
 
 ## Appendices
 

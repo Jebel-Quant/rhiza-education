@@ -36,12 +36,14 @@ nav:
   - '6 — Getting Started': 06-getting-started.md
   - '7 — Configuring Your Template': 07-configuring-your-template.md
   - '8 — The Sync Lifecycle': 08-the-sync-lifecycle.md
-  - '9 — Customising Safely': 09-customizing-safely.md
-  - '10 — The Rhiza Ecosystem': 10-the-rhiza-ecosystem.md
-  - '11 — Further Reading': 11-further-reading.md
+  - '9 — Renovate': 09-renovate.md
+  - '10 — Customising Safely': 10-customizing-safely.md
+  - '11 — The Rhiza Ecosystem': 11-the-rhiza-ecosystem.md
+  - '12 — Further Reading': 12-further-reading.md
   - 'Slides': slides.md
   - Appendices:
     - 'A1 — GitLab Users': A1-gitlab-users.md
     - 'A2 — Marimushka': A2-marimushka.md
     - 'A3 — Projects Using Rhiza': A3-projects-using-rhiza.md
     - 'A4 — Contributors': A4-contributors.md
+

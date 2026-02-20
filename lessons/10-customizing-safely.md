@@ -1,4 +1,4 @@
-# Lesson 9 — Customising Safely
+# Lesson 10 — Customising Safely
 
 Rhiza manages a set of files in your project. This raises an obvious question: what if you need to change something that Rhiza controls? This lesson covers the right ways to customise a Rhiza-managed project without getting into conflicts with the sync.
 
@@ -81,4 +81,4 @@ This pattern scales well: one place to manage standards, automated propagation t
 
 ---
 
-**Next:** [Lesson 10 — The Rhiza Ecosystem](./10-the-rhiza-ecosystem.md)
+**Next:** [Lesson 11 — The Rhiza Ecosystem](./11-the-rhiza-ecosystem.md)

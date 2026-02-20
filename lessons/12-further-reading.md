@@ -1,4 +1,4 @@
-# Lesson 11 — Further Reading
+# Lesson 12 — Further Reading
 
 The Rhiza repos contain detailed documentation beyond what fits in this curriculum. This lesson maps that material by topic so you can go deeper on whatever is most relevant to you.
 
@@ -105,4 +105,4 @@ These live in `.rhiza/docs/` and are synced into every Rhiza-managed project via
 
 ---
 
-**Back to:** [Lesson 10 — The Rhiza Ecosystem](./10-the-rhiza-ecosystem.md) | [README](../README.md)
+**Back to:** [Lesson 11 — The Rhiza Ecosystem](./11-the-rhiza-ecosystem.md) | [README](../README.md)

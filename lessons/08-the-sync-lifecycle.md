@@ -59,7 +59,7 @@ Occasionally a sync PR will have a merge conflict — usually because you edited
 2. **Keep your local version and exclude the file**: Add the file to `exclude:` in `template.yml` so future syncs skip it. Resolve the conflict in favour of your version.
 3. **Merge both sets of changes manually**: Edit the file to incorporate what you need from both the template and your local version, then mark the conflict resolved.
 
-The cleanest long-term approach is to avoid editing template-managed files directly. If you need custom behaviour, use the extension points described in Lesson 9.
+The cleanest long-term approach is to avoid editing template-managed files directly. If you need custom behaviour, use the extension points described in Lesson 10.
 
 ## Triggering sync manually
 
@@ -77,4 +77,4 @@ This writes updated files to disk. Review the changes with `git diff`, commit th
 
 ---
 
-**Next:** [Lesson 9 — Customising Safely](./09-customizing-safely.md)
+**Next:** [Lesson 9 — Renovate](./09-renovate.md)
