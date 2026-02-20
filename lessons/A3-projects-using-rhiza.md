@@ -129,7 +129,7 @@ This is the most extensive bundle selection of any external project here. The `d
 
 [github.com/janushendersonassetallocation/loman](https://github.com/janushendersonassetallocation/loman) · PyPI: `loman`
 
-**Loman** is a DAG-based computation manager for complex analytical workflows, developed by [Janus Henderson Asset Allocation](https://www.janushenderson.com/) — a global asset management firm. It tracks the state of computations and their dependencies, enabling intelligent partial recalculations: when an input changes, only the downstream nodes that depend on it are rerun. It is designed for data pipelines, real-time pricing systems, and research workflows where recomputing everything on each change is too expensive.
+**Loman** is a DAG-based computation manager for complex analytical workflows, developed by [Janus Henderson Investors](https://www.janushenderson.com/) — a global asset management firm. It tracks the state of computations and their dependencies, enabling intelligent partial recalculations: when an input changes, only the downstream nodes that depend on it are rerun. It is designed for data pipelines, real-time pricing systems, and research workflows where recomputing everything on each change is too expensive.
 
 ```yaml
 # .rhiza/template.yml (janushendersonassetallocation/loman)
