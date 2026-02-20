@@ -8,7 +8,7 @@ A team of quantitative developers typically accumulates repositories the way a z
 
 Each of these started well. Someone ran a project generator, answered a few questions, and got a clean repo with a CI workflow, a Makefile, a linting config, and a test harness. On day one, everything was consistent.
 
-Then the animals started to diverge.
+Then the repos started to diverge — and each became an exemplar of its kind.
 
 The backtesting repo got a new pre-commit hook that the risk model repo never received. The data ingestion repo still pins Python 3.9 because nobody got around to updating the CI matrix after 3.9 went end-of-life. Three repos use Black, two use Ruff, one uses both. The CI workflow in the reporting dashboard references a GitHub Actions runner version that was deprecated eight months ago. The Makefile in the experimental repo has targets that the main repo dropped two releases ago — and vice versa.
 
