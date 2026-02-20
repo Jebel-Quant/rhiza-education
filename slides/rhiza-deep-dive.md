@@ -100,6 +100,8 @@ cookiecutter gh:my-org/python-template
 
 **Nobody did this on purpose. It just happens.**
 
+Each repo drifted into a different breed — incompatible with the others, living in its own enclosure, expensive to maintain on its own terms.
+
 ---
 
 ## The real cost
