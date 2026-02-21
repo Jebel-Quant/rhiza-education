@@ -1,6 +1,22 @@
 # Slides
 
-Two presentations are available — choose based on your audience and time slot.
+Three presentations are available — choose based on your audience and time slot.
+
+---
+
+## CI/CD for Complete Beginners
+
+A standalone primer on CI/CD for audiences with no prior experience. Covers the "works on my machine" problem, what CI and CD are, how pipelines work, GitHub Actions basics, and the benefits teams gain. No Rhiza knowledge assumed.
+
+[Open full-screen](cicd-intro.html){ .md-button .md-button--primary target=_blank }
+
+<iframe
+  src="cicd-intro.html"
+  style="width:100%;height:85vh;border:0;"
+  allowfullscreen>
+</iframe>
+
+Source: [`slides/cicd-intro.md`](https://github.com/Jebel-Quant/rhiza-education/blob/main/slides/cicd-intro.md)
 
 ---
 
