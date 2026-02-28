@@ -2,7 +2,7 @@
 marp: true
 theme: default
 paginate: true
-footer: "Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education"
+footer: "Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education · rhiza {{ rhiza_version }} / rhiza-cli {{ rhiza_cli_version }}"
 style: |
   :root {
     --color-brand: #1a5276;
