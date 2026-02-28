@@ -14,7 +14,7 @@ This is a GitHub repo that holds the canonical versions of shared infrastructure
 
 This is your actual project repo. It declares what it wants from the template repo via a config file (`.rhiza/template.yml`). The downstream project does not duplicate the template — it just consumes specific files from it.
 
-**3. The materialiser**
+**3. The syncer**
 
 This is Rhiza itself — the `uvx rhiza` CLI tool. It reads the downstream project's config, fetches the specified files from the template repo at the specified version, and writes them into the project.
 
@@ -75,7 +75,7 @@ fetch → diff → review → commit
 3. **Review**: If anything changed, a pull request is opened with the diff (in automated mode) or the changes are written to disk (in manual mode).
 4. **Commit**: You review the PR and merge it — or reject it if the change doesn't apply to your project.
 
-This loop runs automatically on a schedule (via a GitHub Actions workflow included in the `github` bundle). You can also trigger it manually with `make sync` or `uvx rhiza materialize`.
+This loop runs automatically on a schedule (via a GitHub Actions workflow included in the `github` bundle). You can also trigger it manually with `make sync` or `uvx rhiza sync`.
 
 ## Version pinning and automated updates
 

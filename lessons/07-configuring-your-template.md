@@ -103,14 +103,14 @@ Here is a quick guide:
 | Slide decks from Markdown | `+ presentation` |
 | GitLab instead of GitHub | replace `github` with `gitlab` |
 
-When in doubt, start with `core`, `github`, and `tests`. You can always add bundles later — just add them to `templates` and re-run `uvx rhiza materialize`.
+When in doubt, start with `core`, `github`, and `tests`. You can always add bundles later — just add them to `templates` and re-run `uvx rhiza sync`.
 
 ## Updating the config
 
 After editing `template.yml`, always re-run:
 
 ```bash
-uvx rhiza materialize
+uvx rhiza sync
 ```
 
 This applies any changes — new bundles, updated include/exclude patterns, or a new `ref` — to your project.

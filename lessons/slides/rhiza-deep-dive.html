@@ -1149,10 +1149,10 @@ section.lead::before { display: none; }
     <div style="font-weight:bold;color:#1a5276;">your project</div>
     <div style="font-size:0.82em;color:#555;margin-top:0.2em;">.rhiza/template.yml</div>
   </div>
-  <div style="color:#2e86c1;font-size:0.95em;">↑ &nbsp;materialise</div>
+  <div style="color:#2e86c1;font-size:0.95em;">↑ &nbsp;sync</div>
   <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:8px;padding:0.7em 2.5em;text-align:center;min-width:52%;">
     <div style="font-weight:bold;color:#1a5276;">uvx rhiza</div>
-    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">the materialiser — runs locally or in CI</div>
+    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">the syncer — runs locally or in CI</div>
   </div>
 </div>
 <footer>Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education</footer>
@@ -1541,7 +1541,7 @@ section.lead::before { display: none; }
 </tbody>
 </table>
 <p>None of these need to be written manually.<br />
-They arrive via <code>uvx rhiza materialize</code> and stay current via the sync.</p>
+They arrive via <code>uvx rhiza sync</code> and stay current via the sync.</p>
 <footer>Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="19" data-paginate="true" data-footer="Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education" data-theme="default" data-style=":root {
@@ -1630,7 +1630,7 @@ section.lead::before { display: none; }
 <li><strong>Commit</strong> — you review the PR and merge it (or close it if not relevant)</li>
 </ol>
 <p>Runs automatically on a <strong>weekly schedule</strong> via GitHub Actions.<br />
-On-demand: <code>make sync</code> or <code>uvx rhiza materialize</code>.</p>
+On-demand: <code>make sync</code> or <code>uvx rhiza sync</code>.</p>
 <footer>Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="20" data-paginate="true" data-footer="Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education" data-theme="default" data-style=":root {
@@ -1951,8 +1951,8 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 <span class="hljs-comment"># 2. Initialise — writes .rhiza/template.yml interactively</span>
 uvx rhiza init
 
-<span class="hljs-comment"># 3. Materialise — fetches template files and writes them into the project</span>
-uvx rhiza materialize
+<span class="hljs-comment"># 3. Sync — fetches template files and writes them into the project</span>
+uvx rhiza sync
 
 <span class="hljs-comment"># 4. Install dev environment</span>
 make install
@@ -2036,7 +2036,7 @@ section.lead::before { display: none; }
 ? Bundles to include:                      core, github, tests, renovate
 </code></pre>
 <p>The result is <code>.rhiza/template.yml</code> — one file, under version control, that describes everything Rhiza will manage in this project.</p>
-<p>After <code>init</code>, run <code>uvx rhiza materialize</code> to write the actual files.<br />
+<p>After <code>init</code>, run <code>uvx rhiza sync</code> to write the actual files.<br />
 Review the diff with <code>git diff</code> before committing.</p>
 <footer>Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education</footer>
 </section>
@@ -2110,7 +2110,7 @@ section::before {
 section.lead::before { display: none; }
 ;" data-marpit-pagination-total="45">
 <h2 id="what-you-get-on-day-one">What you get on day one</h2>
-<p>After materialising with <code>core + github + tests + renovate</code>:</p>
+<p>After syncing with <code>core + github + tests + renovate</code>:</p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code>.github/workflows/rhiza_ci.yml          ← CI: test on push and PRs
 .github/workflows/rhiza_pre-commit.yml  ← Pre-commit checks in CI
 .github/workflows/rhiza_sync.yml        ← Weekly template sync
@@ -3148,7 +3148,7 @@ section.lead::before { display: none; }
 <tbody>
 <tr>
 <td><strong>rhiza-cli</strong></td>
-<td><code>uvx rhiza init / materialize / validate</code> — the tool you run</td>
+<td><code>uvx rhiza init / sync / validate</code> — the tool you run</td>
 </tr>
 <tr>
 <td><strong>rhiza-hooks</strong></td>
@@ -3499,16 +3499,16 @@ section.lead::before { display: none; }
 ;" data-marpit-pagination-total="45">
 <h2 id="starting-fresh-vs-migrating">Starting fresh vs. migrating</h2>
 <p><strong>New project — the easy case:</strong></p>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash">uvx rhiza init &amp;&amp; uvx rhiza materialize &amp;&amp; make install
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash">uvx rhiza init &amp;&amp; uvx rhiza sync &amp;&amp; make install
 </code></pre>
 <p>Done. Rhiza-managed from day one.</p>
 <p><strong>Existing project:</strong></p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash">uvx rhiza init           <span class="hljs-comment"># creates .rhiza/template.yml</span>
-uvx rhiza materialize    <span class="hljs-comment"># writes template files — review the diff carefully</span>
+uvx rhiza sync           <span class="hljs-comment"># writes template files — review the diff carefully</span>
 git add -p               <span class="hljs-comment"># stage what makes sense</span>
 git commit -m <span class="hljs-string">&quot;chore: adopt Rhiza template&quot;</span>
 </code></pre>
-<p>The first materialise on an existing repo shows a diff. Some files may already match. Others may have local customisations — preserve those via <code>exclude:</code> before committing.</p>
+<p>The first sync on an existing repo shows a diff. Some files may already match. Others may have local customisations — preserve those via <code>exclude:</code> before committing.</p>
 <footer>Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="42" data-paginate="true" data-footer="Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education" data-theme="default" data-style=":root {
@@ -3584,7 +3584,7 @@ section.lead::before { display: none; }
 <ol>
 <li><strong>Audit your current setup</strong> — list your CI files, linting configs, and Makefiles</li>
 <li><strong>Start conservative</strong> — begin with <code>core</code> only; add <code>github</code> once you've reviewed the workflow files</li>
-<li><strong>Exclude what you own</strong> — add locally-maintained files to <code>exclude:</code> before materialising</li>
+<li><strong>Exclude what you own</strong> — add locally-maintained files to <code>exclude:</code> before syncing</li>
 <li><strong>Review the first sync PR carefully</strong> — treat it as a code review, not a forced update</li>
 <li><strong>Add Renovate</strong> — add the <code>renovate</code> bundle and install the GitHub App</li>
 <li><strong>Expand bundles gradually</strong> — add <code>tests</code>, <code>docker</code>, etc. as your team gains confidence</li>

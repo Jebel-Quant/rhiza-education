@@ -185,7 +185,7 @@ Rhiza's template bundles wire all of this up so you do not have to:
 | `marimo` | Notebook export and Pages deployment |
 | `devcontainer` | Ready-to-use development environment for VS Code / Codespaces |
 
-When you run `uvx rhiza materialize`, you get a fully wired CI/CD pipeline committed to your repo. The rest of the curriculum explains how to configure, extend, and keep it up to date.
+When you run `uvx rhiza sync`, you get a fully wired CI/CD pipeline committed to your repo. The rest of the curriculum explains how to configure, extend, and keep it up to date.
 
 ---
 
