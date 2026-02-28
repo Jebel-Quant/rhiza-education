@@ -7,7 +7,8 @@ docs_dir: lessons
 copyright: >
   Copyright &copy; 2026 Jebel Quant &mdash;
   <a href="/rhiza-education/license/">MIT License</a> &mdash;
-  <a href="/rhiza-education/impressum/">Impressum</a>
+  <a href="/rhiza-education/impressum/">Impressum</a> &mdash;
+  Generated with rhiza {{ rhiza_version }} / rhiza-cli {{ rhiza_cli_version }}
 
 theme:
   name: material
