@@ -4,9 +4,9 @@
 
 ## The problem Renovate solves for Rhiza
 
-Consider what happens after you run `uvx rhiza materialize` for the first time with `ref: v0.8.0` pinned in your `template.yml`. Everything is wired up — CI, linting, releases. Six months later the template is at `v0.12.0` with security fixes, updated runner versions, and a new linting rule. Your project is still on `v0.8.0`.
+Consider what happens after you run `uvx rhiza sync` for the first time with `ref: v0.8.0` pinned in your `template.yml`. Everything is wired up — CI, linting, releases. Six months later the template is at `v0.12.0` with security fixes, updated runner versions, and a new linting rule. Your project is still on `v0.8.0`.
 
-Without Renovate, nothing happens. The template has moved, but your `ref:` is still pinned to the old version. You have to notice the new release yourself, manually update the file, re-run `uvx rhiza materialize`, and open a PR. Across a handful of projects this is manageable. Across twenty or thirty it becomes the same problem Rhiza was built to solve in the first place: inconsistency through neglect.
+Without Renovate, nothing happens. The template has moved, but your `ref:` is still pinned to the old version. You have to notice the new release yourself, manually update the file, re-run `uvx rhiza sync`, and open a PR. Across a handful of projects this is manageable. Across twenty or thirty it becomes the same problem Rhiza was built to solve in the first place: inconsistency through neglect.
 
 Renovate closes this loop automatically. It opens a PR whenever a new template version is tagged, so every project receives a signal that says: *there is a new version — do you want it?*
 

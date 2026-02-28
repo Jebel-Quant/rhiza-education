@@ -7,9 +7,9 @@ Rhiza has full GitLab CI/CD support. If your project lives on GitLab rather than
 Everything in lessons 1–6 applies equally to GitLab:
 
 - The `.rhiza/template.yml` config file works identically.
-- `uvx rhiza init` and `uvx rhiza materialize` work identically.
+- `uvx rhiza init` and `uvx rhiza sync` work identically.
 - The `templates:`, `include:`, and `exclude:` keys work identically.
-- The sync lifecycle — materialize → diff → review → merge — is the same.
+- The sync lifecycle — sync → diff → review → merge — is the same.
 - The extension points (`custom-task.mk`, `custom-env.mk`, `exclude:`) are the same.
 
 ## What changes: use the `gitlab` bundle
@@ -34,7 +34,7 @@ The `gitlab` bundle provides GitLab CI/CD equivalents for all the workflows in t
 
 ## What you get from the `gitlab` bundle
 
-After materialising, your project will have:
+After syncing, your project will have:
 
 ```
 .gitlab-ci.yml                   # Main CI entrypoint — includes all workflow files
@@ -70,13 +70,13 @@ The GitHub bundle sets up a scheduled workflow automatically. On GitLab, you nee
 4. Set the target branch to `main`.
 5. Save.
 
-The `rhiza_sync.yml` workflow will then run on that schedule, materialise the latest template, and open a merge request if anything changed.
+The `rhiza_sync.yml` workflow will then run on that schedule, sync the latest template, and open a merge request if anything changed.
 
 ## Key differences from the GitHub setup
 
 **Merge request creation on sync**
 
-On GitHub, the sync workflow creates a pull request automatically using the built-in `GITHUB_TOKEN`. On GitLab, creating a merge request from CI requires a `PAT_TOKEN` with API scope. If this token is not set, the sync will still run and materialise changes, but it will not open an MR — you will need to create one manually from the resulting branch.
+On GitHub, the sync workflow creates a pull request automatically using the built-in `GITHUB_TOKEN`. On GitLab, creating a merge request from CI requires a `PAT_TOKEN` with API scope. If this token is not set, the sync will still run and apply changes, but it will not open an MR — you will need to create one manually from the resulting branch.
 
 **PyPI publishing**
 

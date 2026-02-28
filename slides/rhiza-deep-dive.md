@@ -216,10 +216,10 @@ The sync is not a bulldozer. It is a proposal.
     <div style="font-weight:bold;color:#1a5276;">your project</div>
     <div style="font-size:0.82em;color:#555;margin-top:0.2em;">.rhiza/template.yml</div>
   </div>
-  <div style="color:#2e86c1;font-size:0.95em;">↑ &nbsp;materialise</div>
+  <div style="color:#2e86c1;font-size:0.95em;">↑ &nbsp;sync</div>
   <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:8px;padding:0.7em 2.5em;text-align:center;min-width:52%;">
     <div style="font-weight:bold;color:#1a5276;">uvx rhiza</div>
-    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">the materialiser — runs locally or in CI</div>
+    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">the syncer — runs locally or in CI</div>
   </div>
 </div>
 
@@ -292,7 +292,7 @@ The canonical template is `Jebel-Quant/rhiza`. For most teams the right setup is
 | `rhiza_renovate.yml` | Self-hosted Renovate runner (optional) |
 
 None of these need to be written manually.
-They arrive via `uvx rhiza materialize` and stay current via the sync.
+They arrive via `uvx rhiza sync` and stay current via the sync.
 
 ---
 
@@ -314,7 +314,7 @@ They arrive via `uvx rhiza materialize` and stay current via the sync.
 4. **Commit** — you review the PR and merge it (or close it if not relevant)
 
 Runs automatically on a **weekly schedule** via GitHub Actions.
-On-demand: `make sync` or `uvx rhiza materialize`.
+On-demand: `make sync` or `uvx rhiza sync`.
 
 ---
 
@@ -372,8 +372,8 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 # 2. Initialise — writes .rhiza/template.yml interactively
 uvx rhiza init
 
-# 3. Materialise — fetches template files and writes them into the project
-uvx rhiza materialize
+# 3. Sync — fetches template files and writes them into the project
+uvx rhiza sync
 
 # 4. Install dev environment
 make install
@@ -395,14 +395,14 @@ Running `uvx rhiza init` walks you through three questions:
 
 The result is `.rhiza/template.yml` — one file, under version control, that describes everything Rhiza will manage in this project.
 
-After `init`, run `uvx rhiza materialize` to write the actual files.
+After `init`, run `uvx rhiza sync` to write the actual files.
 Review the diff with `git diff` before committing.
 
 ---
 
 ## What you get on day one
 
-After materialising with `core + github + tests + renovate`:
+After syncing with `core + github + tests + renovate`:
 
 ```
 .github/workflows/rhiza_ci.yml          ← CI: test on push and PRs
@@ -579,7 +579,7 @@ Runs on every `git commit`. The same checks run in CI via `rhiza_pre-commit.yml`
 
 | Tool | What it does |
 |------|-------------|
-| **rhiza-cli** | `uvx rhiza init / materialize / validate` — the tool you run |
+| **rhiza-cli** | `uvx rhiza init / sync / validate` — the tool you run |
 | **rhiza-hooks** | Pre-commit hooks: validate config, check version consistency |
 | **rhiza-tools** | `bump`, `release`, `version-matrix`, `coverage-badge` |
 | **rhiza-go** | The same living-template pattern for Go projects |
@@ -632,7 +632,7 @@ templates:
 **New project — the easy case:**
 
 ```bash
-uvx rhiza init && uvx rhiza materialize && make install
+uvx rhiza init && uvx rhiza sync && make install
 ```
 
 Done. Rhiza-managed from day one.
@@ -641,12 +641,12 @@ Done. Rhiza-managed from day one.
 
 ```bash
 uvx rhiza init           # creates .rhiza/template.yml
-uvx rhiza materialize    # writes template files — review the diff carefully
+uvx rhiza sync           # writes template files — review the diff carefully
 git add -p               # stage what makes sense
 git commit -m "chore: adopt Rhiza template"
 ```
 
-The first materialise on an existing repo shows a diff. Some files may already match. Others may have local customisations — preserve those via `exclude:` before committing.
+The first sync on an existing repo shows a diff. Some files may already match. Others may have local customisations — preserve those via `exclude:` before committing.
 
 ---
 
@@ -654,7 +654,7 @@ The first materialise on an existing repo shows a diff. Some files may already m
 
 1. **Audit your current setup** — list your CI files, linting configs, and Makefiles
 2. **Start conservative** — begin with `core` only; add `github` once you've reviewed the workflow files
-3. **Exclude what you own** — add locally-maintained files to `exclude:` before materialising
+3. **Exclude what you own** — add locally-maintained files to `exclude:` before syncing
 4. **Review the first sync PR carefully** — treat it as a code review, not a forced update
 5. **Add Renovate** — add the `renovate` bundle and install the GitHub App
 6. **Expand bundles gradually** — add `tests`, `docker`, etc. as your team gains confidence

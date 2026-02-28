@@ -37,7 +37,7 @@ Key fields:
 | `dependencies` | Runtime dependencies; what gets installed by `uv sync` |
 | `[project.optional-dependencies]` | Groups like `dev`, `test`, `docs` installed with `uv sync --extra dev` |
 
-> `pyproject.toml` also carries configuration for tools like `ruff`, `pytest`, and `mypy`. Rhiza's `core` bundle writes sensible defaults for these into the file (or alongside it) when you first materialise.
+> `pyproject.toml` also carries configuration for tools like `ruff`, `pytest`, and `mypy`. Rhiza's `core` bundle writes sensible defaults for these into the file (or alongside it) when you first sync.
 
 ## The src layout
 

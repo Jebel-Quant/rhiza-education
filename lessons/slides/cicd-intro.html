@@ -1468,7 +1468,7 @@ footer { font-size: 0.65em; color: #888; }
 <p>You don't need to write workflow files from scratch.</p>
 <p><strong>Rhiza</strong> provides a ready-made CI/CD setup for Python projects:</p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-bash">uvx rhiza init        <span class="hljs-comment"># creates .rhiza/template.yml</span>
-uvx rhiza materialize <span class="hljs-comment"># writes CI workflow files into your repo</span>
+uvx rhiza sync        <span class="hljs-comment"># writes CI workflow files into your repo</span>
 </code></pre>
 <p>You get: CI on every push, linting, test coverage, automated releases, and a weekly sync to keep everything up to date.</p>
 <blockquote>

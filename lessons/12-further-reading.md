@@ -83,7 +83,7 @@ Each command in [`rhiza-tools`](https://github.com/Jebel-Quant/rhiza-tools) has 
 
 ## Day-to-day operations
 
-These live in `.rhiza/docs/` and are synced into every Rhiza-managed project via the `core` bundle. You will find them in your own repo after materialising.
+These live in `.rhiza/docs/` and are synced into every Rhiza-managed project via the `core` bundle. You will find them in your own repo after syncing.
 
 | Document | What it covers |
 |----------|---------------|

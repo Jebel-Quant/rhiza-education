@@ -10,7 +10,7 @@ Your project will receive sync-related PRs from two sources:
 
 This GitHub Actions workflow runs on a schedule (typically weekly) and does the following:
 
-1. Runs `uvx rhiza materialize` inside a temporary branch.
+1. Runs `uvx rhiza sync` inside a temporary branch.
 2. Compares the result against your current `main` branch.
 3. If any files changed, opens a pull request with the diff.
 4. If nothing changed, exits silently.
@@ -70,7 +70,7 @@ To run a sync without waiting for the schedule:
 make sync
 
 # Or directly via the CLI
-uvx rhiza materialize
+uvx rhiza sync
 ```
 
 This writes updated files to disk. Review the changes with `git diff`, commit them, and push.

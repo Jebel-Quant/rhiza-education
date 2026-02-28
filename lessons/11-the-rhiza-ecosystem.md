@@ -1,6 +1,6 @@
 # Lesson 11 — The Rhiza Ecosystem
 
-The lessons so far have focused on the core workflow: configure `template.yml`, run `uvx rhiza materialize`, review sync PRs. But Rhiza is one piece of a larger set of tools built around the same philosophy — automate the boring parts of running Python (and Go) projects at scale. This lesson maps the full ecosystem so you know what exists and when to reach for it.
+The lessons so far have focused on the core workflow: configure `template.yml`, run `uvx rhiza sync`, review sync PRs. But Rhiza is one piece of a larger set of tools built around the same philosophy — automate the boring parts of running Python (and Go) projects at scale. This lesson maps the full ecosystem so you know what exists and when to reach for it.
 
 ## rhiza-cli — the CLI you have been using
 
@@ -9,11 +9,11 @@ The lessons so far have focused on the core workflow: configure `template.yml`, 
 | Command | What it does |
 |---------|-------------|
 | `uvx rhiza init` | Creates `.rhiza/template.yml` interactively |
-| `uvx rhiza materialize` | Fetches template files and writes them into the project |
+| `uvx rhiza sync` | Fetches template files and writes them into the project |
 | `uvx rhiza validate` | Validates `template.yml` syntax and checks that the referenced repo and ref exist |
 | `uvx rhiza migrate` | Transitions projects from older Rhiza config layouts to the current `.rhiza/` folder structure |
 
-You rarely need to install `rhiza-cli` globally — `uvx` handles it on demand. The Makefile targets (`make sync`, `make materialize`) call `uvx rhiza` under the hood.
+You rarely need to install `rhiza-cli` globally — `uvx` handles it on demand. The Makefile target (`make sync`) calls `uvx rhiza` under the hood.
 
 ## rhiza-hooks — pre-commit hooks
 
@@ -97,7 +97,7 @@ It is useful for team leads or platform engineers who want a persistent overview
           ┌────────────▼──┐  ┌───▼────────────────┐
           │  rhiza-cli    │  │   rhiza-hooks       │
           │  init         │  │   (pre-commit)      │
-          │  materialize  │  └────────────────────┘
+          │  sync         │  └────────────────────┘
           │  validate     │
           └────────────┬──┘
                        │

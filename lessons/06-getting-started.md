@@ -40,14 +40,14 @@ During `init`, you will be asked which bundles to include. For a typical Python 
 - `tests` (pytest, coverage)
 - `renovate` (automated dependency updates)
 
-You can add more bundles later by editing `template.yml` and re-running `materialize`.
+You can add more bundles later by editing `template.yml` and re-running `sync`.
 
-## Step 3: Materialise
+## Step 3: Sync
 
 Now fetch and apply the template files:
 
 ```bash
-uvx rhiza materialize
+uvx rhiza sync
 ```
 
 Rhiza reads your `.rhiza/template.yml`, fetches all matching files from the template repository, and writes them into your project.

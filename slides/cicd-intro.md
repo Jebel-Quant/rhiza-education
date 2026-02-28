@@ -363,7 +363,7 @@ You don't need to write workflow files from scratch.
 
 ```bash
 uvx rhiza init        # creates .rhiza/template.yml
-uvx rhiza materialize # writes CI workflow files into your repo
+uvx rhiza sync        # writes CI workflow files into your repo
 ```
 
 You get: CI on every push, linting, test coverage, automated releases, and a weekly sync to keep everything up to date.

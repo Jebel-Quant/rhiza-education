@@ -17,7 +17,7 @@ templates:
   - marimo      # <-- adds marimo support
 ```
 
-After materialising, your project gains a CI workflow that uses marimushka to export and publish all notebooks on every push.
+After syncing, your project gains a CI workflow that uses marimushka to export and publish all notebooks on every push.
 
 ## Two kinds of output
 

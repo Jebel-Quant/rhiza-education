@@ -21,8 +21,8 @@ Developers who are comfortable with Python, git, and basic CI/CD, and want to ad
 | 2 | [uv and uvx](lessons/02-uv-and-uvx.md) | The package manager and tool runner that underpins the Rhiza ecosystem |
 | 3 | [Python Project Conventions](lessons/03-python-project-conventions.md) | src layout, PEP 621 `pyproject.toml`, and `tests/` structure |
 | 4 | [Why Rhiza?](lessons/04-why-rhiza.md) | The problem with one-shot scaffolding and how Rhiza solves it |
-| 5 | [Core Concepts](lessons/05-core-concepts.md) | The key abstractions: template repos, materialisation, and the sync loop |
-| 6 | [Getting Started](lessons/06-getting-started.md) | Install Rhiza, initialise a project, and run your first materialise |
+| 5 | [Core Concepts](lessons/05-core-concepts.md) | The key abstractions: template repos, syncing, and the sync loop |
+| 6 | [Getting Started](lessons/06-getting-started.md) | Install Rhiza, initialise a project, and run your first sync |
 | 7 | [Configuring Your Template](lessons/07-configuring-your-template.md) | Anatomy of `template.yml`, bundles, include/exclude patterns |
 | 8 | [The Sync Lifecycle](lessons/08-the-sync-lifecycle.md) | How automated sync PRs work and how to review them |
 | 9 | [Renovate](lessons/09-renovate.md) | How Renovate keeps your `ref:` pin current and why it is essential at scale |

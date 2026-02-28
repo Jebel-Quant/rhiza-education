@@ -62,7 +62,7 @@ Global installs cause dependency conflicts. If two tools you install globally ne
 
 ## How the Rhiza ecosystem uses uv
 
-All Rhiza-managed projects adopt uv as the standard package manager. When you run `uvx rhiza materialize`, one of the files it writes is `.python-version`, which tells uv which Python version the project targets. The Makefile it provides uses `uv sync` to set up the development environment.
+All Rhiza-managed projects adopt uv as the standard package manager. When you run `uvx rhiza sync`, one of the files it writes is `.python-version`, which tells uv which Python version the project targets. The Makefile it provides uses `uv sync` to set up the development environment.
 
 In CI, Rhiza's template workflows install uv with the official `astral-sh/setup-uv` action and then call `uv sync` or `uvx` — no manual pip steps required.
 

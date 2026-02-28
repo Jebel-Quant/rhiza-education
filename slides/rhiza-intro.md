@@ -183,10 +183,10 @@ The sync is not a bulldozer. It is a proposal.
     <div style="font-weight:bold;color:#1a5276;">your project</div>
     <div style="font-size:0.82em;color:#555;margin-top:0.2em;">.rhiza/template.yml</div>
   </div>
-  <div style="color:#2e86c1;font-size:0.95em;">↑ &nbsp;materialise</div>
+  <div style="color:#2e86c1;font-size:0.95em;">↑ &nbsp;sync</div>
   <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:8px;padding:0.7em 2.5em;text-align:center;min-width:52%;">
     <div style="font-weight:bold;color:#1a5276;">uvx rhiza</div>
-    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">the materialiser — runs locally or in CI</div>
+    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">the syncer — runs locally or in CI</div>
   </div>
 </div>
 
@@ -247,7 +247,7 @@ One file. That's all Rhiza needs.
 4. **Commit** — you review the PR and merge it (or close it if not relevant)
 
 Runs automatically on a **weekly schedule** via GitHub Actions.
-On-demand: `make sync` or `uvx rhiza materialize`.
+On-demand: `make sync` or `uvx rhiza sync`.
 
 ---
 
@@ -290,8 +290,8 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 # 2. Initialise — writes .rhiza/template.yml interactively
 uvx rhiza init
 
-# 3. Materialise — fetches template files and writes them into the project
-uvx rhiza materialize
+# 3. Sync — fetches template files and writes them into the project
+uvx rhiza sync
 
 # 4. Install dev environment
 make install
@@ -303,7 +303,7 @@ That's it. Your project is now Rhiza-managed.
 
 ## What you get on day one
 
-After materialising with `core + github + tests + renovate`:
+After syncing with `core + github + tests + renovate`:
 
 ```
 .github/workflows/rhiza_ci.yml          ← CI: test on push and PRs
@@ -381,7 +381,7 @@ The PR description usually explains what changed at a high level.
 
 | Tool | What it does |
 |------|-------------|
-| **rhiza-cli** | `uvx rhiza init / materialize / validate` — the tool you run |
+| **rhiza-cli** | `uvx rhiza init / sync / validate` — the tool you run |
 | **rhiza-hooks** | Pre-commit hooks: validate config, check version consistency |
 | **rhiza-tools** | `bump`, `release`, `version-matrix`, `coverage-badge` |
 | **rhiza-go** | The same living-template pattern for Go projects |
