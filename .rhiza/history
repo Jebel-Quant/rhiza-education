@@ -1,0 +1,43 @@
+# Rhiza Template History
+# This file lists all files managed by the Rhiza template.
+# Template repository: jebel-quant/rhiza
+# Template branch: v0.8.0
+#
+# Files under template control:
+.editorconfig
+.gitignore
+.pre-commit-config.yaml
+.python-version
+.rhiza/.cfg.toml
+.rhiza/.env
+.rhiza/.gitignore
+.rhiza/.rhiza-version
+.rhiza/assets/rhiza-logo.svg
+.rhiza/docs/ASSETS.md
+.rhiza/docs/CONFIG.md
+.rhiza/docs/LFS.md
+.rhiza/docs/PRIVATE_PACKAGES.md
+.rhiza/docs/RELEASING.md
+.rhiza/docs/TOKEN_SETUP.md
+.rhiza/docs/WORKFLOWS.md
+.rhiza/make.d/README.md
+.rhiza/make.d/bootstrap.mk
+.rhiza/make.d/custom-env.mk
+.rhiza/make.d/custom-task.mk
+.rhiza/make.d/docs.mk
+.rhiza/make.d/quality.mk
+.rhiza/make.d/releasing.mk
+.rhiza/requirements/README.md
+.rhiza/requirements/docs.txt
+.rhiza/requirements/tools.txt
+.rhiza/rhiza.mk
+.rhiza/scripts/.gitkeep
+Makefile
+docs/ARCHITECTURE.md
+docs/CUSTOMIZATION.md
+docs/DEMO.md
+docs/GLOSSARY.md
+docs/QUICK_REFERENCE.md
+docs/SECURITY.md
+renovate.json
+ruff.toml
