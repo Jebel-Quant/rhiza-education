@@ -19,12 +19,12 @@ He later spent time as a Visiting Scholar at Stanford with Professor Stephen Boy
 
 | Repo | Contributions |
 |------|--------------|
-| rhiza | 629 |
-| marimushka | 358 |
-| rhiza-cli | 123 |
-| rhiza-tools | 42 |
-| rhiza-hooks | 39 |
-| **Total** | **1,191** |
+| rhiza | 761 |
+| marimushka | 387 |
+| rhiza-cli | 195 |
+| rhiza-tools | 61 |
+| rhiza-hooks | 54 |
+| **Total** | **1,458** |
 
 <br style="clear: both;">
 
@@ -38,12 +38,12 @@ Harry is the second-largest contributor to the ecosystem and has been involved a
 
 | Repo | Contributions |
 |------|--------------|
-| rhiza | 122 |
-| rhiza-tools | 43 |
-| rhiza-cli | 25 |
+| rhiza | 128 |
+| rhiza-tools | 47 |
+| rhiza-cli | 29 |
 | rhiza-hooks | 14 |
 | marimushka | 3 |
-| **Total** | **207** |
+| **Total** | **221** |
 
 <br style="clear: both;">
 
