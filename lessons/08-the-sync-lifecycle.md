@@ -21,7 +21,7 @@ You can also trigger it manually from the GitHub Actions tab.
 
 **2. Renovate**
 
-Renovate watches the `ref: vX.Y.Z` line in your `.rhiza/template.yml`. When the template repository publishes a new tag, Renovate opens a PR that bumps your `ref` to the new version — for example, changing `ref: v0.7.1` to `ref: v0.8.0`.
+Renovate watches the `ref: vX.Y.Z` line in your `.rhiza/template.yml`. When the template repository publishes a new tag, Renovate opens a PR that bumps your `ref` to the new version — for example, changing `ref: v0.9.4` to `ref: v0.9.5`.
 
 These two PRs work together: Renovate bumps the version, the sync workflow applies what changed in that new version.
 
