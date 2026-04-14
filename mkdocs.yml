@@ -46,7 +46,6 @@ nav:
   - 'Slides': slides.md
   - Appendices:
     - 'A1 — GitLab Users': A1-gitlab-users.md
-    - 'A2 — Marimushka': A2-marimushka.md
     - 'A3 — Projects Using Rhiza': A3-projects-using-rhiza.md
     - 'A4 — Contributors': A4-contributors.md
 
