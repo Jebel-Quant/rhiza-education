@@ -56,7 +56,7 @@ The following projects live outside the Jebel-Quant organisation and have indepe
 ```yaml
 # .rhiza/template.yml (cvxgrp/simulator)
 template-repository: "jebel-quant/rhiza"
-template-branch: "v0.8.0"
+template-branch: "v0.9.5"
 
 templates:
   - core
@@ -82,7 +82,7 @@ Notable choices: the `legal` bundle (adds standard licence headers and notice fi
 ```yaml
 # .rhiza/template.yml (tschm/jsharpe)
 repository: "jebel-quant/rhiza"
-ref: "v0.8.0"
+ref: "v0.9.5"
 
 templates:
   - core
@@ -109,7 +109,7 @@ The `exclude: ruff.toml` is the most instructive part of this config. The projec
 ```yaml
 # .rhiza/template.yml (chebpy/chebpy)
 repository: "jebel-quant/rhiza"
-ref: "v0.8.0"
+ref: "v0.9.5"
 
 templates:
   - devcontainer

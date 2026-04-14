@@ -7,7 +7,7 @@ The file `.rhiza/template.yml` is the single source of configuration for Rhiza i
 ```yaml
 # .rhiza/template.yml
 repository: Jebel-Quant/rhiza
-ref: v0.8.0
+ref: v0.9.5
 
 templates:
   - core
@@ -36,12 +36,12 @@ This is the GitHub repository that Rhiza treats as your template source. It can 
 ## `ref`
 
 ```yaml
-ref: v0.8.0
+ref: v0.9.5
 ```
 
 This pins your project to a specific version of the template. It accepts:
 
-- **A tag** (e.g. `v0.8.0`) — recommended. Gives you a stable, known version. Renovate can detect new tags and open version-bump PRs automatically.
+- **A tag** (e.g. `v0.9.5`) — recommended. Gives you a stable, known version. Renovate can detect new tags and open version-bump PRs automatically.
 - **A branch** (e.g. `main`) — always fetches the latest commit on that branch. Useful during active development of a template, but means your project can receive breaking changes without a PR review step.
 
 For production projects, always pin to a tag.

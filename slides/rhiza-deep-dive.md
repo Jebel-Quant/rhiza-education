@@ -229,7 +229,7 @@ The sync is not a bulldozer. It is a proposal.
 
 ```yaml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v0.8.0                      # Which version (pinned tag — recommended)
+ref: v0.9.5                      # Which version (pinned tag — recommended)
 
 templates:                        # Named bundles of files to include
   - core
@@ -324,11 +324,11 @@ Without Renovate, the `ref:` pin is frozen. Projects drift behind the template s
 
 <div style="display:flex;flex-direction:column;gap:0.45em;margin:0.9em 0;font-size:0.93em;">
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    template repo publishes <strong>v0.9.0</strong>
+    template repo publishes <strong>v0.9.5</strong>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓</div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    Renovate opens PR: <code>ref: v0.8.0 → v0.9.0</code> &nbsp;<span style="color:#888;">(one line diff)</span>
+    Renovate opens PR: <code>ref: v0.9.4 → v0.9.5</code> &nbsp;<span style="color:#888;">(one line diff)</span>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you merge</span></div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
@@ -343,14 +343,14 @@ Two separate PRs: **should we upgrade?** then **here's what changed.**
 ## The `ref:` pin in depth
 
 ```yaml
-ref: v0.8.0   # pinned tag — recommended for all production repos
+ref: v0.9.5   # pinned tag — recommended for all production repos
 ref: main     # tracks latest commit — useful during template development only
 ```
 
 **Pinning to a tag gives you:**
 - A known, auditable version — you can see exactly what each project is running
 - Safe upgrades — Renovate proposes the bump, you review before it lands
-- Easy rollback — if v0.9.0 breaks something, the cause is unambiguous
+- Easy rollback — if v0.9.5 breaks something, the cause is unambiguous
 
 **Tracking `main`** delivers template changes immediately with no review step. Use only when actively developing the template. Never in repos others depend on.
 
@@ -389,7 +389,7 @@ Running `uvx rhiza init` walks you through three questions:
 
 ```
 ? Template repository (GitHub owner/repo): Jebel-Quant/rhiza
-? Template ref (tag, branch, or commit):   v0.8.0
+? Template ref (tag, branch, or commit):   v0.9.5
 ? Bundles to include:                      core, github, tests, renovate
 ```
 

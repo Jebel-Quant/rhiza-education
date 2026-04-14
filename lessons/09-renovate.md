@@ -4,7 +4,7 @@
 
 ## The problem Renovate solves for Rhiza
 
-Consider what happens after you run `uvx rhiza sync` for the first time with `ref: v0.8.0` pinned in your `template.yml`. Everything is wired up — CI, linting, releases. Six months later the template is at `v0.12.0` with security fixes, updated runner versions, and a new linting rule. Your project is still on `v0.8.0`.
+Consider what happens after you run `uvx rhiza sync` for the first time with `ref: v0.9.5` pinned in your `template.yml`. Everything is wired up — CI, linting, releases. Six months later the template is at `v0.12.0` with security fixes, updated runner versions, and a new linting rule. Your project is still on `v0.9.5`.
 
 Without Renovate, nothing happens. The template has moved, but your `ref:` is still pinned to the old version. You have to notice the new release yourself, manually update the file, re-run `uvx rhiza sync`, and open a PR. Across a handful of projects this is manageable. Across twenty or thirty it becomes the same problem Rhiza was built to solve in the first place: inconsistency through neglect.
 
@@ -15,10 +15,10 @@ Renovate closes this loop automatically. It opens a PR whenever a new template v
 Rhiza separates *knowing a new version exists* from *applying what changed in it*. Renovate handles the first part; the sync workflow handles the second.
 
 ```
-template repo publishes v0.9.0
+template repo publishes v0.9.5
          │
          ▼
-Renovate opens PR: ref: v0.8.0 → v0.9.0
+Renovate opens PR: ref: v0.9.4 → v0.9.5
          │
          ▼ (you review and merge)
 sync workflow triggers
@@ -34,7 +34,7 @@ The Renovate PR contains a single meaningful change: one line in `template.yml`.
 When a new template tag is published, Renovate opens a PR with a title like:
 
 ```
-Update dependency Jebel-Quant/rhiza to v0.9.0
+Update dependency Jebel-Quant/rhiza to v0.9.5
 ```
 
 The diff is minimal:
@@ -42,8 +42,8 @@ The diff is minimal:
 ```diff
 # .rhiza/template.yml
  repository: Jebel-Quant/rhiza
--ref: v0.8.0
-+ref: v0.9.0
+-ref: v0.9.4
++ref: v0.9.5
 ```
 
 The PR body includes a changelog summary (when the template repo provides one), a confidence indicator based on how many other repos have already merged this update, and links to the release notes.

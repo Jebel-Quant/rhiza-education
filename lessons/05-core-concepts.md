@@ -25,7 +25,7 @@ Every downstream project has exactly one Rhiza config file. Here is what it look
 ```yaml
 # .rhiza/template.yml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v0.7.1                      # Which version of the template to use
+ref: v0.9.5                      # Which version of the template to use
 
 templates:                        # Named bundles to include
   - core
@@ -79,7 +79,7 @@ This loop runs automatically on a schedule (via a GitHub Actions workflow includ
 
 ## Version pinning and automated updates
 
-The `ref:` field in `template.yml` pins your project to a specific version of the template. When the template repo releases a new version, Renovate — a dependency automation tool — detects the new tag and opens a PR in your project that bumps `ref: v0.7.1` to `ref: v0.8.0`. You review and merge that PR, then the next sync picks up whatever changed in the new template version.
+The `ref:` field in `template.yml` pins your project to a specific version of the template. When the template repo releases a new version, Renovate — a dependency automation tool — detects the new tag and opens a PR in your project that bumps `ref: v0.9.4` to `ref: v0.9.5`. You review and merge that PR, then the next sync picks up whatever changed in the new template version.
 
 This gives you **opt-in updates**: the template can evolve quickly without forcing changes on you, but you can easily stay current with a single merge.
 
