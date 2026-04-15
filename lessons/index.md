@@ -25,9 +25,8 @@ Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, 
 | Appendix | Title | Audience |
 |----------|-------|----------|
 | A1 | [Rhiza on GitLab](A1-gitlab-users.md) | Teams whose projects live on GitLab rather than GitHub |
-| A2 | [Publishing Notebooks with Marimushka](A2-marimushka.md) | Exporting marimo notebooks to a static site with the `marimo` bundle |
-| A3 | [Projects Using Rhiza](A3-projects-using-rhiza.md) | Real repos using Rhiza — from Stanford's CVXGRP to Janus Henderson — with annotated `template.yml` files |
-| A4 | [Contributors](A4-contributors.md) | The people who built Rhiza and its ecosystem, with profiles and contribution counts |
+| A2 | [Projects Using Rhiza](A2-projects-using-rhiza.md) | Real repos using Rhiza — from Stanford's CVXGRP to Janus Henderson — with annotated `template.yml` files |
+| A3 | [Contributors](A3-contributors.md) | The people who built Rhiza and its ecosystem, with profiles and contribution counts |
 
 ## How to use this curriculum
 

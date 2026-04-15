@@ -49,7 +49,7 @@ Each bundle has its own guide in [`rhiza/docs/`](https://github.com/Jebel-Quant/
 |----------|--------|---------------|
 | [DEVCONTAINER.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/DEVCONTAINER.md) | `devcontainer` | VS Code Dev Container and GitHub Codespaces configuration |
 | [DOCKER.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/DOCKER.md) | `docker` | Dockerfile structure and container CI workflow |
-| [MARIMO.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/MARIMO.md) | `marimo` | Marimo notebook conventions, folder layout, and publishing via marimushka |
+| [MARIMO.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/MARIMO.md) | `marimo` | Marimo notebook conventions and folder layout |
 | [PRESENTATION.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/PRESENTATION.md) | `presentation` | Slide generation from Markdown using Marp |
 | [GH_AW.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/GH_AW.md) | — | GitHub Agentic Workflows: AI-driven repository automation built into the Rhiza template |
 
