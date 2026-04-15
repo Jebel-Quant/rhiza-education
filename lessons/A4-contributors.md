@@ -1,6 +1,6 @@
 # Appendix A4 — Contributors
 
-Rhiza and its ecosystem are built by a small group of people. This page lists every human contributor across the five core repositories — `rhiza`, `rhiza-cli`, `rhiza-tools`, `rhiza-hooks`, and `marimushka` — with their GitHub profiles and contribution counts.
+Rhiza and its ecosystem are built by a small group of people. This page lists every human contributor across the five core repositories — `rhiza`, `rhiza-cli`, `rhiza-tools` and `rhiza-hooks` — with their GitHub profiles and contribution counts.
 
 Contribution counts reflect commits to the default branch as of the time this page was written. Automated commits from Renovate, Copilot, and other bots are excluded.
 
@@ -20,7 +20,6 @@ He later spent time as a Visiting Scholar at Stanford with Professor Stephen Boy
 | Repo | Contributions |
 |------|--------------|
 | rhiza | 761 |
-| marimushka | 387 |
 | rhiza-cli | 195 |
 | rhiza-tools | 61 |
 | rhiza-hooks | 54 |
@@ -42,7 +41,6 @@ Harry is the second-largest contributor to the ecosystem and has been involved a
 | rhiza-tools | 47 |
 | rhiza-cli | 29 |
 | rhiza-hooks | 14 |
-| marimushka | 3 |
 | **Total** | **221** |
 
 <br style="clear: both;">
