@@ -23,7 +23,7 @@ He later spent time as a Visiting Scholar at Stanford with Professor Stephen Boy
 | rhiza-cli | 195 |
 | rhiza-tools | 61 |
 | rhiza-hooks | 54 |
-| **Total** | **1,458** |
+| **Total** | **1,071** |
 
 <br style="clear: both;">
 
@@ -41,7 +41,7 @@ Harry is the second-largest contributor to the ecosystem and has been involved a
 | rhiza-tools | 47 |
 | rhiza-cli | 29 |
 | rhiza-hooks | 14 |
-| **Total** | **221** |
+| **Total** | **218** |
 
 <br style="clear: both;">
 
