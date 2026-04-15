@@ -24,12 +24,6 @@ The pre-commit hook repository. Because it is a Python package with its own CI a
 
 The utility command package. Its CI pipeline uses `version-matrix` (from rhiza-tools) to generate the Python test matrix and `generate-coverage-badge` to publish the coverage badge — tools built by the project, consumed by its own CI, all wired together by the Rhiza template.
 
-### marimushka
-
-[github.com/Jebel-Quant/marimushka](https://github.com/Jebel-Quant/marimushka)
-
-The notebook export tool. It uses the `marimo` bundle from Rhiza to publish its own documentation notebooks to GitHub Pages — again, the tool consuming its own output.
-
 ## A real-world library: jquantstats
 
 [github.com/Jebel-Quant/jquantstats](https://github.com/Jebel-Quant/jquantstats)
