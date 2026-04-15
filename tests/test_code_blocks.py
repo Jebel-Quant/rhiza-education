@@ -16,18 +16,34 @@ import yaml
 REPO_ROOT = Path(__file__).parent.parent
 MARKDOWN_DIRS = [REPO_ROOT / "lessons", REPO_ROOT / "slides"]
 
+# Matches any fenced code block, capturing the language tag and body.
+_FENCE_RE = re.compile(r"```(\w+)\n(.*?)```", re.DOTALL)
 
-def _collect_code_blocks(lang: str) -> list[tuple[str, int, str]]:
-    """Return a list of (relative_path, block_index, block_text) for *lang*."""
-    pattern = re.compile(rf"```{lang}\n(.*?)```", re.DOTALL)
-    results: list[tuple[str, int, str]] = []
+
+def _collect_all_blocks() -> tuple[list[tuple[str, int, str]], list[tuple[str, int, str]]]:
+    """Walk every Markdown file once and return (yaml_blocks, toml_blocks).
+
+    Each element is a list of (relative_path, block_index, block_text) tuples
+    where block_index counts blocks of that language within the file.
+    """
+    yaml_blocks: list[tuple[str, int, str]] = []
+    toml_blocks: list[tuple[str, int, str]] = []
+    yaml_counters: dict[str, int] = {}
+    toml_counters: dict[str, int] = {}
+
     for directory in MARKDOWN_DIRS:
         for md_file in sorted(directory.rglob("*.md")):
-            rel = md_file.relative_to(REPO_ROOT)
+            rel = str(md_file.relative_to(REPO_ROOT))
             text = md_file.read_text(encoding="utf-8")
-            for idx, block in enumerate(pattern.findall(text), start=1):
-                results.append((str(rel), idx, block))
-    return results
+            for lang, body in _FENCE_RE.findall(text):
+                if lang in ("yaml", "yml"):
+                    yaml_counters[rel] = yaml_counters.get(rel, 0) + 1
+                    yaml_blocks.append((rel, yaml_counters[rel], body))
+                elif lang == "toml":
+                    toml_counters[rel] = toml_counters.get(rel, 0) + 1
+                    toml_blocks.append((rel, toml_counters[rel], body))
+
+    return yaml_blocks, toml_blocks
 
 
 def _block_id(val: tuple[str, int, str]) -> str:
@@ -35,8 +51,7 @@ def _block_id(val: tuple[str, int, str]) -> str:
     return f"{path}::block{idx}"
 
 
-YAML_BLOCKS = _collect_code_blocks("yaml") + _collect_code_blocks("yml")
-TOML_BLOCKS = _collect_code_blocks("toml")
+YAML_BLOCKS, TOML_BLOCKS = _collect_all_blocks()
 
 
 @pytest.mark.parametrize("path,idx,block", YAML_BLOCKS, ids=[_block_id(b) for b in YAML_BLOCKS])
