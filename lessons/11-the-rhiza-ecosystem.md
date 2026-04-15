@@ -79,7 +79,7 @@ It is useful for team leads or platform engineers who want a persistent overview
 
 ## marimushka — notebook publishing
 
-[`marimushka`](https://github.com/Jebel-Quant/marimushka) is covered in [Appendix A2](./A2-marimushka.md). In ecosystem terms, it is the publishing layer for the `marimo` bundle — it converts `.py` marimo notebooks to static HTML and WebAssembly for deployment to GitHub Pages.
+[`marimushka`](https://github.com/Jebel-Quant/marimushka) is the publishing layer for the `marimo` bundle — it converts `.py` marimo notebooks to static HTML and WebAssembly for deployment to GitHub Pages.
 
 ## How the pieces fit together
 

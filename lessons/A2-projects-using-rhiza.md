@@ -1,4 +1,4 @@
-# Appendix A3 — Projects Using Rhiza
+# Appendix A2 — Projects Using Rhiza
 
 The best evidence that a tool works is that its authors use it themselves. This appendix lists the public projects that are already synced with Rhiza, so you can inspect real `.rhiza/template.yml` files, see what bundles teams actually choose, and observe how the sync PRs look in practice.
 
@@ -28,7 +28,7 @@ The utility command package. Its CI pipeline uses `version-matrix` (from rhiza-t
 
 [github.com/Jebel-Quant/marimushka](https://github.com/Jebel-Quant/marimushka)
 
-The notebook export tool (covered in [Appendix A2](./A2-marimushka.md)). It uses the `marimo` bundle from Rhiza to publish its own documentation notebooks to GitHub Pages — again, the tool consuming its own output.
+The notebook export tool. It uses the `marimo` bundle from Rhiza to publish its own documentation notebooks to GitHub Pages — again, the tool consuming its own output.
 
 ## A real-world library: jquantstats
 

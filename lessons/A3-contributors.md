@@ -1,4 +1,4 @@
-# Appendix A4 — Contributors
+# Appendix A3 — Contributors
 
 Rhiza and its ecosystem are built by a small group of people. This page lists every human contributor across the five core repositories — `rhiza`, `rhiza-cli`, `rhiza-tools` and `rhiza-hooks` — with their GitHub profiles and contribution counts.
 
