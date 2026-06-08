@@ -229,13 +229,10 @@ The sync is not a bulldozer. It is a proposal.
 
 ```yaml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v0.9.5                      # Which version (pinned tag — recommended)
+ref: v0.18.8                     # Which version (pinned tag — recommended)
 
-templates:                        # Named bundles of files to include
-  - core
-  - github
-  - tests
-  - renovate
+profiles:                         # Curated bundle preset (recommended)
+  - github-project
 
 exclude: |                        # Files you own locally — never overwritten
   ruff.toml
@@ -267,29 +264,39 @@ The canonical template is `Jebel-Quant/rhiza`. For most teams the right setup is
 
 ## Bundles — named groups of files
 
+**Feature bundles** (local tooling, no CI/CD):
+
 | Bundle | What it includes |
 |--------|-----------------|
 | `core` | Makefile, ruff.toml, pre-commit config, editor config |
-| `github` | All GitHub Actions CI/CD workflows |
-| `tests` | pytest config, coverage, security scanning |
-| `docker` | Dockerfile and container CI workflow |
+| `tests` | pytest config, coverage, type checking |
+| `docker` | Dockerfile and container configuration |
 | `marimo` | Interactive notebook support |
 | `presentation` | Slide generation from Markdown (Marp) |
 | `renovate` | Automated dependency update config |
 
-`core` is always required. All others are optional.
+**Platform overlay bundles** layer CI/CD on top: `github-tests`, `github-book`, `gitlab-tests`, etc.
+
+**Profiles** (`github-project`, `gitlab-project`, `local`) expand to a sensible combination. Start here.
 
 ---
 
-## What's in the `github` bundle
+## What's in the `github` + `github-tests` bundles
+
+The `github` overlay provides the base platform wiring:
+
+| File | Purpose |
+|------|---------|
+| `rhiza_sync.yml` | Weekly template sync — opens the sync PR |
+| `rhiza_release.yml` | Build wheel, publish to PyPI via OIDC, create GitHub Release |
+| `rhiza_pre-commit.yml` | Run pre-commit hooks in CI |
+| `rhiza_renovate.yml` | Self-hosted Renovate runner (optional) |
+
+The `github-tests` overlay adds testing CI on top:
 
 | File | Purpose |
 |------|---------|
 | `rhiza_ci.yml` | Test matrix across Python versions on push and PRs |
-| `rhiza_pre-commit.yml` | Run pre-commit hooks in CI |
-| `rhiza_sync.yml` | Weekly template sync — opens the sync PR |
-| `rhiza_release.yml` | Build wheel, publish to PyPI via OIDC, create GitHub Release |
-| `rhiza_renovate.yml` | Self-hosted Renovate runner (optional) |
 
 None of these need to be written manually.
 They arrive via `uvx rhiza sync` and stay current via the sync.
@@ -324,11 +331,11 @@ Without Renovate, the `ref:` pin is frozen. Projects drift behind the template s
 
 <div style="display:flex;flex-direction:column;gap:0.45em;margin:0.9em 0;font-size:0.93em;">
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    template repo publishes <strong>v0.9.5</strong>
+    template repo publishes <strong>v0.18.8</strong>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓</div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    Renovate opens PR: <code>ref: v0.9.4 → v0.9.5</code> &nbsp;<span style="color:#888;">(one line diff)</span>
+    Renovate opens PR: <code>ref: v0.18.7 → v0.18.8</code> &nbsp;<span style="color:#888;">(one line diff)</span>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you merge</span></div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
@@ -343,14 +350,14 @@ Two separate PRs: **should we upgrade?** then **here's what changed.**
 ## The `ref:` pin in depth
 
 ```yaml
-ref: v0.9.5   # pinned tag — recommended for all production repos
+ref: v0.18.8  # pinned tag — recommended for all production repos
 ref: main     # tracks latest commit — useful during template development only
 ```
 
 **Pinning to a tag gives you:**
 - A known, auditable version — you can see exactly what each project is running
 - Safe upgrades — Renovate proposes the bump, you review before it lands
-- Easy rollback — if v0.9.5 breaks something, the cause is unambiguous
+- Easy rollback — if v0.18.8 breaks something, the cause is unambiguous
 
 **Tracking `main`** delivers template changes immediately with no review step. Use only when actively developing the template. Never in repos others depend on.
 
@@ -389,8 +396,8 @@ Running `uvx rhiza init` walks you through three questions:
 
 ```
 ? Template repository (GitHub owner/repo): Jebel-Quant/rhiza
-? Template ref (tag, branch, or commit):   v0.9.5
-? Bundles to include:                      core, github, tests, renovate
+? Template ref (tag, branch, or commit):   v0.18.8
+? Profile or bundles to include:           github-project
 ```
 
 The result is `.rhiza/template.yml` — one file, under version control, that describes everything Rhiza will manage in this project.

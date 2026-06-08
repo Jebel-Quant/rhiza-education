@@ -4,15 +4,33 @@ The file `.rhiza/template.yml` is the single source of configuration for Rhiza i
 
 ## A complete example
 
+The recommended approach is to use a **profile** — a curated preset that expands to a sensible bundle selection:
+
 ```yaml
-# .rhiza/template.yml
+# .rhiza/template.yml (profile-based — recommended)
 repository: Jebel-Quant/rhiza
-ref: v0.9.5
+ref: v0.18.8
+
+profiles:
+  - github-project
+
+exclude: |
+  .rhiza/scripts/customisations/*
+  Makefile.local
+```
+
+For finer control, you can list bundles explicitly:
+
+```yaml
+# .rhiza/template.yml (explicit bundles)
+repository: Jebel-Quant/rhiza
+ref: v0.18.8
 
 templates:
   - core
-  - github
   - tests
+  - github
+  - github-tests
   - renovate
 
 exclude: |
@@ -36,28 +54,48 @@ This is the GitHub repository that Rhiza treats as your template source. It can 
 ## `ref`
 
 ```yaml
-ref: v0.9.5
+ref: v0.18.8
 ```
 
 This pins your project to a specific version of the template. It accepts:
 
-- **A tag** (e.g. `v0.9.5`) — recommended. Gives you a stable, known version. Renovate can detect new tags and open version-bump PRs automatically.
+- **A tag** (e.g. `v0.18.8`) — recommended. Gives you a stable, known version. Renovate can detect new tags and open version-bump PRs automatically.
 - **A branch** (e.g. `main`) — always fetches the latest commit on that branch. Useful during active development of a template, but means your project can receive breaking changes without a PR review step.
 
 For production projects, always pin to a tag.
 
-## `templates` — named bundles
+## `profiles` — curated bundle presets
 
-The `templates` key lists the named bundles you want from the template repository:
+The `profiles` key selects a preset that expands to a curated list of bundles:
+
+```yaml
+profiles:
+  - github-project
+```
+
+| Profile | What it includes |
+|---------|-----------------|
+| `github-project` | `core`, `github`, `tests`, `github-tests`, `renovate` — the standard setup for a Python project on GitHub |
+| `gitlab-project` | `core`, `gitlab`, `tests`, `gitlab-tests`, `renovate` — the same for GitLab |
+| `local` | `core` only — for projects that only need local tooling, no CI/CD |
+
+Using a profile means your bundle selection automatically stays consistent with what Rhiza recommends for that setup. You can still add extra bundles via `templates:` alongside a profile.
+
+## `templates` — explicit bundle selection
+
+For finer control, the `templates` key lists bundles directly:
 
 ```yaml
 templates:
   - core
-  - github
   - tests
+  - github
+  - github-tests
 ```
 
-Bundles are named groups of files defined in the template repo. They are the easiest way to get a meaningful set of files without enumerating every path.
+Bundles come in two kinds. **Feature bundles** contain local tooling only (`core`, `tests`, `book`, `marimo`, etc.). **Platform overlay bundles** layer CI/CD workflows on top (`github-tests`, `github-book`, `gitlab-tests`, etc.). When you want CI for a feature, you need both: for example, `tests` (pytest config) plus `github-tests` (the GitHub Actions workflow that runs it).
+
+Run `make explain-bundles` to see every available bundle with its description and dependencies.
 
 ## `include` — explicit file patterns
 
@@ -92,18 +130,21 @@ This is how you customise a file that Rhiza would otherwise manage. Add it to `e
 
 ## Choosing your starting bundles
 
-Here is a quick guide:
+For most projects, start with the `github-project` or `gitlab-project` profile and add feature bundles as needed:
 
-| You want... | Add these bundles |
-|-------------|------------------|
-| A working project from day one | `core`, `github`, `tests` |
-| Automated dependency updates | `+ renovate` |
-| Docker support | `+ docker` |
-| Interactive notebooks | `+ marimo` |
+| You want... | Add these |
+|-------------|----------|
+| A working GitHub project from day one | `profiles: [github-project]` |
+| A working GitLab project from day one | `profiles: [gitlab-project]` |
+| Interactive notebooks | `+ marimo` (local), `+ github-marimo` (with GitHub CI) |
+| API documentation | `+ book` (local), `+ github-book` (with GitHub Pages publish) |
+| Docker builds | `+ docker` (local), `+ github-docker` (with GitHub CI) |
 | Slide decks from Markdown | `+ presentation` |
-| GitLab instead of GitHub | replace `github` with `gitlab` |
+| Licence headers and IP notices | `+ legal` |
+| Git LFS support | `+ lfs` |
+| Performance benchmarks | `+ benchmarks` |
 
-When in doubt, start with `core`, `github`, and `tests`. You can always add bundles later — just add them to `templates` and re-run `uvx rhiza sync`.
+When in doubt, start with `profiles: [github-project]`. You can always add bundles later — add them to `templates:` and re-run `uvx rhiza sync`.
 
 ## Updating the config
 

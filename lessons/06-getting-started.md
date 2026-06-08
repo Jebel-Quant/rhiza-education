@@ -31,16 +31,23 @@ After you answer, it writes `.rhiza/template.yml` to your project. This is the o
 
 > **Note:** `uvx rhiza init` does not write any template files yet. It only creates the config that tells Rhiza what to fetch. The next step does the actual fetching.
 
-## Step 2: Choose your bundles
+## Step 2: Choose your bundles or profile
 
-During `init`, you will be asked which bundles to include. For a typical Python project, a good starting point is:
+During `init`, you will be asked what to include. For most projects, choose the `github-project` profile — it expands to `core`, `github`, `tests`, `github-tests`, and `renovate`, which covers CI/CD, testing, and automated dependency updates in one step.
+
+If you prefer to select bundles individually, the essentials are:
 
 - `core` (always required)
-- `github` (CI/CD workflows — highly recommended)
-- `tests` (pytest, coverage)
+- `github` (base GitHub Actions setup)
+- `tests` (pytest, coverage — local tooling)
+- `github-tests` (testing and security scan workflows on GitHub)
 - `renovate` (automated dependency updates)
 
-You can add more bundles later by editing `template.yml` and re-running `sync`.
+You can add more bundles later by editing `template.yml` and re-running `sync`. To see every available bundle with descriptions and dependency information, run:
+
+```bash
+make explain-bundles
+```
 
 ## Step 3: Sync
 
@@ -74,7 +81,15 @@ git commit -m "chore: initialise rhiza template"
 
 ## Step 4: Verify your setup
 
-Run `make help` to see all the Makefile targets now available in your project. You should see targets grouped by category: testing, quality, docs, releasing, and more.
+Run `make doctor` to check that your project and environment are correctly configured:
+
+```bash
+make doctor
+```
+
+This validates required tools, Python version consistency across `.python-version`, `pyproject.toml`, and the CI matrix, and the `.rhiza/` configuration. Start here whenever something seems wrong.
+
+Run `make help` to see all the Makefile targets now available. You should see targets grouped by category: testing, quality, docs, releasing, and more.
 
 Run `make install` to set up your development environment:
 

@@ -15,6 +15,15 @@ The lessons so far have focused on the core workflow: configure `template.yml`, 
 
 You rarely need to install `rhiza-cli` globally — `uvx` handles it on demand. The Makefile target (`make sync`) calls `uvx rhiza` under the hood.
 
+The `core` bundle also ships two Makefile targets that are useful for everyday diagnostics:
+
+| Target | What it does |
+|--------|-------------|
+| `make doctor` | Validates your project and environment — required tools, Python version consistency, `.rhiza/` config |
+| `make explain-bundles` | Lists all available bundles with descriptions, dependency relationships, and platform grouping |
+
+Start with `make doctor` when something is wrong. Run `make explain-bundles` when you are planning which bundles to add.
+
 ## rhiza-hooks — pre-commit hooks
 
 [`rhiza-hooks`](https://github.com/Jebel-Quant/rhiza-hooks) is a pre-commit hook repository. The `core` bundle includes a `.pre-commit-config.yaml` that pulls from it. The hooks run automatically on `git commit` and catch common mistakes before they hit CI:

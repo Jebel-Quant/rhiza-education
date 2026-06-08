@@ -154,7 +154,7 @@ When you visit any of these projects, the following are worth inspecting
 
 ## A note on the configs you will find
 
-Not every project here uses the current config format or best practices — and that is useful. You will find `template-repository` / `template-branch` alongside `repository` / `ref`; projects tracking `main` rather than a pinned tag; and `exclude:` entries that reflect real customisation decisions. Reading these configs as an outsider — asking "why did they exclude that?" or "why are they on `main`?" — is one of the best ways to build intuition for the trade-offs described in this curriculum.
+Not every project here uses the current config format or best practices — and that is useful. You will find `template-repository` / `template-branch` alongside `repository` / `ref`; projects tracking `main` rather than a pinned tag; `templates:` bundle lists rather than the newer `profiles:` shorthand; and `exclude:` entries that reflect real customisation decisions. Reading these configs as an outsider — asking "why did they exclude that?" or "why are they on `main`?" — is one of the best ways to build intuition for the trade-offs described in this curriculum.
 
 ---
 
