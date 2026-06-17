@@ -1229,7 +1229,7 @@ section.lead::before { display: none; }
 ;" data-marpit-pagination-total="45">
 <h2 id="the-config-file-rhizatemplateyml">The config file: <code>.rhiza/template.yml</code></h2>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-yaml"><span class="hljs-attr">repository:</span> <span class="hljs-string">Jebel-Quant/rhiza</span>   <span class="hljs-comment"># Which template repo to sync from</span>
-<span class="hljs-attr">ref:</span> <span class="hljs-string">v0.18.8</span>                     <span class="hljs-comment"># Which version (pinned tag — recommended)</span>
+<span class="hljs-attr">ref:</span> <span class="hljs-string">v0.19.3</span>                     <span class="hljs-comment"># Which version (pinned tag — recommended)</span>
 
 <span class="hljs-attr">profiles:</span>                         <span class="hljs-comment"># Curated bundle preset (recommended)</span>
   <span class="hljs-bullet">-</span> <span class="hljs-string">github-project</span>
@@ -1714,11 +1714,11 @@ section.lead::before { display: none; }
 <p>Without Renovate, the <code>ref:</code> pin is frozen. Projects drift behind the template silently.</p>
 <div style="display:flex;flex-direction:column;gap:0.45em;margin:0.9em 0;font-size:0.93em;">
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    template repo publishes <strong>v0.18.8</strong>
+    template repo publishes <strong>v0.19.3</strong>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓</div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    Renovate opens PR: <code>ref: v0.18.7 → v0.18.8</code> &nbsp;<span style="color:#888;">(one line diff)</span>
+    Renovate opens PR: <code>ref: v0.19.2 → v0.19.3</code> &nbsp;<span style="color:#888;">(one line diff)</span>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you merge</span></div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
@@ -1798,14 +1798,14 @@ section::before {
 section.lead::before { display: none; }
 ;" data-marpit-pagination-total="45">
 <h2 id="the-ref-pin-in-depth">The <code>ref:</code> pin in depth</h2>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-yaml"><span class="hljs-attr">ref:</span> <span class="hljs-string">v0.18.8</span>  <span class="hljs-comment"># pinned tag — recommended for all production repos</span>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-yaml"><span class="hljs-attr">ref:</span> <span class="hljs-string">v0.19.3</span>  <span class="hljs-comment"># pinned tag — recommended for all production repos</span>
 <span class="hljs-attr">ref:</span> <span class="hljs-string">main</span>     <span class="hljs-comment"># tracks latest commit — useful during template development only</span>
 </code></pre>
 <p><strong>Pinning to a tag gives you:</strong></p>
 <ul>
 <li>A known, auditable version — you can see exactly what each project is running</li>
 <li>Safe upgrades — Renovate proposes the bump, you review before it lands</li>
-<li>Easy rollback — if v0.18.8 breaks something, the cause is unambiguous</li>
+<li>Easy rollback — if v0.19.3 breaks something, the cause is unambiguous</li>
 </ul>
 <p><strong>Tracking <code>main</code></strong> delivers template changes immediately with no review step. Use only when actively developing the template. Never in repos others depend on.</p>
 <footer>Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education · rhiza {{ rhiza_version }} / rhiza-cli {{ rhiza_cli_version }}</footer>
@@ -2040,7 +2040,7 @@ section.lead::before { display: none; }
 <h2 id="what-rhiza-init-asks">What <code>rhiza init</code> asks</h2>
 <p>Running <code>uvx rhiza init</code> walks you through three questions:</p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code>? Template repository (GitHub owner/repo): Jebel-Quant/rhiza
-? Template ref (tag, branch, or commit):   v0.18.8
+? Template ref (tag, branch, or commit):   v0.19.3
 ? Profile or bundles to include:           github-project
 </code></pre>
 <p>The result is <code>.rhiza/template.yml</code> — one file, under version control, that describes everything Rhiza will manage in this project.</p>
