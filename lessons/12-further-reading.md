@@ -81,6 +81,28 @@ Each command in [`rhiza-tools`](https://github.com/Jebel-Quant/rhiza-tools) has 
 
 ---
 
+## Claude Code integration
+
+The [`rhiza-config`](https://github.com/Jebel-Quant/rhiza-config) plugin marketplace ships the `rhiza` plugin — slash commands that drive the sync and quality workflow from Claude Code. Each command has its source in [`commands/`](https://github.com/Jebel-Quant/rhiza-config/tree/main/commands).
+
+| Document | Command | What it covers |
+|----------|---------|---------------|
+| [README.md](https://github.com/Jebel-Quant/rhiza-config/blob/main/README.md) | — | Installing the marketplace and the full command list |
+| [boost.md](https://github.com/Jebel-Quant/rhiza-config/blob/main/commands/boost.md) | `/rhiza:boost` | Bump to the latest release, sync, resolve conflicts, and open a scorecard PR |
+| [quality.md](https://github.com/Jebel-Quant/rhiza-config/blob/main/commands/quality.md) | `/rhiza:quality` | Run the code-quality gate and score the repo |
+| [revisit.md](https://github.com/Jebel-Quant/rhiza-config/blob/main/commands/revisit.md) | `/rhiza:revisit` | Refresh `README.md`, `CLAUDE.md`, and `mkdocs.yml` |
+| [stats.md](https://github.com/Jebel-Quant/rhiza-config/blob/main/commands/stats.md) | `/rhiza:stats` | Read-only statistics dashboard for the repo |
+
+---
+
+## Cross-repo testing
+
+| Document | Repo | What it covers |
+|----------|------|---------------|
+| [README.md](https://github.com/Jebel-Quant/rhiza-brainbug/blob/main/README.md) | rhiza-brainbug | The cross-repo test harness: how polling detects upstream commits and dispatches brainbug test runs |
+
+---
+
 ## Day-to-day operations
 
 These live in `.rhiza/docs/` and are synced into every Rhiza-managed project via the `core` bundle. You will find them in your own repo after syncing.

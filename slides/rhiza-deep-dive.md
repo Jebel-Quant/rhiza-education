@@ -589,8 +589,8 @@ Runs on every `git commit`. The same checks run in CI via `rhiza_pre-commit.yml`
 | **rhiza-cli** | `uvx rhiza init / sync / validate` — the tool you run |
 | **rhiza-hooks** | Pre-commit hooks: validate config, check version consistency |
 | **rhiza-tools** | `bump`, `release`, `version-matrix`, `coverage-badge` |
-| **rhiza-go** | The same living-template pattern for Go projects |
-| **repo-monitor** | Desktop dashboard: workflow status, open PRs, Renovate state |
+| **rhiza-config** | Claude Code plugin: `/rhiza:boost`, `quality`, `revisit`, `stats` |
+| **rhiza-brainbug** | Cross-repo test harness: runs contract tests on upstream commits |
 
 ---
 
