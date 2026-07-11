@@ -27,7 +27,7 @@ Developers who are comfortable with Python, git, and basic CI/CD, and want to ad
 | 8 | [The Sync Lifecycle](lessons/08-the-sync-lifecycle.md) | How automated sync PRs work and how to review them |
 | 9 | [Renovate](lessons/09-renovate.md) | How Renovate keeps your `ref:` pin current and why it is essential at scale |
 | 10 | [Customising Safely](lessons/10-customizing-safely.md) | Extend Rhiza-managed projects without fighting the sync |
-| 11 | [The Rhiza Ecosystem](lessons/11-the-rhiza-ecosystem.md) | rhiza-cli, rhiza-hooks, rhiza-tools, rhiza-go, rhiza-manager, and repo-monitor |
+| 11 | [The Rhiza Ecosystem](lessons/11-the-rhiza-ecosystem.md) | rhiza-cli, rhiza-hooks, rhiza-tools, rhiza-config, and rhiza-brainbug |
 | 12 | [Further Reading](lessons/12-further-reading.md) | Direct links to every doc file across the Rhiza repos, organised by topic |
 
 Work through the lessons in order — each one builds on the last.

@@ -1,6 +1,6 @@
 # Lesson 11 — The Rhiza Ecosystem
 
-The lessons so far have focused on the core workflow: configure `template.yml`, run `uvx rhiza sync`, review sync PRs. But Rhiza is one piece of a larger set of tools built around the same philosophy — automate the boring parts of running Python (and Go) projects at scale. This lesson maps the full ecosystem so you know what exists and when to reach for it.
+The lessons so far have focused on the core workflow: configure `template.yml`, run `uvx rhiza sync`, review sync PRs. But Rhiza is one piece of a larger set of tools built around the same philosophy — automate the boring parts of running Python projects at scale. This lesson maps that ecosystem so you know what exists and when to reach for it.
 
 ## rhiza-cli — the CLI you have been using
 
@@ -41,7 +41,7 @@ These run locally on commit. The same checks also run in CI via the `rhiza_pre-c
 
 ## rhiza-tools — release and project utilities
 
-[`rhiza-tools`](https://github.com/Jebel-Quant/rhiza-tools) is a collection of utility commands that the Rhiza Makefile exposes as `make` targets. You can also call them directly with `uvx rhiza-tools <command>`:
+[`rhiza-tools`](https://github.com/Jebel-Quant/rhiza-tools) is a collection of utility commands that the Rhiza Makefile exposes as `make` targets. It installs as a plugin for `rhiza-cli`, so you can also call the commands directly as `rhiza tools <command>` (via `uvx "rhiza[tools]" tools <command>`), or standalone with `uvx rhiza-tools <command>`:
 
 | Command | What it does |
 |---------|-------------|
@@ -54,44 +54,42 @@ These run locally on commit. The same checks also run in CI via the `rhiza_pre-c
 
 Most of the time you will reach these through `make bump`, `make release`, and so on rather than calling `uvx rhiza-tools` directly. But knowing the underlying tool exists means you can call it in custom scripts or extend it.
 
-## rhiza-go — the same pattern for Go projects
+## rhiza-config — Rhiza commands for Claude Code
 
-[`rhiza-go`](https://github.com/Jebel-Quant/rhiza-go) is a parallel template repository for Go projects. It provides the same living-template contract — a `ref`-pinned template repo with a sync workflow — but tailored to Go tooling:
+[`rhiza-config`](https://github.com/Jebel-Quant/rhiza-config) is a [Claude Code](https://claude.com/claude-code) plugin marketplace. It ships the **`rhiza`** plugin — a set of slash commands that drive the whole sync-and-quality workflow from inside your AI coding assistant, so you do not have to remember the underlying `make` and `uvx` invocations.
 
-- `.golangci.yml` for linting
-- GitHub Actions and GitLab CI workflows
-- Makefile with Go-specific targets
-- Dev container configuration
+Install it once:
 
-If your organisation runs both Python and Go projects, you can use `rhiza` and `rhiza-go` side by side, with each project's `.rhiza/template.yml` pointing at the appropriate template repo.
+```
+/plugin marketplace add Jebel-Quant/rhiza-config
+/plugin install rhiza@rhiza-config
+```
 
-## rhiza-manager — multi-repo VS Code workspace
+The commands then appear namespaced under the plugin:
 
-[`rhiza-manager`](https://github.com/Jebel-Quant/rhiza-manager) is a VS Code extension for teams that work across many repositories simultaneously. It adds a sidebar panel that shows the status of every repo in your workspace at a glance:
+| Command | What it does |
+|---------|-------------|
+| `/rhiza:boost` | Bumps the repo to the latest (or a given) rhiza release, syncs the template, resolves conflicts, runs the quality gates, and opens a PR with a quality scorecard |
+| `/rhiza:quality` | Runs the code-quality gate (lint, types, docs, deps, security, tests, complexity, architecture) and scores the repo |
+| `/rhiza:revisit` | Creates or refreshes the repo's `README.md`, `CLAUDE.md`, and `mkdocs.yml` — refreshing badges and correcting drift while preserving hand-written prose |
+| `/rhiza:stats` | Read-only statistics dashboard for the repo (lines of code, test ratio, stars, coverage, complexity, template status) |
 
-- Pending CI workflows
-- Open PRs (including Rhiza sync PRs waiting for review)
-- Branch status and commit counts
-- Dependency update alerts from Renovate
+Where `rhiza-cli` automates the mechanics of syncing, `rhiza-config` automates the *judgement* around it — deciding when to bump, scoring quality, and keeping docs honest — by handing those tasks to Claude Code with the right context baked in. It is optional: everything the plugin does can also be done by hand with the CLI and Makefile targets.
 
-The extension is useful once you have five or more Rhiza-managed repos: instead of checking each repo individually in GitHub, you see everything in one place inside your editor.
+## rhiza-brainbug — cross-repo test harness
 
-## repo-monitor — repository dashboard desktop app
+[`rhiza-brainbug`](https://github.com/Jebel-Quant/rhiza-brainbug) solves a problem that appears once you have many interdependent Rhiza projects: **contract and compatibility tests that span more than one repo**. Rather than duplicating an integration test in every consumer, you write it once in brainbug.
 
-[`repo-monitor`](https://github.com/Jebel-Quant/repo-monitor) is an Electron desktop application that surfaces the same multi-repo information as rhiza-manager but outside of VS Code. It connects to GitHub via a personal access token and displays a live dashboard covering:
+Brainbug watches a list of repositories on a cron. When any branch of a watched repo gets a new commit, brainbug checks out that repo at that SHA and runs its own tests ("brainbugs") against the code. Nothing is installed in the monitored repos — it is pure polling, comparing each branch head against a stored state file and self-dispatching a run on any change.
 
-- Workflow status across all configured repos
-- Open PRs, issues, and code quality signals
-- Renovate dependency update state
-
-It is useful for team leads or platform engineers who want a persistent overview without having VS Code open, or who prefer a standalone window for the monitoring view.
+This makes it the ecosystem's answer to "did my change break a downstream repo?" without wiring webhooks or CI triggers into every project.
 
 ## How the pieces fit together
 
 ```
                     ┌─────────────────────────────┐
                     │       template repo          │
-                    │   (rhiza or rhiza-go)        │
+                    │          (rhiza)             │
                     └─────────────┬───────────────┘
                                   │ sync PRs
                     ┌─────────────▼───────────────┐
@@ -111,9 +109,12 @@ It is useful for team leads or platform engineers who want a persistent overview
           │  bump · release · version-matrix      │
           │  coverage-badge · analyze-benchmarks  │
           └───────────────────────────────────────┘
+
+   AI layer (optional):  rhiza-config   → /rhiza:boost · quality · revisit · stats
+   Cross-repo testing:   rhiza-brainbug → contract/compatibility runs on upstream commits
 ```
 
-At the top is the template repo (Rhiza or a fork of it). `rhiza-cli` is how you interact with it from inside a project. `rhiza-hooks` keeps the project valid on every commit. `rhiza-tools` handles the release and reporting tasks that the CI workflows call on. `rhiza-manager` and `repo-monitor` give you visibility across all of this at the organisation level.
+At the top is the template repo (Rhiza). `rhiza-cli` is how you interact with it from inside a project. `rhiza-hooks` keeps the project valid on every commit. `rhiza-tools` handles the release and reporting tasks that the CI workflows call on. `rhiza-config` layers Claude Code slash commands over that workflow when you want the assistant to drive it, and `rhiza-brainbug` runs the compatibility tests that span multiple Rhiza projects.
 
 ---
 
