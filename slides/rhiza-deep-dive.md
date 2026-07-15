@@ -576,7 +576,6 @@ Runs on every `git commit`. The same checks run in CI via `rhiza_pre-commit.yml`
 | `bump patch / minor / major` | Increments version in `pyproject.toml` |
 | `release` | Creates and pushes a git tag → triggers `rhiza_release.yml` |
 | `version-matrix` | Reads `requires-python`, emits JSON matrix for GitHub Actions |
-| `generate-coverage-badge` | Produces a shields.io badge from pytest-cov output |
 | `analyze-benchmarks` | Converts pytest-benchmark results to an interactive HTML report |
 | `update-readme` | Embeds `make help` output into `README.md` |
 

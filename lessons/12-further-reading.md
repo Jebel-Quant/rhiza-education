@@ -64,7 +64,6 @@ Each command in [`rhiza-tools`](https://github.com/Jebel-Quant/rhiza-tools) has 
 | [bump.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/commands/bump.md) | `rhiza-tools bump` | Semantic version bumping in `pyproject.toml` |
 | [release.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/commands/release.md) | `rhiza-tools release` | Pushing a release tag to trigger the release workflow |
 | [version_matrix.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/commands/version_matrix.md) | `rhiza-tools version-matrix` | Extracting Python versions from `pyproject.toml` for CI matrices |
-| [generate_coverage_badge.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/commands/generate_coverage_badge.md) | `rhiza-tools generate-coverage-badge` | Producing a shields.io-compatible badge from coverage output |
 | [analyze_benchmarks.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/commands/analyze_benchmarks.md) | `rhiza-tools analyze-benchmarks` | Processing pytest-benchmark results into an interactive HTML report |
 | [update_readme.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/commands/update_readme.md) | `rhiza-tools update-readme` | Embedding `make help` output into `README.md` |
 | [rollback.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/commands/rollback.md) | `rhiza-tools rollback` | Rolling back a release tag |

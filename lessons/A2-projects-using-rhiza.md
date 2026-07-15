@@ -22,7 +22,7 @@ The pre-commit hook repository. Because it is a Python package with its own CI a
 
 [github.com/Jebel-Quant/rhiza-tools](https://github.com/Jebel-Quant/rhiza-tools)
 
-The utility command package. Its CI pipeline uses `version-matrix` (from rhiza-tools) to generate the Python test matrix and `generate-coverage-badge` to publish the coverage badge — tools built by the project, consumed by its own CI, all wired together by the Rhiza template.
+The utility command package. Its CI pipeline uses `version-matrix` (from rhiza-tools) to generate the Python test matrix — a tool built by the project, consumed by its own CI, wired together by the Rhiza template.
 
 ## A real-world library: jquantstats
 
