@@ -48,7 +48,6 @@ These run locally on commit. The same checks also run in CI via the `rhiza_pre-c
 | `bump` | Bumps the version in `pyproject.toml` (major, minor, or patch) |
 | `release` | Pushes a version tag to trigger the release workflow |
 | `update-readme` | Refreshes the `make help` section in `README.md` |
-| `generate-coverage-badge` | Produces a coverage badge JSON file from pytest-cov output |
 | `version-matrix` | Reads `requires-python` from `pyproject.toml` and emits a JSON matrix for GitHub Actions |
 | `analyze-benchmarks` | Processes pytest-benchmark results and generates an interactive HTML report |
 
