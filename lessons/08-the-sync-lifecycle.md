@@ -1,45 +1,44 @@
 # Lesson 8 — The Sync Lifecycle
 
-Once Rhiza is set up, you largely stop thinking about it — until a sync PR appears. This lesson explains what drives those PRs, what they contain, and how to handle them.
+Once Rhiza is set up, you largely stop thinking about it — until it is time to pull in a new template version. This lesson explains what drives an update, what the resulting PR contains, and how to handle it.
 
-## Two triggers for sync
+## How updates reach your project
 
-Your project will receive sync-related PRs from two sources:
+There is no automated CI job that materialises template files into your repo. Template file changes are applied by a human running `/rhiza:update` in Claude Code. What you receive automatically is a *signal* that a new template version exists — and there are two ways that signal arrives.
 
-**1. The sync workflow (`rhiza_sync.yml`)**
+**1. You run `/rhiza:update` yourself**
 
-This GitHub Actions workflow runs on a schedule (typically weekly) and does the following:
+`/rhiza:update` is the update mechanism. When you run it in Claude Code, it:
 
-1. Runs `uvx rhiza sync` inside a temporary branch.
-2. Compares the result against your current `main` branch.
-3. If any files changed, opens a pull request with the diff.
-4. If nothing changed, exits silently.
+1. Bumps your `ref:` to the latest (or a given) rhiza release.
+2. Materialises the changed template files into your repo.
+3. Resolves conflicts against the template upstream.
+4. Runs the quality gates and produces a scorecard.
+5. Opens a pull request with the file changes and that quality scorecard.
 
-You can also trigger it manually from the GitHub Actions tab.
+You can run it whenever you like. To check first whether you are behind the latest release, run `/rhiza:status --check` — it compares your pinned `ref:` against the latest upstream release.
 
-> **Note:** The sync workflow falls back to the built-in `GITHUB_TOKEN` if no `PAT_TOKEN` secret is set, and this is enough to open PRs for most file types. However, if the sync includes changes to files under `.github/workflows/`, GitHub requires a Personal Access Token — the default `GITHUB_TOKEN` cannot write workflow files. If your project uses the `github` bundle (which includes workflow files), set a `PAT_TOKEN` secret in your repository to avoid silent failures.
+**2. Renovate opens a `ref:` bump PR**
 
-**2. Renovate**
+Renovate watches the `ref: vX.Y.Z` line in your `.rhiza/template.yml`. When the template repository publishes a new release, Renovate opens a PR that bumps your `ref` to the new version — for example, changing `ref: v1.1.0` to `ref: v1.2.0`.
 
-Renovate watches the `ref: vX.Y.Z` line in your `.rhiza/template.yml`. When the template repository publishes a new tag, Renovate opens a PR that bumps your `ref` to the new version — for example, changing `ref: v0.19.2` to `ref: v0.19.3`.
+This PR is a **notification only**. Merging it changes one line in `template.yml`, but it does *not* apply the new template files — there is no sync workflow to do that. Treat the Renovate PR as a prompt: a new template version is available. When you are ready to adopt it, run `/rhiza:update`, which bumps the ref and materialises the changed files together in a single reviewable PR.
 
-These two PRs work together: Renovate bumps the version, the sync workflow applies what changed in that new version.
+## Reading a `/rhiza:update` PR
 
-## Reading a sync PR
-
-A sync PR shows you a standard git diff of the template files that changed. Here is how to read it:
+A `/rhiza:update` PR shows you a standard git diff of the template files that changed, plus a quality scorecard summarising the state of the repo after the update. Here is how to read the diff:
 
 - **Added lines (green)**: New content in the template that your project does not have yet. Usually safe to accept.
 - **Removed lines (red)**: Content removed from the template. Check whether you depend on anything being removed.
 - **Changed lines**: Modifications to existing files. Read these carefully — they may update a workflow version, change a lint rule, or fix a bug.
 
-The PR description usually explains what changed at a high level. If you pinned to a tag and Renovate bumped it, check the template repo's changelog for the version you are upgrading to.
+The scorecard tells you whether the update leaves your repo passing the quality gates (lint, types, docs, deps, security, tests, test-layout, complexity, architecture). If you bumped across several versions, check the template repo's changelog for the versions you are upgrading through.
 
 ## When to accept, modify, or reject
 
 **Accept the PR as-is** when:
 - The changes are CI workflow updates, runner version bumps, or linting rule adjustments that apply cleanly to your project.
-- The diff looks correct and your tests pass in the PR branch.
+- The diff looks correct, the scorecard is healthy, and your tests pass in the PR branch.
 
 **Modify the PR before merging** when:
 - A change applies to your project but needs a small adjustment (e.g. the template added a workflow that references a file your project names differently).
@@ -49,31 +48,27 @@ The PR description usually explains what changed at a high level. If you pinned 
 - The change is not relevant to your project (e.g. the template added Docker support but your project will never use containers).
 - You have intentionally diverged from the template for a file and want to keep your local version.
 
-> **Note:** Closing a sync PR is fine. The next scheduled sync will open a new PR if the template still differs from your project. If you want to permanently silence a specific file from sync, add it to `exclude:` in `template.yml`.
+> **Note:** Closing an update PR is fine — nothing changes until you merge. When you next run `/rhiza:update`, it will produce a fresh PR against the current template. If you want to permanently silence a specific file from updates, add it to `exclude:` in `template.yml`.
 
 ## Handling conflicts
 
-Occasionally a sync PR will have a merge conflict — usually because you edited a template-managed file locally. Your options:
+Occasionally an update will run into a conflict — usually because you edited a template-managed file locally. `/rhiza:update` resolves conflicts against the template upstream as it builds the PR, but you still decide what to keep. Your options:
 
 1. **Accept the template version**: If the template's version is better, take it and discard your local change.
-2. **Keep your local version and exclude the file**: Add the file to `exclude:` in `template.yml` so future syncs skip it. Resolve the conflict in favour of your version.
-3. **Merge both sets of changes manually**: Edit the file to incorporate what you need from both the template and your local version, then mark the conflict resolved.
+2. **Keep your local version and exclude the file**: Add the file to `exclude:` in `template.yml` so future updates skip it, then keep your version.
+3. **Merge both sets of changes manually**: Edit the file to incorporate what you need from both the template and your local version, then push to the PR branch.
 
 The cleanest long-term approach is to avoid editing template-managed files directly. If you need custom behaviour, use the extension points described in Lesson 10.
 
-## Triggering sync manually
+## Running an update
 
-To run a sync without waiting for the schedule:
+To pull in the latest template version at any time, run in Claude Code:
 
-```bash
-# Via the Makefile
-make sync
-
-# Or directly via the CLI
-uvx rhiza sync
+```
+/rhiza:update
 ```
 
-This writes updated files to disk. Review the changes with `git diff`, commit them, and push.
+This bumps your `ref:` to the latest release, syncs the changed files, resolves conflicts, runs the quality gates, and opens a PR with a scorecard. Review the PR, then merge.
 
 ---
 

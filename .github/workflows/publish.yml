@@ -27,12 +27,12 @@ jobs:
           RHIZA_VERSION=$(curl -sf https://api.github.com/repos/Jebel-Quant/rhiza/releases/latest \
             | python3 -c "import sys,json; print(json.load(sys.stdin).get('tag_name','unknown'))" \
             2>/dev/null || echo "unknown")
-          RHIZA_CLI_VERSION=$(curl -sf https://pypi.org/pypi/rhiza-cli/json \
-            | python3 -c "import sys,json; print(json.load(sys.stdin)['info'].get('version','unknown'))" \
+          RHIZA_CLAUDE_VERSION=$(curl -sf https://api.github.com/repos/Jebel-Quant/rhiza-claude/releases/latest \
+            | python3 -c "import sys,json; print(json.load(sys.stdin).get('tag_name','unknown'))" \
             2>/dev/null || echo "unknown")
           VERSION_FILES="mkdocs.yml slides/rhiza-intro.md slides/rhiza-deep-dive.md"
           sed -i "s/{{ rhiza_version }}/$RHIZA_VERSION/g" $VERSION_FILES
-          sed -i "s/{{ rhiza_cli_version }}/$RHIZA_CLI_VERSION/g" $VERSION_FILES
+          sed -i "s/{{ rhiza_claude_version }}/$RHIZA_CLAUDE_VERSION/g" $VERSION_FILES
 
       - name: Build slides
         run: |

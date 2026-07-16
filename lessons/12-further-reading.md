@@ -6,15 +6,14 @@ All links point directly to the Markdown source on GitHub. Every file listed her
 
 ---
 
-## Getting started and CLI usage
+## Getting started and command usage
 
-These live in [`rhiza-cli`](https://github.com/Jebel-Quant/rhiza-cli) alongside the source code.
+The primary interface is the `rhiza` plugin shipped by [`rhiza-claude`](https://github.com/Jebel-Quant/rhiza-claude), documented on its [docs site](https://jebel-quant.github.io/rhiza-claude/) — a page per command.
 
 | Document | What it covers |
 |----------|---------------|
-| [GETTING_STARTED.md](https://github.com/Jebel-Quant/rhiza-cli/blob/main/GETTING_STARTED.md) | End-to-end walkthrough of adopting Rhiza in a new project — the narrative version of Lesson 6 |
-| [CLI.md](https://github.com/Jebel-Quant/rhiza-cli/blob/main/CLI.md) | One-page command reference: every flag and subcommand with examples |
-| [USAGE.md](https://github.com/Jebel-Quant/rhiza-cli/blob/main/USAGE.md) | Practical tutorials and real-world usage patterns, including edge cases |
+| [rhiza-claude docs](https://jebel-quant.github.io/rhiza-claude/) | Installing the marketplace and the full `/rhiza:*` command set, one page per command — the reference for `init`, `update`, `quality`, and the rest |
+| [`jebel-quant/rhiza` README](https://github.com/Jebel-Quant/rhiza/blob/main/README.md) | The template repo itself — bundles, structure, and how the template files land in your project |
 
 ---
 
@@ -55,19 +54,20 @@ Each bundle has its own guide in [`rhiza/docs/`](https://github.com/Jebel-Quant/
 
 ---
 
-## rhiza-tools command reference
+## Command reference
 
-Each command in [`rhiza-tools`](https://github.com/Jebel-Quant/rhiza-tools) has a dedicated doc in [`docs/commands/`](https://github.com/Jebel-Quant/rhiza-tools/tree/main/docs/commands).
+Each `/rhiza:*` command has a dedicated page on the [rhiza-claude docs site](https://jebel-quant.github.io/rhiza-claude/).
 
 | Document | Command | What it covers |
 |----------|---------|---------------|
-| [bump.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/commands/bump.md) | `rhiza-tools bump` | Semantic version bumping in `pyproject.toml` |
-| [release.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/commands/release.md) | `rhiza-tools release` | Pushing a release tag to trigger the release workflow |
-| [version_matrix.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/commands/version_matrix.md) | `rhiza-tools version-matrix` | Extracting Python versions from `pyproject.toml` for CI matrices |
-| [analyze_benchmarks.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/commands/analyze_benchmarks.md) | `rhiza-tools analyze-benchmarks` | Processing pytest-benchmark results into an interactive HTML report |
-| [update_readme.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/commands/update_readme.md) | `rhiza-tools update-readme` | Embedding `make help` output into `README.md` |
-| [rollback.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/commands/rollback.md) | `rhiza-tools rollback` | Rolling back a release tag |
-| [configuration.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/docs/configuration.md) | — | The `.rhiza/.cfg.toml` configuration file and bump-my-version integration |
+| [update](https://jebel-quant.github.io/rhiza-claude/) | `/rhiza:update` | Bump to the latest release, sync the template, resolve conflicts, and open a scorecard PR |
+| [quality](https://jebel-quant.github.io/rhiza-claude/) | `/rhiza:quality` | Run the code-quality gate and score the repo |
+| [release](https://jebel-quant.github.io/rhiza-claude/) | `/rhiza:release` | Derive the next semver from conventional commits, bump `pyproject.toml`, regenerate `CHANGELOG.md`, commit and tag locally |
+| [stats](https://jebel-quant.github.io/rhiza-claude/) | `/rhiza:stats` | Read-only statistics dashboard; writes `docs/stats.html` |
+| [status](https://jebel-quant.github.io/rhiza-claude/) | `/rhiza:status` | Show sync status from `.rhiza/template.lock`; `--check` reports whether you are behind |
+| [new](https://jebel-quant.github.io/rhiza-claude/) | `/rhiza:new` | Scaffold a source module and its mirrored test file |
+
+> The version-matrix and coverage-badge logic that used to be user-run `rhiza-tools` commands now lives inside the template's reusable CI workflows (`rhiza_ci.yml`), so there is nothing to invoke by hand.
 
 ---
 
@@ -82,15 +82,15 @@ Each command in [`rhiza-tools`](https://github.com/Jebel-Quant/rhiza-tools) has 
 
 ## Claude Code integration
 
-The [`rhiza-config`](https://github.com/Jebel-Quant/rhiza-config) plugin marketplace ships the `rhiza` plugin — slash commands that drive the sync and quality workflow from Claude Code. Each command has its source in [`commands/`](https://github.com/Jebel-Quant/rhiza-config/tree/main/commands).
+The [`rhiza-claude`](https://github.com/Jebel-Quant/rhiza-claude) plugin marketplace ships the `rhiza` plugin — the slash commands that drive the whole init, sync, and quality workflow from Claude Code. The full reference lives on its [docs site](https://jebel-quant.github.io/rhiza-claude/).
 
 | Document | Command | What it covers |
 |----------|---------|---------------|
-| [README.md](https://github.com/Jebel-Quant/rhiza-config/blob/main/README.md) | — | Installing the marketplace and the full command list |
-| [boost.md](https://github.com/Jebel-Quant/rhiza-config/blob/main/commands/boost.md) | `/rhiza:boost` | Bump to the latest release, sync, resolve conflicts, and open a scorecard PR |
-| [quality.md](https://github.com/Jebel-Quant/rhiza-config/blob/main/commands/quality.md) | `/rhiza:quality` | Run the code-quality gate and score the repo |
-| [revisit.md](https://github.com/Jebel-Quant/rhiza-config/blob/main/commands/revisit.md) | `/rhiza:revisit` | Refresh `README.md`, `CLAUDE.md`, and `mkdocs.yml` |
-| [stats.md](https://github.com/Jebel-Quant/rhiza-config/blob/main/commands/stats.md) | `/rhiza:stats` | Read-only statistics dashboard for the repo |
+| [rhiza-claude README](https://github.com/Jebel-Quant/rhiza-claude/blob/main/README.md) | — | Installing the marketplace and the full command list |
+| [update](https://jebel-quant.github.io/rhiza-claude/) | `/rhiza:update` | Bump to the latest release, sync, resolve conflicts, and open a scorecard PR |
+| [quality](https://jebel-quant.github.io/rhiza-claude/) | `/rhiza:quality` | Run the code-quality gate and score the repo |
+| [revisit](https://jebel-quant.github.io/rhiza-claude/) | `/rhiza:revisit` | Refresh `README.md`, `CLAUDE.md`, and `mkdocs.yml` |
+| [stats](https://jebel-quant.github.io/rhiza-claude/) | `/rhiza:stats` | Read-only statistics dashboard for the repo |
 
 ---
 
@@ -109,8 +109,8 @@ These live in `.rhiza/docs/` and are synced into every Rhiza-managed project via
 | Document | What it covers |
 |----------|---------------|
 | [WORKFLOWS.md](https://github.com/Jebel-Quant/rhiza/blob/main/.rhiza/docs/WORKFLOWS.md) | Recommended day-to-day development workflows: branching, dependency updates, debugging CI |
-| [RELEASING.md](https://github.com/Jebel-Quant/rhiza/blob/main/.rhiza/docs/RELEASING.md) | Full release process: from `make bump` to a published PyPI package |
-| [TOKEN_SETUP.md](https://github.com/Jebel-Quant/rhiza/blob/main/.rhiza/docs/TOKEN_SETUP.md) | How to create and configure a `PAT_TOKEN` for the sync and release workflows |
+| [RELEASING.md](https://github.com/Jebel-Quant/rhiza/blob/main/.rhiza/docs/RELEASING.md) | Full release process: from `/rhiza:release` to a published PyPI package |
+| [TOKEN_SETUP.md](https://github.com/Jebel-Quant/rhiza/blob/main/.rhiza/docs/TOKEN_SETUP.md) | How to create and configure a `PAT_TOKEN` for the release workflow and PR automation |
 | [PRIVATE_PACKAGES.md](https://github.com/Jebel-Quant/rhiza/blob/main/.rhiza/docs/PRIVATE_PACKAGES.md) | Using private GitHub packages as dependencies in Rhiza-managed projects |
 
 ---
@@ -120,8 +120,7 @@ These live in `.rhiza/docs/` and are synced into every Rhiza-managed project via
 | Document | Repo | What it covers |
 |----------|------|---------------|
 | [CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza/blob/main/CONTRIBUTING.md) | rhiza | How to contribute to the core template repo |
-| [CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-cli/blob/main/CONTRIBUTING.md) | rhiza-cli | How to contribute to the CLI |
-| [CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/CONTRIBUTING.md) | rhiza-tools | How to contribute utilities |
+| [rhiza-claude README](https://github.com/Jebel-Quant/rhiza-claude/blob/main/README.md) | rhiza-claude | How to contribute to the `rhiza` plugin and its commands |
 | [CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-hooks/blob/main/CONTRIBUTING.md) | rhiza-hooks | How to contribute pre-commit hooks |
 
 ---

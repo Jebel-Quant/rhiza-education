@@ -71,7 +71,7 @@ on:
   workflow_dispatch:        # allows manual triggering from the GitHub UI
 ```
 
-Rhiza's CI workflow (`rhiza_ci.yml`) triggers on `push` and `pull_request`. The sync workflow (`rhiza_sync.yml`) uses `schedule`.
+Rhiza's CI workflow (`rhiza_ci.yml`) triggers on `push` and `pull_request`. The weekly maintenance workflow (`rhiza_weekly.yml`) uses `schedule`.
 
 ### Runners
 
@@ -120,7 +120,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 ```
 
-This runs three parallel jobs — one per Python version — and reports each as a separate check. Rhiza's `rhiza_ci.yml` builds this matrix dynamically from the `requires-python` field in `pyproject.toml` using `uvx rhiza-tools version-matrix`.
+This runs three parallel jobs — one per Python version — and reports each as a separate check. Rhiza's `rhiza_ci.yml` builds this matrix dynamically from the `requires-python` field in `pyproject.toml`. That derivation happens inside the reusable workflow itself — there is no command you run to generate it.
 
 ### Secrets and environment variables
 
@@ -133,7 +133,7 @@ Sensitive values (API tokens, passwords) are stored as *secrets* in the reposito
   run: uv publish
 ```
 
-Secrets are masked in logs — they never appear in plain text. Rhiza's release workflow uses `PYPI_TOKEN` for PyPI publishing on GitHub, and a `PAT_TOKEN` for the sync workflow (which needs permission to open pull requests).
+Secrets are masked in logs — they never appear in plain text. Rhiza's release workflow uses `PYPI_TOKEN` for PyPI publishing on GitHub, and any workflow that opens pull requests needs a token with permission to do so.
 
 ### Artifacts and Pages
 
@@ -156,7 +156,7 @@ permissions:
   contents: write      # create releases, push tags
   pages: write         # deploy to GitHub Pages
   id-token: write      # OIDC for PyPI Trusted Publishing
-  pull-requests: write # open sync PRs
+  pull-requests: write # open PRs
 ```
 
 Rhiza's templates set the minimal permissions needed for each workflow.
@@ -165,8 +165,8 @@ Rhiza's templates set the minimal permissions needed for each workflow.
 
 A typical Rhiza-managed project has this release flow:
 
-1. Developer runs `make bump` (calls `uvx rhiza-tools bump patch`) to increment the version in `pyproject.toml`.
-2. Developer runs `make release` (calls `uvx rhiza-tools release`) to create and push a git tag (e.g. `v1.2.3`).
+1. Developer runs `/rhiza:release` in Claude Code. It derives the next semantic version from the conventional commits since the last tag (via git-cliff), bumps the version in `pyproject.toml`, regenerates `CHANGELOG.md`, then commits and tags locally (e.g. `v1.2.3`). It stops before pushing.
+2. Developer pushes the tag (`git push --tags`).
 3. The tag push triggers the `rhiza_release.yml` workflow.
 4. The workflow builds a wheel, publishes to PyPI using OIDC Trusted Publishing (no token stored), and creates a GitHub Release.
 
@@ -178,14 +178,14 @@ Rhiza's template bundles wire all of this up so you do not have to:
 
 | Bundle | What it provides |
 |--------|-----------------|
-| `core` | Makefile with `make test`, `make lint`, `make bump`, `make release` |
-| `github` | All workflow files: CI, pre-commit, sync, release, Renovate |
+| `core` | Makefile with `make test`, `make lint`, and the rest of the local tooling |
+| `github` | Workflow files: CI, release, CodeQL, scorecard, and quality review |
 | `tests` | pytest config, coverage reporting, coverage badge publishing |
 | `book` | API documentation build and Pages deployment |
 | `marimo` | Notebook export and Pages deployment |
 | `devcontainer` | Ready-to-use development environment for VS Code / Codespaces |
 
-When you run `uvx rhiza sync`, you get a fully wired CI/CD pipeline committed to your repo. The rest of the curriculum explains how to configure, extend, and keep it up to date.
+When you bootstrap a project with `/rhiza:init` and keep it current with `/rhiza:update`, you get a fully wired CI/CD pipeline committed to your repo. The rest of the curriculum explains how to configure, extend, and keep it up to date.
 
 ---
 

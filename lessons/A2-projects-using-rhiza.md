@@ -4,25 +4,19 @@ The best evidence that a tool works is that its authors use it themselves. This 
 
 ## The Rhiza tools themselves
 
-The most direct proof of Rhiza's value is that the Rhiza ecosystem tools are all managed by Rhiza. Each one has a `.rhiza/template.yml` and receives sync PRs when the template is updated — the same workflow you set up in Lesson 6.
+The most direct proof of Rhiza's value is that the Rhiza ecosystem tools are all managed by Rhiza. Each one has a `.rhiza/template.yml` and receives an update PR when the template changes — the same `/rhiza:update` workflow you set up in Lesson 6.
 
-### rhiza-cli
+### rhiza-claude
 
-[github.com/Jebel-Quant/rhiza-cli](https://github.com/Jebel-Quant/rhiza-cli)
+[github.com/Jebel-Quant/rhiza-claude](https://github.com/Jebel-Quant/rhiza-claude)
 
-The CLI package that provides `uvx rhiza`. Being a Python tool with CI, tests, and a release workflow, it is a natural consumer of its own template. Its `template.yml` is a useful reference for what a typical `core + github + tests + renovate` setup looks like.
+The Claude Code plugin marketplace that ships the `rhiza` plugin — the primary interface to Rhiza and the source of the `/rhiza:*` commands used throughout this curriculum. It is itself a rhiza-managed repository, so its `template.yml` is a useful reference for what a tooling project's setup looks like.
 
 ### rhiza-hooks
 
 [github.com/Jebel-Quant/rhiza-hooks](https://github.com/Jebel-Quant/rhiza-hooks)
 
 The pre-commit hook repository. Because it is a Python package with its own CI and release pipeline, it uses the same Rhiza template as any other project. Notably, the `check-rhiza-config` hook it provides also validates its own `template.yml` — so every commit to rhiza-hooks runs Rhiza validation on itself.
-
-### rhiza-tools
-
-[github.com/Jebel-Quant/rhiza-tools](https://github.com/Jebel-Quant/rhiza-tools)
-
-The utility command package. Its CI pipeline uses `version-matrix` (from rhiza-tools) to generate the Python test matrix — a tool built by the project, consumed by its own CI, wired together by the Rhiza template.
 
 ## A real-world library: jquantstats
 
@@ -63,7 +57,7 @@ templates:
 
 Notable choices: the `legal` bundle (adds standard licence headers and notice files — common for projects from research institutions that need to be explicit about intellectual property) and the `marimo` bundle (interactive notebook demos of backtesting strategies published to GitHub Pages). The `book` bundle deploys API documentation on every push.
 
-> **Config format note:** This project uses the older `template-repository` / `template-branch` key names rather than the current `repository` / `ref`. The tool accepts both; `uvx rhiza migrate` can update the format automatically.
+> **Config format note:** This project uses the older `template-repository` / `template-branch` key names rather than the current `repository` / `ref`. Both key formats are still accepted.
 
 ---
 
@@ -90,7 +84,7 @@ exclude:
   - ruff.toml
 ```
 
-The `exclude: ruff.toml` is the most instructive part of this config. The project has custom linting rules that diverge from Rhiza's defaults — rather than fighting the sync, the author added `ruff.toml` to `exclude:` and manages it locally. This is exactly the pattern described in [Lesson 9](./09-customizing-safely.md).
+The `exclude: ruff.toml` is the most instructive part of this config. The project has custom linting rules that diverge from Rhiza's defaults — rather than fighting the sync, the author added `ruff.toml` to `exclude:` and manages it locally. This is exactly the pattern described in [Lesson 10](./10-customizing-safely.md).
 
 ---
 
@@ -158,4 +152,4 @@ Not every project here uses the current config format or best practices — and 
 
 ---
 
-**Back to:** [Lesson 10 — The Rhiza Ecosystem](./10-the-rhiza-ecosystem.md) | [README](../README.md)
+**Back to:** [Lesson 11 — The Rhiza Ecosystem](./11-the-rhiza-ecosystem.md) | [README](../README.md)

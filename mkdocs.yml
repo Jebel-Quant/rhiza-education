@@ -8,7 +8,7 @@ copyright: >
   Copyright &copy; 2026 Jebel Quant &mdash;
   <a href="/rhiza-education/license/">MIT License</a> &mdash;
   <a href="/rhiza-education/impressum/">Impressum</a> &mdash;
-  Generated with rhiza {{ rhiza_version }} / rhiza-cli {{ rhiza_cli_version }}
+  Generated with rhiza {{ rhiza_version }} / rhiza-claude {{ rhiza_claude_version }}
 
 theme:
   name: material
