@@ -26,7 +26,7 @@ Source: [`slides/rhiza-intro.md`](https://github.com/Jebel-Quant/rhiza-education
 
 ## 60-Minute Deep Dive
 
-A comprehensive presentation covering everything in the 30-minute version plus: the hidden cost of drift, bundle internals, the `ref:` pin in depth, `rhiza init` walkthrough, PAT_TOKEN setup, OIDC publishing, conflict handling, customisation patterns, rhiza-hooks, rhiza-tools, GitLab support, and a full adoption guide.
+A comprehensive presentation covering everything in the 30-minute version plus: the hidden cost of drift, bundle internals, the `ref:` pin in depth, the `/rhiza:init` walkthrough, PAT_TOKEN setup, OIDC publishing, conflict handling, customisation patterns, rhiza-hooks, releasing with `/rhiza:release`, GitLab support, and a full adoption guide.
 
 [Open full-screen](rhiza-deep-dive.html){ .md-button .md-button--primary target=_blank }
 

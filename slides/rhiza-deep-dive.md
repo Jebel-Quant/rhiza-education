@@ -2,7 +2,7 @@
 marp: true
 theme: default
 paginate: true
-footer: "Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education · rhiza {{ rhiza_version }} / rhiza-cli {{ rhiza_cli_version }}"
+footer: "Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education · rhiza {{ rhiza_version }} / rhiza-claude {{ rhiza_claude_version }}"
 style: |
   :root {
     --color-brand: #1a5276;
@@ -59,7 +59,7 @@ Keeping every Python repo in sync — automatically
 3. **How Rhiza works** — config, bundles, the sync loop, and Renovate
 4. **Getting started** — setup, first sync, and token configuration
 5. **Living with Rhiza** — sync PRs, customisation, and conflict resolution
-6. **The ecosystem** — rhiza-hooks, rhiza-tools, and companion projects
+6. **The ecosystem** — rhiza-claude, rhiza-hooks, and companion projects
 7. **Adoption** — migrating existing repos and rolling out across a team
 
 ---
@@ -216,10 +216,10 @@ The sync is not a bulldozer. It is a proposal.
     <div style="font-weight:bold;color:#1a5276;">your project</div>
     <div style="font-size:0.82em;color:#555;margin-top:0.2em;">.rhiza/template.yml</div>
   </div>
-  <div style="color:#2e86c1;font-size:0.95em;">↑ &nbsp;sync</div>
+  <div style="color:#2e86c1;font-size:0.95em;">↑ &nbsp;/rhiza:update</div>
   <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:8px;padding:0.7em 2.5em;text-align:center;min-width:52%;">
-    <div style="font-weight:bold;color:#1a5276;">uvx rhiza</div>
-    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">the syncer — runs locally or in CI</div>
+    <div style="font-weight:bold;color:#1a5276;">rhiza-claude</div>
+    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">the interface — <code>/rhiza:*</code> commands you run in Claude Code</div>
   </div>
 </div>
 
@@ -229,7 +229,7 @@ The sync is not a bulldozer. It is a proposal.
 
 ```yaml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v0.19.3                     # Which version (pinned tag — recommended)
+ref: v1.2.0                      # Which version (pinned tag — recommended)
 
 profiles:                         # Curated bundle preset (recommended)
   - github-project
@@ -287,19 +287,17 @@ The `github` overlay provides the base platform wiring:
 
 | File | Purpose |
 |------|---------|
-| `rhiza_sync.yml` | Weekly template sync — opens the sync PR |
 | `rhiza_release.yml` | Build wheel, publish to PyPI via OIDC, create GitHub Release |
-| `rhiza_pre-commit.yml` | Run pre-commit hooks in CI |
-| `rhiza_renovate.yml` | Self-hosted Renovate runner (optional) |
+| `rhiza_codeql.yml` | CodeQL security scanning |
+| `rhiza_scorecard.yml` | OpenSSF Scorecard supply-chain checks |
 
 The `github-tests` overlay adds testing CI on top:
 
 | File | Purpose |
 |------|---------|
-| `rhiza_ci.yml` | Test matrix across Python versions on push and PRs |
+| `rhiza_ci.yml` | Test matrix across Python versions on push and PRs (matrix derived from `requires-python`) |
 
-None of these need to be written manually.
-They arrive via `uvx rhiza sync` and stay current via the sync.
+Other bundles layer in more workflows — benchmarks, mutation testing, fuzzing, a weekly dependency/link check, and a quality review. There is **no sync workflow**: template changes are applied by running `/rhiza:update`.
 
 ---
 
@@ -317,11 +315,10 @@ They arrive via `uvx rhiza sync` and stay current via the sync.
 
 1. **Fetch** — reads `template.yml`, pulls matching files from the template repo at `ref`
 2. **Diff** — compares what was fetched against what's currently in your project
-3. **Review** — if anything changed, opens a pull request with the diff
+3. **Review** — if anything changed, opens a pull request with the diff (and a quality scorecard)
 4. **Commit** — you review the PR and merge it (or close it if not relevant)
 
-Runs automatically on a **weekly schedule** via GitHub Actions.
-On-demand: `make sync` or `uvx rhiza sync`.
+Run it on demand with **`/rhiza:update`** in Claude Code — it bumps the `ref`, syncs the files, resolves conflicts, runs the quality gates, and opens the PR.
 
 ---
 
@@ -331,33 +328,33 @@ Without Renovate, the `ref:` pin is frozen. Projects drift behind the template s
 
 <div style="display:flex;flex-direction:column;gap:0.45em;margin:0.9em 0;font-size:0.93em;">
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    template repo publishes <strong>v0.19.3</strong>
+    template repo publishes <strong>v1.2.0</strong>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓</div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    Renovate opens PR: <code>ref: v0.19.2 → v0.19.3</code> &nbsp;<span style="color:#888;">(one line diff)</span>
+    Renovate opens PR: <code>ref: v1.1.0 → v1.2.0</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
   </div>
-  <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you merge</span></div>
+  <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you run <code>/rhiza:update</code></span></div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    sync workflow applies updated CI files, linting config, etc.
+    <code>/rhiza:update</code> applies the new CI files, linting config, etc. in a PR
   </div>
 </div>
 
-Two separate PRs: **should we upgrade?** then **here's what changed.**
+Two separate steps: **should we upgrade?** (the ref-bump PR) then **here's what changed** (the `/rhiza:update` PR).
 
 ---
 
 ## The `ref:` pin in depth
 
 ```yaml
-ref: v0.19.3  # pinned tag — recommended for all production repos
+ref: v1.2.0   # pinned tag — recommended for all production repos
 ref: main     # tracks latest commit — useful during template development only
 ```
 
 **Pinning to a tag gives you:**
 - A known, auditable version — you can see exactly what each project is running
 - Safe upgrades — Renovate proposes the bump, you review before it lands
-- Easy rollback — if v0.19.3 breaks something, the cause is unambiguous
+- Easy rollback — if v1.2.0 breaks something, the cause is unambiguous
 
 **Tracking `main`** delivers template changes immediately with no review step. Use only when actively developing the template. Never in repos others depend on.
 
@@ -376,34 +373,39 @@ ref: main     # tracks latest commit — useful during template development only
 # 1. Install uv (skip if already installed)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# 2. Initialise — writes .rhiza/template.yml interactively
-uvx rhiza init
+# 2. Bootstrap the repo — writes .rhiza/template.yml, first sync, opens a PR
+/rhiza:init
 
-# 3. Sync — fetches template files and writes them into the project
-uvx rhiza sync
+# 3. Pull the latest template — syncs files, resolves conflicts, opens a PR
+/rhiza:update
 
 # 4. Install dev environment
 make install
 ```
 
+The `/rhiza:*` commands come from the rhiza Claude Code plugin — install it once with
+`/plugin marketplace add Jebel-Quant/rhiza-claude` then `/plugin install rhiza@rhiza-claude`.
+
 That's it. Your project is now Rhiza-managed.
 
 ---
 
-## What `rhiza init` asks
+## What `/rhiza:init` asks
 
-Running `uvx rhiza init` walks you through three questions:
+Running `/rhiza:init` walks you through a few questions:
 
 ```
-? Template repository (GitHub owner/repo): Jebel-Quant/rhiza
-? Template ref (tag, branch, or commit):   v0.19.3
-? Profile or bundles to include:           github-project
+? Host and repo (GitHub or GitLab, owner/name):  Jebel-Quant/rhiza
+? Language / template repo:                       Python → Jebel-Quant/rhiza
+? Template ref (tag, branch, or commit):          v1.2.0
+? Profile or bundles to include:                  github-project
 ```
+
+Go is also supported (template `Jebel-Quant/rhiza-go`); Python is the default.
 
 The result is `.rhiza/template.yml` — one file, under version control, that describes everything Rhiza will manage in this project.
 
-After `init`, run `uvx rhiza sync` to write the actual files.
-Review the diff with `git diff` before committing.
+`/rhiza:init` runs the first sync and opens a PR on a `rhiza_init_<date>` branch — review that diff before merging.
 
 ---
 
@@ -412,12 +414,11 @@ Review the diff with `git diff` before committing.
 After syncing with `core + github + tests + renovate`:
 
 ```
-.github/workflows/rhiza_ci.yml          ← CI: test on push and PRs
-.github/workflows/rhiza_pre-commit.yml  ← Pre-commit checks in CI
-.github/workflows/rhiza_sync.yml        ← Weekly template sync
-.pre-commit-config.yaml                 ← Local commit hooks
+.github/workflows/rhiza_ci.yml          ← CI: test matrix on push and PRs
+.github/workflows/rhiza_release.yml     ← Build + publish to PyPI on a tag
+.pre-commit-config.yaml                 ← Local commit hooks (rhiza-hooks)
 ruff.toml                               ← Linting config
-Makefile                                ← make test · make lint · make release
+Makefile                                ← make test · make lint
 .python-version                         ← Pinned Python version
 .editorconfig                           ← Editor consistency
 ```
@@ -428,7 +429,7 @@ None of this required manual configuration.
 
 ## The one manual step — `PAT_TOKEN`
 
-The sync workflow opens pull requests. GitHub requires a Personal Access Token for PRs that touch `.github/workflows/` files.
+Rhiza's automation (Renovate, releases) opens pull requests. GitHub requires a Personal Access Token for PRs that touch `.github/workflows/` files.
 
 **Create a fine-grained token:**
 > GitHub → Settings → Developer settings → Personal access tokens (fine-grained)
@@ -437,7 +438,7 @@ Required permissions: `contents: write`, `pull-requests: write`, `workflows: wri
 
 Add it as `PAT_TOKEN` in your repository secrets — or as an org secret to cover all repos at once.
 
-> Without `PAT_TOKEN`, the workflow falls back to `GITHUB_TOKEN`, which cannot write workflow files. Syncs that touch workflow files will silently produce no PR.
+> Without `PAT_TOKEN`, automation falls back to `GITHUB_TOKEN`, which cannot write workflow files. PRs that touch workflow files will silently fail to open.
 
 ---
 
@@ -563,21 +564,24 @@ Audit your exclude list when bumping the template version. Ask: *"Does the new t
 | `check-python-version-consistency` | `.python-version`, `pyproject.toml`, and CI matrix agree |
 | `update-readme-help` | Embeds `make help` output into `README.md` |
 
-Runs on every `git commit`. The same checks run in CI via `rhiza_pre-commit.yml`.
+Runs on every `git commit` — catching config errors locally, before anything reaches CI.
 
 ---
 
-## rhiza-tools — release and project utilities
+## Releasing — `/rhiza:release`
 
-`uvx rhiza-tools <command>` — or via `make`:
+`/rhiza:release` prepares a release straight from your conventional-commit history:
 
-| Command | What it does |
-|---------|-------------|
-| `bump patch / minor / major` | Increments version in `pyproject.toml` |
-| `release` | Creates and pushes a git tag → triggers `rhiza_release.yml` |
-| `version-matrix` | Reads `requires-python`, emits JSON matrix for GitHub Actions |
-| `analyze-benchmarks` | Converts pytest-benchmark results to an interactive HTML report |
-| `update-readme` | Embeds `make help` output into `README.md` |
+| Step | What it does |
+|------|-------------|
+| Derive version | Reads the conventional commits since the last tag (via git-cliff) to pick the next semver |
+| Bump | Updates the version in `pyproject.toml` |
+| Changelog | Regenerates `CHANGELOG.md`, folding the unreleased commits under the new tag |
+| Commit + tag | Commits and tags locally — then stops before pushing |
+
+You review, then push the tag yourself. The pushed tag triggers `rhiza_release.yml`, which builds and publishes.
+
+The old `version-matrix` and `coverage-badge` helpers are no longer user commands — that logic now lives **inside the reusable CI workflows** (`rhiza_ci.yml` derives the test matrix from `requires-python`; the coverage badge is generated during CI).
 
 ---
 
@@ -585,17 +589,15 @@ Runs on every `git commit`. The same checks run in CI via `rhiza_pre-commit.yml`
 
 | Tool | What it does |
 |------|-------------|
-| **rhiza-cli** | `uvx rhiza init / sync / validate` — the tool you run |
+| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `release`, `revisit`, `stats`, …). The primary interface. |
 | **rhiza-hooks** | Pre-commit hooks: validate config, check version consistency |
-| **rhiza-tools** | `bump`, `release`, `version-matrix`, `coverage-badge` |
-| **rhiza-config** | Claude Code plugin: `/rhiza:boost`, `quality`, `revisit`, `stats` |
 | **rhiza-brainbug** | Cross-repo test harness: runs contract tests on upstream commits |
 
 ---
 
 ## Who's using it
 
-**The Rhiza tools themselves** — rhiza-cli, rhiza-hooks, and rhiza-tools all sync from rhiza. The system eats its own cooking.
+**The Rhiza tools themselves** — rhiza-claude and rhiza-hooks all sync from rhiza. The system eats its own cooking.
 
 **External projects:**
 
@@ -620,9 +622,9 @@ templates:
   - renovate
 ```
 
-**What changes:** CI workflows become `.gitlab-ci.yml` pipeline files. The sync job runs as a scheduled pipeline. Renovate opens merge requests. `PAT_TOKEN` → GitLab Personal Access Token with `api` scope.
+**What changes:** CI workflows become `.gitlab-ci.yml` pipeline files. Renovate opens merge requests. `PAT_TOKEN` → GitLab Personal Access Token with `api` scope.
 
-**What doesn't change:** `template.yml`, `renovate.json`, all tooling (`rhiza-cli`, `rhiza-tools`, `rhiza-hooks`).
+**What doesn't change:** `template.yml`, `renovate.json`, the tooling (`rhiza-claude`, `rhiza-hooks`), and how you sync — you still run `/rhiza:update` in Claude Code.
 
 ---
 
@@ -638,7 +640,8 @@ templates:
 **New project — the easy case:**
 
 ```bash
-uvx rhiza init && uvx rhiza sync && make install
+/rhiza:init      # scaffolds config, first sync, opens a PR
+make install
 ```
 
 Done. Rhiza-managed from day one.
@@ -646,13 +649,11 @@ Done. Rhiza-managed from day one.
 **Existing project:**
 
 ```bash
-uvx rhiza init           # creates .rhiza/template.yml
-uvx rhiza sync           # writes template files — review the diff carefully
-git add -p               # stage what makes sense
-git commit -m "chore: adopt Rhiza template"
+/rhiza:init      # detects the existing repo, scaffolds .rhiza/,
+                 # runs the first sync, opens a PR on rhiza_init_<date>
 ```
 
-The first sync on an existing repo shows a diff. Some files may already match. Others may have local customisations — preserve those via `exclude:` before committing.
+The first sync on an existing repo shows a diff in that PR. Some files may already match. Others may have local customisations — preserve those via `exclude:` in `template.yml` before merging.
 
 ---
 
@@ -677,7 +678,7 @@ The first sync on an existing repo shows a diff. Some files may already match. O
 
 **Month 2** — Add Renovate org-wide. Enable the Dependency Dashboard. Review the first round of version-bump PRs together.
 
-**Ongoing** — New projects start with `uvx rhiza init`. Legacy repos migrate at their next maintenance window.
+**Ongoing** — New projects start with `/rhiza:init`. Legacy repos migrate at their next maintenance window.
 
 **Governance** — One person or platform team owns the org's template fork. Changes go through PRs on the fork — reviewed before they propagate to all subscriber repos.
 
@@ -706,7 +707,7 @@ The first sync on an existing repo shows a diff. Some files may already match. O
 # Get started
 
 ```bash
-uvx rhiza init
+/rhiza:init
 ```
 
 *ῥίζα (ree-ZAH) — root*

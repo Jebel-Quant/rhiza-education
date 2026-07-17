@@ -2,7 +2,7 @@
 marp: true
 theme: default
 paginate: true
-footer: "Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education · rhiza {{ rhiza_version }} / rhiza-cli {{ rhiza_cli_version }}"
+footer: "Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education · rhiza {{ rhiza_version }} / rhiza-claude {{ rhiza_claude_version }}"
 style: |
   :root {
     --color-brand: #1a5276;
@@ -183,10 +183,10 @@ The sync is not a bulldozer. It is a proposal.
     <div style="font-weight:bold;color:#1a5276;">your project</div>
     <div style="font-size:0.82em;color:#555;margin-top:0.2em;">.rhiza/template.yml</div>
   </div>
-  <div style="color:#2e86c1;font-size:0.95em;">↑ &nbsp;sync</div>
+  <div style="color:#2e86c1;font-size:0.95em;">↑ &nbsp;/rhiza:update</div>
   <div style="background:#eaf4fc;border:2px solid #2e86c1;border-radius:8px;padding:0.7em 2.5em;text-align:center;min-width:52%;">
-    <div style="font-weight:bold;color:#1a5276;">uvx rhiza</div>
-    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">the syncer — runs locally or in CI</div>
+    <div style="font-weight:bold;color:#1a5276;">rhiza-claude</div>
+    <div style="font-size:0.82em;color:#555;margin-top:0.2em;">the interface — <code>/rhiza:*</code> commands you run in Claude Code</div>
   </div>
 </div>
 
@@ -196,7 +196,7 @@ The sync is not a bulldozer. It is a proposal.
 
 ```yaml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v0.19.3                     # Which version (pinned tag — recommended)
+ref: v1.2.0                      # Which version (pinned tag — recommended)
 
 profiles:                         # Curated bundle preset (recommended)
   - github-project
@@ -243,11 +243,10 @@ One file. That's all Rhiza needs.
 
 1. **Fetch** — reads `template.yml`, pulls matching files from the template repo at `ref`
 2. **Diff** — compares what was fetched against what's currently in your project
-3. **Review** — if anything changed, opens a pull request with the diff
+3. **Review** — if anything changed, opens a pull request with the diff (and a quality scorecard)
 4. **Commit** — you review the PR and merge it (or close it if not relevant)
 
-Runs automatically on a **weekly schedule** via GitHub Actions.
-On-demand: `make sync` or `uvx rhiza sync`.
+Run it on demand with **`/rhiza:update`** in Claude Code — it bumps the `ref`, syncs the files, resolves conflicts, and opens the PR.
 
 ---
 
@@ -257,19 +256,19 @@ Without Renovate, the `ref:` pin is frozen. Projects drift behind the template s
 
 <div style="display:flex;flex-direction:column;gap:0.45em;margin:0.9em 0;font-size:0.93em;">
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    template repo publishes <strong>v0.19.3</strong>
+    template repo publishes <strong>v1.2.0</strong>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓</div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    Renovate opens PR: <code>ref: v0.19.2 → v0.19.3</code> &nbsp;<span style="color:#888;">(one line diff)</span>
+    Renovate opens PR: <code>ref: v1.1.0 → v1.2.0</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
   </div>
-  <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you merge</span></div>
+  <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you run <code>/rhiza:update</code></span></div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    sync workflow applies updated CI files, linting config, etc.
+    <code>/rhiza:update</code> applies the new CI files, linting config, etc. in a PR
   </div>
 </div>
 
-Two separate PRs: **should we upgrade?** then **here's what changed.**
+Two separate steps: **should we upgrade?** (the ref-bump PR) then **here's what changed** (the `/rhiza:update` PR).
 Opt-in per repo. Systematic across the organisation.
 
 ---
@@ -287,15 +286,18 @@ Opt-in per repo. Systematic across the organisation.
 # 1. Install uv (skip if already installed)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# 2. Initialise — writes .rhiza/template.yml interactively
-uvx rhiza init
+# 2. Bootstrap the repo — writes .rhiza/template.yml, first sync, opens a PR
+/rhiza:init
 
-# 3. Sync — fetches template files and writes them into the project
-uvx rhiza sync
+# 3. Pull the latest template — syncs files, resolves conflicts, opens a PR
+/rhiza:update
 
 # 4. Install dev environment
 make install
 ```
+
+The `/rhiza:*` commands come from the rhiza Claude Code plugin — install it once with
+`/plugin marketplace add Jebel-Quant/rhiza-claude` then `/plugin install rhiza@rhiza-claude`.
 
 That's it. Your project is now Rhiza-managed.
 
@@ -306,12 +308,11 @@ That's it. Your project is now Rhiza-managed.
 After syncing with the `github-project` profile (`core + github + tests + github-tests + renovate`):
 
 ```
-.github/workflows/rhiza_ci.yml          ← CI: test on push and PRs
-.github/workflows/rhiza_pre-commit.yml  ← Pre-commit checks in CI
-.github/workflows/rhiza_sync.yml        ← Weekly template sync
-.pre-commit-config.yaml                 ← Local commit hooks
+.github/workflows/rhiza_ci.yml          ← CI: test matrix on push and PRs
+.github/workflows/rhiza_release.yml     ← Build + publish to PyPI on a tag
+.pre-commit-config.yaml                 ← Local commit hooks (rhiza-hooks)
 ruff.toml                               ← Linting config
-Makefile                                ← make test · make lint · make release
+Makefile                                ← make test · make lint
 .python-version                         ← Pinned Python version
 .editorconfig                           ← Editor consistency
 ```
@@ -381,17 +382,15 @@ The PR description usually explains what changed at a high level.
 
 | Tool | What it does |
 |------|-------------|
-| **rhiza-cli** | `uvx rhiza init / sync / validate` — the tool you run |
+| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `release`, `revisit`, `stats`, …). The primary interface. |
 | **rhiza-hooks** | Pre-commit hooks: validate config, check version consistency |
-| **rhiza-tools** | `bump`, `release`, `version-matrix`, `coverage-badge` |
-| **rhiza-config** | Claude Code plugin: `/rhiza:boost`, `quality`, `revisit`, `stats` |
 | **rhiza-brainbug** | Cross-repo test harness: runs contract tests on upstream commits |
 
 ---
 
 ## Who's using it
 
-**The Rhiza tools themselves** — rhiza-cli, rhiza-hooks, and rhiza-tools all sync from rhiza. The system eats its own cooking.
+**The Rhiza tools themselves** — rhiza-claude and rhiza-hooks all sync from rhiza. The system eats its own cooking.
 
 **External projects:**
 
@@ -423,7 +422,7 @@ The PR description usually explains what changed at a high level.
 # Get started
 
 ```bash
-uvx rhiza init
+/rhiza:init
 ```
 
 *ῥίζα (ree-ZAH) — root*

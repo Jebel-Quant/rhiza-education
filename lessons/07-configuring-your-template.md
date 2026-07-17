@@ -9,7 +9,7 @@ The recommended approach is to use a **profile** — a curated preset that expan
 ```yaml
 # .rhiza/template.yml (profile-based — recommended)
 repository: Jebel-Quant/rhiza
-ref: v0.19.3
+ref: v1.2.0
 
 profiles:
   - github-project
@@ -24,7 +24,7 @@ For finer control, you can list bundles explicitly:
 ```yaml
 # .rhiza/template.yml (explicit bundles)
 repository: Jebel-Quant/rhiza
-ref: v0.19.3
+ref: v1.2.0
 
 templates:
   - core
@@ -54,12 +54,12 @@ This is the GitHub repository that Rhiza treats as your template source. It can 
 ## `ref`
 
 ```yaml
-ref: v0.19.3
+ref: v1.2.0
 ```
 
 This pins your project to a specific version of the template. It accepts:
 
-- **A tag** (e.g. `v0.19.3`) — recommended. Gives you a stable, known version. Renovate can detect new tags and open version-bump PRs automatically.
+- **A tag** (e.g. `v1.2.0`) — recommended. Gives you a stable, known version. Renovate can detect new releases and open version-bump PRs automatically.
 - **A branch** (e.g. `main`) — always fetches the latest commit on that branch. Useful during active development of a template, but means your project can receive breaking changes without a PR review step.
 
 For production projects, always pin to a tag.
@@ -95,7 +95,7 @@ templates:
 
 Bundles come in two kinds. **Feature bundles** contain local tooling only (`core`, `tests`, `book`, `marimo`, etc.). **Platform overlay bundles** layer CI/CD workflows on top (`github-tests`, `github-book`, `gitlab-tests`, etc.). When you want CI for a feature, you need both: for example, `tests` (pytest config) plus `github-tests` (the GitHub Actions workflow that runs it).
 
-Run `make explain-bundles` to see every available bundle with its description and dependencies.
+Browse the template repo's [`bundles/` directory](https://github.com/Jebel-Quant/rhiza/tree/main/bundles) to see every available bundle with its description and dependencies.
 
 ## `include` — explicit file patterns
 
@@ -124,7 +124,7 @@ exclude: |
   .env
 ```
 
-This is how you customise a file that Rhiza would otherwise manage. Add it to `exclude`, make your local edits, and the sync will skip it.
+This is how you customise a file that Rhiza would otherwise manage. Add it to `exclude`, make your local edits, and the next update will skip it.
 
 > **Warning:** Be deliberate about what you put in `exclude`. Files you exclude will not receive upstream template updates. If the template fixes a security issue in a workflow you have excluded, you will not get that fix automatically.
 
@@ -144,17 +144,17 @@ For most projects, start with the `github-project` or `gitlab-project` profile a
 | Git LFS support | `+ lfs` |
 | Performance benchmarks | `+ benchmarks` |
 
-When in doubt, start with `profiles: [github-project]`. You can always add bundles later — add them to `templates:` and re-run `uvx rhiza sync`.
+When in doubt, start with `profiles: [github-project]`. You can always add bundles later — add them to `templates:` and run `/rhiza:update`.
 
 ## Updating the config
 
-After editing `template.yml`, always re-run:
+After editing `template.yml`, always run:
 
-```bash
-uvx rhiza sync
+```
+/rhiza:update
 ```
 
-This applies any changes — new bundles, updated include/exclude patterns, or a new `ref` — to your project.
+This applies any changes — new bundles, updated include/exclude patterns, or a new `ref` — to your project, and opens a PR with a quality scorecard for review.
 
 ---
 

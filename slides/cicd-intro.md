@@ -359,14 +359,16 @@ Every build has a log. You can see exactly what ran, when it ran, and what it pr
 
 You don't need to write workflow files from scratch.
 
-**Rhiza** provides a ready-made CI/CD setup for Python projects:
+**Rhiza** provides a ready-made CI/CD setup for Python projects, driven from Claude Code:
 
 ```bash
-uvx rhiza init        # creates .rhiza/template.yml
-uvx rhiza sync        # writes CI workflow files into your repo
+/rhiza:init        # creates .rhiza/template.yml, first sync, opens a PR
+/rhiza:update      # later, pulls the latest CI workflow files
 ```
 
-You get: CI on every push, linting, test coverage, automated releases, and a weekly sync to keep everything up to date.
+The `/rhiza:*` commands come from the rhiza Claude Code plugin (`/plugin install rhiza@rhiza-claude`).
+
+You get: CI on every push, linting, test coverage, automated releases, and an easy way to keep everything up to date.
 
 > Learn more: **https://jebel-quant.github.io/rhiza-education/**
 
@@ -382,7 +384,7 @@ You get: CI on every push, linting, test coverage, automated releases, and a wee
 
 4. **GitHub Actions** is CI/CD built into GitHub — workflows are YAML files in your repo.
 
-5. **You don't need to build this from scratch.** Tools like Rhiza wire it up for you in four commands.
+5. **You don't need to build this from scratch.** Tools like Rhiza wire it up for you in a couple of commands.
 
 ---
 

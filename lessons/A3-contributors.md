@@ -1,6 +1,6 @@
 # Appendix A3 — Contributors
 
-Rhiza and its ecosystem are built by a small group of people. This page lists every human contributor across the five core repositories — `rhiza`, `rhiza-cli`, `rhiza-tools` and `rhiza-hooks` — with their GitHub profiles and contribution counts.
+Rhiza and its ecosystem are built by a small group of people. The current core repositories are `rhiza`, `rhiza-claude`, `rhiza-hooks`, and `rhiza-brainbug`. The now-archived `rhiza-cli` and `rhiza-tools` were core repositories earlier in the project's life, and the contribution counts below still include the work that went into them. This page lists every human contributor with their GitHub profiles and contribution counts.
 
 Contribution counts reflect commits to the default branch as of the time this page was written. Automated commits from Renovate, Copilot, and other bots are excluded.
 
@@ -111,10 +111,9 @@ Armaan contributed to the core `rhiza` template repo.
 Rhiza is open source and welcomes contributions. The best entry points are:
 
 - **[rhiza CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza/blob/main/CONTRIBUTING.md)** — for template changes
-- **[rhiza-cli CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-cli/blob/main/CONTRIBUTING.md)** — for CLI changes
-- **[rhiza-tools CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-tools/blob/main/CONTRIBUTING.md)** — for utility commands
+- **[rhiza-claude CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-claude/blob/main/CONTRIBUTING.md)** — for the Claude Code plugin and the `/rhiza:*` commands
 - **[rhiza-hooks CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-hooks/blob/main/CONTRIBUTING.md)** — for pre-commit hooks
 
 ---
 
-**Back to:** [Lesson 11 — Further Reading](./11-further-reading.md) | [README](../README.md)
+**Back to:** [Lesson 12 — Further Reading](./12-further-reading.md) | [README](../README.md)

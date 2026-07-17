@@ -17,7 +17,7 @@ Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, 
 | 8 | [The Sync Lifecycle](08-the-sync-lifecycle.md) | What triggers a sync PR, what it contains, and how to handle it |
 | 9 | [Renovate](09-renovate.md) | How Renovate keeps your `ref:` pin current, the two-part update flow, and how to configure it |
 | 10 | [Customising Safely](10-customizing-safely.md) | How to modify Rhiza-managed files without conflicting with future syncs |
-| 11 | [The Rhiza Ecosystem](11-the-rhiza-ecosystem.md) | rhiza-cli, rhiza-hooks, rhiza-tools, rhiza-config, and rhiza-brainbug |
+| 11 | [The Rhiza Ecosystem](11-the-rhiza-ecosystem.md) | rhiza-claude, rhiza-hooks, and rhiza-brainbug |
 | 12 | [Further Reading](12-further-reading.md) | Direct links to every doc file across the Rhiza repos, organised by topic |
 
 ## Appendices

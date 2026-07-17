@@ -1,6 +1,6 @@
 # Lesson 2 — uv and uvx
 
-Rhiza is distributed as a `uvx` tool. Before you can run `uvx rhiza`, you need to understand what `uv` and `uvx` are and why the Rhiza ecosystem uses them.
+Rhiza-managed projects use `uv` as their package manager, and the `rhiza-claude` plugin lists `uv` among its prerequisites. Before you go further, you need to understand what `uv` and `uvx` are and why the Rhiza ecosystem relies on them.
 
 ## What is uv?
 
@@ -40,19 +40,19 @@ uv --version
 `uvx` is shorthand for `uv tool run`. It downloads a tool, runs it in an isolated throwaway environment, and discards the environment when done. You never need to install the tool globally or manage its dependencies.
 
 ```bash
-uvx rhiza init
+uvx ruff check .
 ```
 
 This is equivalent to:
 
 1. Create a temporary virtual environment
-2. Install `rhiza` and its dependencies into it
-3. Run `rhiza init`
+2. Install `ruff` and its dependencies into it
+3. Run `ruff check .`
 4. Delete the environment
 
 The first run fetches from PyPI and takes a few seconds. Subsequent runs use a local cache and are nearly instant.
 
-### Why not just `pip install rhiza`?
+### Why not just `pip install` the tool?
 
 Global installs cause dependency conflicts. If two tools you install globally need different versions of the same library, one of them breaks. `uvx` sidesteps this entirely by giving every tool its own isolated environment.
 
@@ -62,7 +62,7 @@ Global installs cause dependency conflicts. If two tools you install globally ne
 
 ## How the Rhiza ecosystem uses uv
 
-All Rhiza-managed projects adopt uv as the standard package manager. When you run `uvx rhiza sync`, one of the files it writes is `.python-version`, which tells uv which Python version the project targets. The Makefile it provides uses `uv sync` to set up the development environment.
+All Rhiza-managed projects adopt uv as the standard package manager. The template provides a `.python-version` file, which tells uv which Python version the project targets, and the Makefile it ships uses `uv sync` to set up the development environment. The `rhiza-claude` plugin also expects `uv` on your PATH.
 
 In CI, Rhiza's template workflows install uv with the official `astral-sh/setup-uv` action and then call `uv sync` or `uvx` — no manual pip steps required.
 
@@ -72,8 +72,8 @@ In CI, Rhiza's template workflows install uv with the official `astral-sh/setup-
 # Install uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Run Rhiza without installing it
-uvx rhiza --help
+# Run a tool without installing it
+uvx ruff check .
 
 # Set up a project's development environment (inside a Rhiza-managed project)
 uv sync

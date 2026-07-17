@@ -7,9 +7,9 @@ Rhiza has full GitLab CI/CD support. If your project lives on GitLab rather than
 Everything in lessons 1–6 applies equally to GitLab:
 
 - The `.rhiza/template.yml` config file works identically.
-- `uvx rhiza init` and `uvx rhiza sync` work identically.
+- The rhiza-claude plugin commands (`/rhiza:init`, `/rhiza:update`) work identically — `/rhiza:init` asks whether your project is on GitHub or GitLab.
 - The `templates:`, `include:`, and `exclude:` keys work identically.
-- The sync lifecycle — sync → diff → review → merge — is the same.
+- The update lifecycle — `/rhiza:update` → diff → review → merge — is the same.
 - The extension points (`custom-task.mk`, `custom-env.mk`, `exclude:`) are the same.
 
 ## What changes: use the `gitlab` bundle
@@ -19,7 +19,7 @@ When configuring your `template.yml`, replace the `github` bundle with `gitlab`:
 ```yaml
 # .rhiza/template.yml
 repository: Jebel-Quant/rhiza
-ref: v0.8.0
+ref: v1.2.0
 
 templates:
   - core
@@ -28,7 +28,7 @@ templates:
   - renovate
 ```
 
-The `gitlab` bundle provides GitLab CI/CD equivalents for all the workflows in the `github` bundle: CI testing, pre-commit, deptry, documentation, sync, and release.
+The `gitlab` bundle provides GitLab CI/CD equivalents for the workflows in the `github` bundle: CI testing, the code-quality gates, documentation, releases, and Renovate.
 
 > **Note:** Do not include both `github` and `gitlab` in the same project. Pick one.
 
@@ -40,14 +40,14 @@ After syncing, your project will have:
 .gitlab-ci.yml                   # Main CI entrypoint — includes all workflow files
 .gitlab/workflows/
   rhiza_ci.yml                   # Multi-version Python CI
-  rhiza_pre-commit.yml           # Pre-commit hooks
-  rhiza_deptry.yml               # Dependency checking
-  rhiza_validate.yml             # Rhiza config validation
+  rhiza_quality.yml              # Code-quality gates (lint, types, deps, security)
   rhiza_book.yml                 # Documentation (deploys to GitLab Pages)
-  rhiza_sync.yml                 # Scheduled template sync
   rhiza_release.yml              # Release and PyPI publishing
   rhiza_renovate.yml             # Renovate dependency updates
+  rhiza_weekly.yml               # Weekly dependency-compatibility and link checks
 ```
+
+There is no `rhiza_sync.yml` — GitLab has no automated template-sync pipeline any more than GitHub does. Template updates are applied by running `/rhiza:update`. Pre-commit hooks run locally via [rhiza-hooks](https://github.com/Jebel-Quant/rhiza-hooks) rather than as a CI workflow.
 
 ## Required CI/CD variables
 
@@ -55,28 +55,22 @@ Set these in your GitLab project under **Settings > CI/CD > Variables**:
 
 | Variable | Required for | Notes |
 |----------|-------------|-------|
-| `PAT_TOKEN` | Sync workflow | A Project or Group Access Token with `api` scope. Needed for two reasons: (1) GitLab's `CI_JOB_TOKEN` cannot create merge requests, so without PAT_TOKEN the sync runs but no MR is opened; (2) pushing changes to workflow files requires a PAT on both GitHub and GitLab — the default job token lacks that permission. |
+| `PAT_TOKEN` | Renovate MRs | A Project or Group Access Token with `api` scope. GitLab's `CI_JOB_TOKEN` cannot create merge requests, so without `PAT_TOKEN` the `rhiza_renovate.yml` job runs but no MR is opened. |
 | `PYPI_TOKEN` | Release workflow | Your PyPI API token. GitLab uses token-based authentication; OIDC Trusted Publishing is a GitHub-only feature. |
 
 Mark both as **Masked** in the variable settings so they are not exposed in pipeline logs.
 
-## Scheduling the sync pipeline
+## Keeping the template up to date
 
-The GitHub bundle sets up a scheduled workflow automatically. On GitLab, you need to configure the schedule manually:
+There is no scheduled sync pipeline on GitLab (or on GitHub). To pull the latest template changes into your project, run `/rhiza:update` from Claude Code — it works identically regardless of platform, bumps the `ref:`, applies the changed files, and opens a merge request with a quality scorecard. Run `/rhiza:status --check` any time to see whether your pinned `ref:` is behind the latest release.
 
-1. Go to **CI/CD > Schedules** in your GitLab project.
-2. Click **New schedule**.
-3. Set the cron expression (e.g. `0 9 * * 1` for every Monday at 09:00).
-4. Set the target branch to `main`.
-5. Save.
-
-The `rhiza_sync.yml` workflow will then run on that schedule, sync the latest template, and open a merge request if anything changed.
+Renovate (via the shipped `rhiza_renovate.yml` job) still opens a merge request bumping the `ref:` when a new template release is tagged, but that MR is only a notification that a new version exists — you apply the actual file changes with `/rhiza:update`.
 
 ## Key differences from the GitHub setup
 
-**Merge request creation on sync**
+**Merge request creation**
 
-On GitHub, the sync workflow creates a pull request automatically using the built-in `GITHUB_TOKEN`. On GitLab, creating a merge request from CI requires a `PAT_TOKEN` with API scope. If this token is not set, the sync will still run and apply changes, but it will not open an MR — you will need to create one manually from the resulting branch.
+On GitHub, Renovate and the release automation open pull requests using the built-in `GITHUB_TOKEN`. On GitLab, creating a merge request from CI requires a `PAT_TOKEN` with API scope. If this token is not set, the `rhiza_renovate.yml` job still runs but will not open an MR — you will need to create one manually from the resulting branch.
 
 **PyPI publishing**
 
@@ -96,4 +90,4 @@ The `renovate` bundle works on GitLab too. Renovate supports GitLab natively and
 
 ---
 
-**Back to:** [Lesson 9 — Customising Safely](./09-customizing-safely.md) | [README](../README.md)
+**Back to:** [Lesson 10 — Customising Safely](./10-customizing-safely.md) | [README](../README.md)

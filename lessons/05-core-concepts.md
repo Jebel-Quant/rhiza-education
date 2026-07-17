@@ -16,7 +16,7 @@ This is your actual project repo. It declares what it wants from the template re
 
 **3. The syncer**
 
-This is Rhiza itself — the `uvx rhiza` CLI tool. It reads the downstream project's config, fetches the specified files from the template repo at the specified version, and writes them into the project.
+This is the sync engine, driven by `/rhiza:update` from the `rhiza-claude` Claude Code plugin. It reads the downstream project's config (`.rhiza/template.yml`), fetches the specified files from the template repo at the specified version, writes them into the project, and records what it synced — repository, ref, commit SHA, timestamp, strategy, and file paths — in `.rhiza/template.lock`.
 
 ## The config file: `.rhiza/template.yml`
 
@@ -25,7 +25,7 @@ Every downstream project has exactly one Rhiza config file. Here is what it look
 ```yaml
 # .rhiza/template.yml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v0.19.3                     # Which version of the template to use
+ref: v1.2.0                      # Which version of the template to use
 
 profiles:                         # Curated bundle preset (recommended)
   - github-project
@@ -85,7 +85,7 @@ Listing every file path in `include` by hand gets tedious. Rhiza provides **bund
 | `gitlab-project` | `core`, `gitlab`, `tests`, `gitlab-tests`, `renovate` |
 | `local` | `core` only (no CI/CD) |
 
-Run `make explain-bundles` in any Rhiza-managed project to see the full list with dependency information. The `core` bundle is required. All others are optional.
+Browse the `bundles/` directory in the template repo to see the full list with dependency information. The `core` bundle is required. All others are optional.
 
 ## The sync loop
 
@@ -97,16 +97,16 @@ fetch → diff → review → commit
 
 1. **Fetch**: Rhiza reads your `template.yml` and pulls the matching files from the template repo at the specified `ref`.
 2. **Diff**: It compares what it fetched against what is currently in your project.
-3. **Review**: If anything changed, a pull request is opened with the diff (in automated mode) or the changes are written to disk (in manual mode).
+3. **Review**: If anything changed, a pull request is opened with the diff and a quality scorecard.
 4. **Commit**: You review the PR and merge it — or reject it if the change doesn't apply to your project.
 
-This loop runs automatically on a schedule (via a GitHub Actions workflow included in the `github` bundle). You can also trigger it manually with `make sync` or `uvx rhiza sync`.
+This loop is human-initiated. You run `/rhiza:update` in Claude Code, which bumps the `ref` to the latest release, materializes the changed files, resolves conflicts against the template, runs the quality gates, and opens the PR for you to review. There is no longer an automated CI workflow that materializes template files — a person drives every update.
 
 ## Version pinning and automated updates
 
-The `ref:` field in `template.yml` pins your project to a specific version of the template. When the template repo releases a new version, Renovate — a dependency automation tool — detects the new tag and opens a PR in your project that bumps `ref: v0.19.2` to `ref: v0.19.3`. You review and merge that PR, then the next sync picks up whatever changed in the new template version.
+The `ref:` field in `template.yml` pins your project to a specific version of the template. When the template repo releases a new version, Renovate — a dependency automation tool — detects the new tag and opens a PR in your project that bumps `ref: v1.1.0` to `ref: v1.2.0`. That PR is a *notification* that a newer template exists; merging it no longer triggers a sync on its own. To actually apply the new version, run `/rhiza:update`, which bumps the `ref` and syncs the files in a single reviewable PR.
 
-This gives you **opt-in updates**: the template can evolve quickly without forcing changes on you, but you can easily stay current with a single merge.
+This gives you **opt-in updates**: the template can evolve quickly without forcing changes on you, but you can easily stay current when you choose to.
 
 ---
 
