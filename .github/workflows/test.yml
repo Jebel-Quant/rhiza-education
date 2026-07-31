@@ -18,5 +18,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run tests
-        run: uv run --extra test pytest
+      - name: Run tests with coverage
+        run: uv run --extra test pytest --cov --cov-report=xml --cov-report=term-missing
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
