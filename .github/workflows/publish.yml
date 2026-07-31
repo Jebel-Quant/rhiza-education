@@ -43,6 +43,17 @@ jobs:
       - name: Build site
         run: uvx --with mkdocs-material mkdocs build
 
+      # Published alongside the site rather than from the test workflow, because
+      # this is the only workflow that deploys Pages and a badge nobody can
+      # fetch is not a badge. It runs after MkDocs, which empties the site
+      # directory before writing into it.
+      - name: Publish coverage badge and report
+        run: |
+          uv run --extra test pytest \
+            --cov-report=xml:coverage.xml \
+            --cov-report=html:site/reports/html-coverage
+          uvx 'genbadge[coverage]' coverage -i coverage.xml -o site/coverage-badge.svg
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
