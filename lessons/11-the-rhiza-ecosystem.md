@@ -13,32 +13,31 @@ Install it once:
 /plugin install rhiza@rhiza-claude
 ```
 
-Pin a version by appending a git tag: `/plugin marketplace add Jebel-Quant/rhiza-claude#v0.4.1`. The only prerequisites are `uv`, `git`, and `make`.
+Pin a version by appending a git tag: `/plugin marketplace add Jebel-Quant/rhiza-claude#v0.6.1`. The only prerequisites are `uv`, `git`, and `make`.
 
-The commands appear namespaced under the plugin. The primary ones drive the day-to-day lifecycle:
-
-| Command | What it does |
-|---------|-------------|
-| `/rhiza:init` | Bootstraps a rhiza-managed repo in the current folder — `git init` if needed, asks GitHub/GitLab, owner/name/visibility, language (Python or Go) and template repo, optionally scaffolds `pyproject.toml` + `src/` + `tests/` + `mkdocs.yml` + a starter README, validates, and opens a PR on a `rhiza_init_<date>` branch |
-| `/rhiza:update` | Bumps the repo to the latest (or a given) rhiza release, syncs the template, resolves conflicts, runs the quality gates, and opens a PR with a quality scorecard — this is how you apply template changes |
-| `/rhiza:quality` | Runs the code-quality gate (lint, types, docs, deps, security, tests, test-layout, complexity, architecture) and scores the repo; can file findings as issues |
-| `/rhiza:revisit` | Creates or refreshes the repo's `README.md`, `CLAUDE.md`, and `mkdocs.yml` — refreshing badges and correcting drift while preserving hand-written prose |
-| `/rhiza:stats` | Read-only statistics dashboard for the repo (lines of code, test ratio, stars, coverage, complexity, dependencies, template status); writes `docs/stats.html` |
-| `/rhiza:repos` | Lists GitHub repos tagged with a rhiza topic (default `rhiza`) as JSON |
-| `/rhiza:release` | Derives the next semantic version from the conventional commits since the last tag (via git-cliff), bumps `pyproject.toml`, regenerates `CHANGELOG.md`, then commits and tags locally — stopping before pushing |
-| `/rhiza:new` | Scaffolds `src/<pkg>/<name>.py` plus its mirrored `tests/<pkg>/test_<name>.py`, keeping the 1:1 layout parity that `/rhiza:quality` enforces; never overwrites |
-
-A second group of repo utilities is read-only (or destructive but explicit) and works straight off the lock file:
+The commands appear namespaced under the plugin. Five of them drive the lifecycle of a project:
 
 | Command | What it does |
 |---------|-------------|
-| `/rhiza:status` | Shows the sync status — template repository, ref, synced commit SHA, timestamp, and strategy; `--files`/`--tree` lists managed files, `--check` compares the pinned ref against the latest upstream release |
-| `/rhiza:validate` | Validates that `.rhiza/template.yml` parses and its fields are well-typed; exits non-zero on failure |
+| `/rhiza:init` | Makes the current folder rhiza-managed: `git init` if needed, asks GitHub/GitLab, owner/name/visibility, language (Python or Go) and template repo, then writes `.rhiza/template.yml` — the pointer at a template and a pinned ref — adds a Python skeleton and license metadata, and opens a PR on a `rhiza_init_<date>` branch. It syncs nothing and runs no gates |
+| `/rhiza:update` | Bumps the repo to the latest (or a given) template release, syncs, resolves conflicts by taking the upstream side, and opens a PR containing **only** template-owned files. This is how template content arrives, both the first time and every time after |
+| `/rhiza:quality` | Runs the code-quality gate (lint, types, docs, deps, security, tests, test-layout, complexity, architecture) and scores the repo; can file findings as issues. Requires a repo that is both rhiza-managed **and** synced, since every gate is a `make` target the sync delivers |
+| `/rhiza:docs` | Creates or refreshes the repo's `README.md`, `CLAUDE.md`, and `mkdocs.yml` — regenerating the badge block and correcting stale facts while preserving hand-written prose. Writes files only: no commit, no branch, no PR |
+| `/rhiza:release` | Lays out the legal next versions as a table for you to choose from — it never picks one for you — then has `bump-my-version` write your choice into every location the repo declares in `[tool.bumpversion]`, regenerates `CHANGELOG.md`, and commits and tags locally. It stops before pushing, because pushing the tag is what triggers the release CI |
+
+A second group works straight off the lock file. Two are read-only; one is destructive but explicit:
+
+| Command | What it does |
+|---------|-------------|
+| `/rhiza:status` | Reports both halves of the repo's rhiza state: that `.rhiza/template.yml` exists, parses, and is well-typed, and what `.rhiza/template.lock` says was actually synced — repository, ref, commit SHA, timestamp, strategy, managed files. `--files` lists those as a tree, `--check` compares the pinned ref against the latest upstream release |
+| `/rhiza:maffay` | Prints one bonmot from a random Peter Maffay song. Read-only, needs no repo, works in any directory — the ecosystem's one deliberate frivolity |
 | `/rhiza:uninstall` | Removes every file listed in `.rhiza/template.lock`, prunes emptied directories, and deletes the lock; destructive, so it prompts unless `--force` |
 
-Start with `/rhiza:status` and `/rhiza:validate` when something looks wrong — the first tells you what was synced and whether you are behind, the second confirms your config is well-formed.
+Reach for `/rhiza:status` first when something looks wrong: it answers both "is my config well-formed?" and "what did I actually get, and am I behind?" in one shot.
 
-> Historically, the mechanics lived in two separate packages — `rhiza-cli` (the `uvx rhiza` command) and `rhiza-tools` (release and reporting utilities). Both are now archived: `rhiza-claude` supersedes the CLI, and the reporting/matrix logic moved inside the template's reusable CI workflows. You no longer run `uvx rhiza` or `uvx rhiza-tools` for anything.
+> **Two commands you may read about elsewhere no longer exist.** `/rhiza:validate` was folded into `/rhiza:status`, which now validates the config *and* reports the lock — the two disagree often enough that reporting one alone misleads. `/rhiza:revisit` was renamed `/rhiza:docs`. Older material also mentions `/rhiza:stats`, `/rhiza:repos` and `/rhiza:new`; those have been retired.
+
+> Historically the mechanics lived in two separate packages — `rhiza-cli` (the `uvx rhiza` command) and `rhiza-tools` (release and reporting utilities). Both are archived. `rhiza-claude` supersedes the CLI, and the reporting and version-matrix logic moved inside the template's reusable CI workflows. You no longer run `uvx rhiza` or `uvx rhiza-tools` for anything, and nothing in this curriculum asks you to. The reasoning behind splitting the template from its tooling is recorded in [ADR-0005](https://github.com/Jebel-Quant/rhiza/blob/main/docs/adr/0005-separate-rhiza-template-from-cli.md).
 
 ## rhiza-hooks — pre-commit hooks
 
@@ -47,7 +46,7 @@ Start with `/rhiza:status` and `/rhiza:validate` when something looks wrong — 
 | Hook | What it checks |
 |------|---------------|
 | `check-rhiza-config` | `template.yml` is valid and the referenced repo/ref can be resolved |
-| `check-rhiza-workflow-names` | GitHub Actions workflow files follow the expected naming convention |
+| `check-rhiza-workflow-names` | GitHub Actions workflow names carry the uppercase `(RHIZA)` prefix — and fixes them if not |
 | `check-makefile-targets` | The Makefile exposes the targets CI depends on |
 | `check-python-version-consistency` | `.python-version`, `pyproject.toml`, and CI matrix all agree on the Python version |
 | `check-template-bundles` | The bundles listed in `template.yml` exist in the remote template repo |
@@ -74,8 +73,8 @@ This makes it the ecosystem's answer to "did my change break a downstream repo?"
                     ┌─────────────▼───────────────┐
                     │        rhiza-claude          │
                     │  init · update · quality     │
-                    │  revisit · stats · release   │
-                    │  status · validate · …       │
+                    │  docs · release · status     │
+                    │  uninstall · maffay          │
                     └─────────────┬───────────────┘
                                   │ drives
                     ┌─────────────▼───────────────┐

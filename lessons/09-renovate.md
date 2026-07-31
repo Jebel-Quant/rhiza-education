@@ -24,7 +24,7 @@ Renovate opens PR: ref: v1.1.0 → v1.2.0   (notification only)
 you run /rhiza:update in Claude Code
          │
          ▼
-ref bump + updated CI files, linting config, etc. land in a PR with a scorecard
+ref bump + updated CI files, linting config, etc. land in one PR
 ```
 
 The Renovate PR contains a single line change in `template.yml`. Merging it on its own does **not** apply the new template files — there is no sync workflow that reacts to it. It is a prompt. When you are ready, `/rhiza:update` performs the real update: it bumps the ref and materialises the changed files together in one reviewable PR. (You can also skip the Renovate signal entirely and run `/rhiza:status --check` to see whether you are behind, then `/rhiza:update`.)
@@ -51,7 +51,7 @@ The PR body includes a changelog summary (when the template repo provides one), 
 When you see this PR:
 1. Check the template repo's [releases page](https://github.com/Jebel-Quant/rhiza/releases) for the release notes of the new version.
 2. Scan for breaking changes — especially if the bump spans multiple minor versions.
-3. Run `/rhiza:update` to actually adopt the version. It opens a follow-up PR with the file changes and a quality scorecard. (You can close the Renovate notification PR — `/rhiza:update` sets the ref itself.)
+3. Run `/rhiza:update` to actually adopt the version. It opens a follow-up PR with the file changes. (You can close the Renovate notification PR — `/rhiza:update` sets the ref itself.)
 
 ## How Rhiza ships Renovate configuration
 
@@ -106,7 +106,7 @@ On first activation, Renovate opens a **Dependency Dashboard** issue in your rep
 
 ### Option 2 — Self-hosted Renovate
 
-For organisations that cannot or prefer not to grant third-party app access, Renovate can be self-hosted. The standard approach uses the [official Docker image](https://docs.renovatebot.com/self-hosting/) inside a scheduled CI job:
+For organisations that cannot or prefer not to grant third-party app access, Renovate can be self-hosted. The standard approach uses the [official Docker image](https://docs.renovatebot.com/getting-started/running/) inside a scheduled CI job:
 
 ```yaml
 # .github/workflows/renovate.yml
@@ -194,7 +194,7 @@ With Renovate in place, the lifecycle runs with minimal manual scanning:
 1. The template repo ships a new version.
 2. Renovate opens a one-line notification PR in every subscriber repo.
 3. A reviewer reads the release notes and decides whether to adopt it.
-4. Running `/rhiza:update` bumps the ref, applies the file changes, and opens a PR with a quality scorecard.
+4. Running `/rhiza:update` bumps the ref, applies the file changes, and opens a PR of template-owned files.
 5. The reviewer merges that update PR.
 
 No manual scanning of the template repo. No new release left unnoticed. Every project stays within a few weeks of the latest template — or opts out deliberately via the `exclude:` mechanism.

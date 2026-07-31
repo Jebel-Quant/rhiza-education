@@ -13,10 +13,11 @@ There is no automated CI job that materialises template files into your repo. Te
 1. Bumps your `ref:` to the latest (or a given) rhiza release.
 2. Materialises the changed template files into your repo.
 3. Resolves conflicts against the template upstream.
-4. Runs the quality gates and produces a scorecard.
-5. Opens a pull request with the file changes and that quality scorecard.
+4. Opens a pull request containing **only** template-owned files — the paths `.rhiza/template.lock` records, never a blanket `git add --all`.
 
 You can run it whenever you like. To check first whether you are behind the latest release, run `/rhiza:status --check` — it compares your pinned `ref:` against the latest upstream release.
+
+Note what is *not* on that list: `/rhiza:update` runs no quality gates, produces no scorecard, and files no issues. The sync stays single-purpose so that exactly one code path writes template files. When you want the repo scored — before or after an update — run `/rhiza:quality`, which is built for it.
 
 **2. Renovate opens a `ref:` bump PR**
 
@@ -26,19 +27,19 @@ This PR is a **notification only**. Merging it changes one line in `template.yml
 
 ## Reading a `/rhiza:update` PR
 
-A `/rhiza:update` PR shows you a standard git diff of the template files that changed, plus a quality scorecard summarising the state of the repo after the update. Here is how to read the diff:
+A `/rhiza:update` PR shows you a standard git diff of the template files that changed, and nothing else. Here is how to read it:
 
 - **Added lines (green)**: New content in the template that your project does not have yet. Usually safe to accept.
 - **Removed lines (red)**: Content removed from the template. Check whether you depend on anything being removed.
 - **Changed lines**: Modifications to existing files. Read these carefully — they may update a workflow version, change a lint rule, or fix a bug.
 
-The scorecard tells you whether the update leaves your repo passing the quality gates (lint, types, docs, deps, security, tests, test-layout, complexity, architecture). If you bumped across several versions, check the template repo's changelog for the versions you are upgrading through.
+The PR branch's own CI tells you whether the update leaves your project green. For a fuller picture — lint, types, docs, deps, security, tests, test-layout, complexity, architecture — run `/rhiza:quality` on the branch; the update itself will not tell you. If you bumped across several versions, check the template repo's changelog for the versions you are upgrading through.
 
 ## When to accept, modify, or reject
 
 **Accept the PR as-is** when:
 - The changes are CI workflow updates, runner version bumps, or linting rule adjustments that apply cleanly to your project.
-- The diff looks correct, the scorecard is healthy, and your tests pass in the PR branch.
+- The diff looks correct and your tests pass in the PR branch.
 
 **Modify the PR before merging** when:
 - A change applies to your project but needs a small adjustment (e.g. the template added a workflow that references a file your project names differently).
@@ -68,7 +69,7 @@ To pull in the latest template version at any time, run in Claude Code:
 /rhiza:update
 ```
 
-This bumps your `ref:` to the latest release, syncs the changed files, resolves conflicts, runs the quality gates, and opens a PR with a scorecard. Review the PR, then merge.
+This bumps your `ref:` to the latest release, syncs the changed files, resolves conflicts, and opens a PR of template-owned files. Review the PR, then merge.
 
 ---
 
