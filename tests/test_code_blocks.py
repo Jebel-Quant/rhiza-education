@@ -70,3 +70,23 @@ def test_toml_block_is_valid(path: str, idx: int, block: str) -> None:
         tomllib.loads(block)
     except tomllib.TOMLDecodeError as exc:
         pytest.fail(f"{path} block {idx}: invalid TOML — {exc}")
+
+
+# The two checks above only report a failure when a lesson contains a broken
+# block, which — the lessons being correct — never happens on a passing run.
+# That leaves the reporting itself unexercised: a typo in the message, or an
+# `except` clause naming the wrong error, would go unnoticed until the day a
+# lesson actually breaks and the check either says nothing useful or blows up.
+# So feed each check a deliberately broken block and assert on what it says.
+
+
+def test_broken_yaml_block_is_reported_with_its_location() -> None:
+    """An invalid YAML block fails the check, naming the file and block index."""
+    with pytest.raises(pytest.fail.Exception, match=r"lessons/broken\.md block 7: invalid YAML"):
+        test_yaml_block_is_valid("lessons/broken.md", 7, "key: [unclosed\n")
+
+
+def test_broken_toml_block_is_reported_with_its_location() -> None:
+    """An invalid TOML block fails the check, naming the file and block index."""
+    with pytest.raises(pytest.fail.Exception, match=r"slides/broken\.md block 3: invalid TOML"):
+        test_toml_block_is_valid("slides/broken.md", 3, "key = \n")
