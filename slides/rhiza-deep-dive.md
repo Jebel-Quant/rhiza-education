@@ -57,7 +57,7 @@ Keeping every Python repo in sync — automatically
 1. **The Repo Zoo Problem** — what goes wrong at scale and why it's structural
 2. **Why existing tools fall short** — the Day 0 / Day 365 gap
 3. **How Rhiza works** — config, bundles, the sync loop, and Renovate
-4. **Getting started** — setup, first sync, and token configuration
+4. **Getting started** — setup and the two bootstrap PRs
 5. **Living with Rhiza** — sync PRs, customisation, and conflict resolution
 6. **The ecosystem** — rhiza-claude, rhiza-hooks, and companion projects
 7. **Adoption** — migrating existing repos and rolling out across a team
@@ -315,7 +315,7 @@ Other bundles layer in more workflows — benchmarks, mutation testing, fuzzing,
 
 1. **Fetch** — reads `template.yml`, pulls matching files from the template repo at `ref`
 2. **Diff** — compares what was fetched against what's currently in your project
-3. **Review** — if anything changed, opens a pull request with the diff (and a quality scorecard)
+3. **Review** — if anything changed, opens a pull request with the diff (scoring is `/rhiza:quality`)
 4. **Commit** — you review the PR and merge it (or close it if not relevant)
 
 Run it on demand with **`/rhiza:update`** in Claude Code — it bumps the `ref`, syncs the files, resolves conflicts, runs the quality gates, and opens the PR.
@@ -373,10 +373,10 @@ ref: main     # tracks latest commit — useful during template development only
 # 1. Install uv (skip if already installed)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# 2. Bootstrap the repo — writes .rhiza/template.yml, first sync, opens a PR
+# 2. Make the repo rhiza-managed — writes .rhiza/template.yml, opens PR #1
 /rhiza:init
 
-# 3. Pull the latest template — syncs files, resolves conflicts, opens a PR
+# 3. After #1 merges: sync the template — this is where the files arrive (PR #2)
 /rhiza:update
 
 # 4. Install dev environment
@@ -397,15 +397,14 @@ Running `/rhiza:init` walks you through a few questions:
 ```
 ? Host and repo (GitHub or GitLab, owner/name):  Jebel-Quant/rhiza
 ? Language / template repo:                       Python → Jebel-Quant/rhiza
-? Template ref (tag, branch, or commit):          v1.2.0
-? Profile or bundles to include:                  github-project
+? Template ref (tag, branch, or commit):          v1.2.5
 ```
 
 Go is also supported (template `Jebel-Quant/rhiza-go`); Python is the default.
 
-The result is `.rhiza/template.yml` — one file, under version control, that describes everything Rhiza will manage in this project.
+The profile follows from the platform, so it is not asked. The result is `.rhiza/template.yml` — one file, under version control, that describes everything Rhiza will manage in this project.
 
-`/rhiza:init` runs the first sync and opens a PR on a `rhiza_init_<date>` branch — review that diff before merging.
+`/rhiza:init` opens a PR on a `rhiza_init_<date>` branch. It syncs **nothing**: no CI, no `Makefile`, no gates. Merge it, then run `/rhiza:update` for the content.
 
 ---
 
@@ -589,7 +588,7 @@ The old `version-matrix` and `coverage-badge` helpers are no longer user command
 
 | Tool | What it does |
 |------|-------------|
-| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `release`, `revisit`, `stats`, …). The primary interface. |
+| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `docs`, `release`, `status`, `uninstall`, `maffay`). The primary interface. |
 | **rhiza-hooks** | Pre-commit hooks: validate config, check version consistency |
 | **rhiza-brainbug** | Cross-repo test harness: runs contract tests on upstream commits |
 
@@ -640,7 +639,8 @@ templates:
 **New project — the easy case:**
 
 ```bash
-/rhiza:init      # scaffolds config, first sync, opens a PR
+/rhiza:init      # config + skeleton, PR #1
+/rhiza:update    # after #1 merges: the template content, PR #2
 make install
 ```
 
@@ -649,11 +649,12 @@ Done. Rhiza-managed from day one.
 **Existing project:**
 
 ```bash
-/rhiza:init      # detects the existing repo, scaffolds .rhiza/,
-                 # runs the first sync, opens a PR on rhiza_init_<date>
+/rhiza:init      # detects the existing repo from its origin and asks
+                 # nothing; opens PR #1 on rhiza_init_<date>
+/rhiza:update    # the first sync — this is the PR that needs review
 ```
 
-The first sync on an existing repo shows a diff in that PR. Some files may already match. Others may have local customisations — preserve those via `exclude:` in `template.yml` before merging.
+PR #1 is nearly empty on an existing repo. The sync in PR #2 is where the diff appears: some files may already match, others may have local customisations — preserve those via `exclude:` in `template.yml` before merging.
 
 ---
 
@@ -662,7 +663,7 @@ The first sync on an existing repo shows a diff in that PR. Some files may alrea
 1. **Audit your current setup** — list your CI files, linting configs, and Makefiles
 2. **Start conservative** — begin with `core` only; add `github` once you've reviewed the workflow files
 3. **Exclude what you own** — add locally-maintained files to `exclude:` before syncing
-4. **Review the first sync PR carefully** — treat it as a code review, not a forced update
+4. **Review the first sync PR carefully** — that is PR #2, from `/rhiza:update`; treat it as a code review, not a forced update
 5. **Add Renovate** — add the `renovate` bundle and install the GitHub App
 6. **Expand bundles gradually** — add `tests`, `docker`, etc. as your team gains confidence
 

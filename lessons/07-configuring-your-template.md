@@ -154,7 +154,7 @@ After editing `template.yml`, always run:
 /rhiza:update
 ```
 
-This applies any changes — new bundles, updated include/exclude patterns, or a new `ref` — to your project, and opens a PR with a quality scorecard for review.
+This applies any changes — new bundles, updated include/exclude patterns, or a new `ref` — to your project, and opens a PR of template-owned files for review.
 
 ---
 

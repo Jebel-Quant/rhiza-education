@@ -243,7 +243,7 @@ One file. That's all Rhiza needs.
 
 1. **Fetch** — reads `template.yml`, pulls matching files from the template repo at `ref`
 2. **Diff** — compares what was fetched against what's currently in your project
-3. **Review** — if anything changed, opens a pull request with the diff (and a quality scorecard)
+3. **Review** — if anything changed, opens a pull request with the diff (scoring is `/rhiza:quality`)
 4. **Commit** — you review the PR and merge it (or close it if not relevant)
 
 Run it on demand with **`/rhiza:update`** in Claude Code — it bumps the `ref`, syncs the files, resolves conflicts, and opens the PR.
@@ -286,10 +286,10 @@ Opt-in per repo. Systematic across the organisation.
 # 1. Install uv (skip if already installed)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# 2. Bootstrap the repo — writes .rhiza/template.yml, first sync, opens a PR
+# 2. Make the repo rhiza-managed — writes .rhiza/template.yml, opens PR #1
 /rhiza:init
 
-# 3. Pull the latest template — syncs files, resolves conflicts, opens a PR
+# 3. After #1 merges: sync the template — this is where the files arrive (PR #2)
 /rhiza:update
 
 # 4. Install dev environment
@@ -382,7 +382,7 @@ The PR description usually explains what changed at a high level.
 
 | Tool | What it does |
 |------|-------------|
-| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `release`, `revisit`, `stats`, …). The primary interface. |
+| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `docs`, `release`, `status`, `uninstall`, `maffay`). The primary interface. |
 | **rhiza-hooks** | Pre-commit hooks: validate config, check version consistency |
 | **rhiza-brainbug** | Cross-repo test harness: runs contract tests on upstream commits |
 

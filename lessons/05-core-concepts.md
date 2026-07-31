@@ -25,7 +25,7 @@ Every downstream project has exactly one Rhiza config file. Here is what it look
 ```yaml
 # .rhiza/template.yml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v1.2.0                      # Which version of the template to use
+ref: v1.2.5                      # Which version of the template to use
 
 profiles:                         # Curated bundle preset (recommended)
   - github-project
@@ -36,7 +36,7 @@ exclude: |                        # Files to never overwrite locally
 
 - `repository` — any GitHub repo, not just the canonical Rhiza repo.
 - `ref` — a tag or branch name. Tags are recommended because they enable automated version tracking (more on this in Lesson 8).
-- `profiles` — a curated preset that expands to a sensible bundle selection (e.g. `github-project` gives you `core`, `github`, `tests`, `github-tests`, and `renovate`). This is the recommended starting point.
+- `profiles` — a curated preset that expands to a sensible bundle selection. `github-project` gives you `core`, `github`, `tests`, `github-tests`, `book`, `github-book`, `marimo`, and `github-marimo`. This is the recommended starting point. There are three profiles — `github-project`, `gitlab-project`, and `local` — and `renovate` belongs to none of them, so projects that want automated dependency updates add that bundle by hand.
 - `templates` — explicit list of named bundles, for when you need finer control than a profile offers.
 - `include` — explicit glob patterns for files not covered by a bundle (optional).
 - `exclude` — glob patterns that protect files from being overwritten by the sync.
@@ -81,11 +81,13 @@ Listing every file path in `include` by hand gets tedious. Rhiza provides **bund
 
 | Profile | Expands to |
 |---------|-----------|
-| `github-project` | `core`, `github`, `tests`, `github-tests`, `renovate` |
-| `gitlab-project` | `core`, `gitlab`, `tests`, `gitlab-tests`, `renovate` |
-| `local` | `core` only (no CI/CD) |
+| `github-project` | `core`, `github`, `tests`, `github-tests`, `book`, `github-book`, `marimo`, `github-marimo` |
+| `gitlab-project` | `core`, `gitlab`, `tests`, `gitlab-tests`, `book`, `gitlab-book`, `marimo`, `gitlab-marimo` |
+| `local` | `core`, `tests`, `book`, `marimo` — everything local, no hosted workflows |
 
-Browse the `bundles/` directory in the template repo to see the full list with dependency information. The `core` bundle is required. All others are optional.
+Each platform profile is the `local` set plus that platform's CI overlays, which is why switching between GitHub and GitLab changes the workflows and nothing else. Note that `renovate` is in **no** profile: automated dependency updates are opt-in, added as a bundle when you want them (Lesson 9).
+
+Browse the `bundles/` directory in the template repo, or the [bundle taxonomy](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/BUNDLE_TAXONOMY.md), to see the full list with dependency information. The `core` bundle is required. All others are optional.
 
 ## The sync loop
 
@@ -97,10 +99,10 @@ fetch → diff → review → commit
 
 1. **Fetch**: Rhiza reads your `template.yml` and pulls the matching files from the template repo at the specified `ref`.
 2. **Diff**: It compares what it fetched against what is currently in your project.
-3. **Review**: If anything changed, a pull request is opened with the diff and a quality scorecard.
+3. **Review**: If anything changed, a pull request is opened with the diff. Scoring the repo is `/rhiza:quality`'s job, not the sync's.
 4. **Commit**: You review the PR and merge it — or reject it if the change doesn't apply to your project.
 
-This loop is human-initiated. You run `/rhiza:update` in Claude Code, which bumps the `ref` to the latest release, materializes the changed files, resolves conflicts against the template, runs the quality gates, and opens the PR for you to review. There is no longer an automated CI workflow that materializes template files — a person drives every update.
+This loop is human-initiated. You run `/rhiza:update` in Claude Code, which bumps the `ref` to the latest release, materializes the changed files, resolves conflicts against the template, and opens the PR for you to review. There is no longer an automated CI workflow that materializes template files — a person drives every update.
 
 ## Version pinning and automated updates
 

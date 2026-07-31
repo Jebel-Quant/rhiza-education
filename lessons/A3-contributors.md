@@ -110,9 +110,9 @@ Armaan contributed to the core `rhiza` template repo.
 
 Rhiza is open source and welcomes contributions. The best entry points are:
 
-- **[rhiza CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza/blob/main/CONTRIBUTING.md)** — for template changes
+- **[rhiza CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza/blob/main/.rhiza/CONTRIBUTING.md)** — for template changes
 - **[rhiza-claude CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-claude/blob/main/CONTRIBUTING.md)** — for the Claude Code plugin and the `/rhiza:*` commands
-- **[rhiza-hooks CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-hooks/blob/main/CONTRIBUTING.md)** — for pre-commit hooks
+- **[rhiza-hooks CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-hooks/blob/main/.rhiza/CONTRIBUTING.md)** — for pre-commit hooks
 
 ---
 

@@ -362,7 +362,7 @@ You don't need to write workflow files from scratch.
 **Rhiza** provides a ready-made CI/CD setup for Python projects, driven from Claude Code:
 
 ```bash
-/rhiza:init        # creates .rhiza/template.yml, first sync, opens a PR
+/rhiza:init        # creates .rhiza/template.yml, opens PR #1 (no sync yet)
 /rhiza:update      # later, pulls the latest CI workflow files
 ```
 
