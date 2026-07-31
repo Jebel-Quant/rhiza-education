@@ -3,3 +3,5 @@ slides/dist/
 __pycache__/
 *.pyc
 .pytest_cache/
+.coverage
+coverage.xml
