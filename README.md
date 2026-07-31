@@ -4,6 +4,8 @@
 
 # rhiza-education
 
+[![CodeFactor](https://www.codefactor.io/repository/github/jebel-quant/rhiza-education/badge)](https://www.codefactor.io/repository/github/jebel-quant/rhiza-education)
+
 Training for and with [Rhiza](https://github.com/Jebel-Quant/rhiza) — the living template system for Python projects.
 
 The companion website (rendered, searchable) is at **https://jebel-quant.github.io/rhiza-education/**.
