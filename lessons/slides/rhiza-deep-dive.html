@@ -2036,10 +2036,10 @@ section.lead::before { display: none; }
 <h2 id="what-rhizainit-asks">What <code>/rhiza:init</code> asks</h2>
 <p>Running <code>/rhiza:init</code> walks you through a few questions:</p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code>? Host and repo (GitHub or GitLab, owner/name):  Jebel-Quant/rhiza
-? Language / template repo:                       Python → Jebel-Quant/rhiza
+? Template repo:                                  Jebel-Quant/rhiza
 ? Template ref (tag, branch, or commit):          v1.2.5
 </code></pre>
-<p>Go is also supported (template <code>Jebel-Quant/rhiza-go</code>); Python is the default.</p>
+<p>The template defaults to <code>Jebel-Quant/rhiza</code>; name any other <code>owner/repo</code> — a fork, or your own house template — and it is checked for reachability before being pinned.</p>
 <p>The profile follows from the platform, so it is not asked. The result is <code>.rhiza/template.yml</code> — one file, under version control, that describes everything Rhiza will manage in this project.</p>
 <p><code>/rhiza:init</code> opens a PR on a <code>rhiza_init_&lt;date&gt;</code> branch. It syncs <strong>nothing</strong>: no CI, no <code>Makefile</code>, no gates. Merge it, then run <code>/rhiza:update</code> for the content.</p>
 <footer>Rhiza — The Living Template System · jebel-quant.github.io/rhiza-education · rhiza v1.2.5 / rhiza-claude v0.6.1</footer>

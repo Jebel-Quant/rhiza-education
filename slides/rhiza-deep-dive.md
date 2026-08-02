@@ -396,11 +396,11 @@ Running `/rhiza:init` walks you through a few questions:
 
 ```
 ? Host and repo (GitHub or GitLab, owner/name):  Jebel-Quant/rhiza
-? Language / template repo:                       Python → Jebel-Quant/rhiza
+? Template repo:                                  Jebel-Quant/rhiza
 ? Template ref (tag, branch, or commit):          v1.2.5
 ```
 
-Go is also supported (template `Jebel-Quant/rhiza-go`); Python is the default.
+The template defaults to `Jebel-Quant/rhiza`; name any other `owner/repo` — a fork, or your own house template — and it is checked for reachability before being pinned.
 
 The profile follows from the platform, so it is not asked. The result is `.rhiza/template.yml` — one file, under version control, that describes everything Rhiza will manage in this project.
 

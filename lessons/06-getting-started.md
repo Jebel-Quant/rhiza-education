@@ -47,7 +47,7 @@ Navigate to your project directory and, in Claude Code, run:
 
 - **GitHub or GitLab** — this picks your project's profile, so a GitLab repo gets GitLab's CI
 - **Owner, name, and visibility** for the repo
-- **Language and template repository** — Python (default, `Jebel-Quant/rhiza`) or Go (`Jebel-Quant/rhiza-go`), or any `owner/repo` you name. It checks the template is reachable before pointing at it, and pins its latest release as your starting `ref`
+- **Template repository** — `Jebel-Quant/rhiza` by default, or any `owner/repo` you name. It checks the template is reachable before pointing at it, and pins its latest release as your starting `ref`
 
 It then writes `.rhiza/template.yml` — the pointer, and the only Rhiza config file your project needs — adds a Python skeleton (`uv init --lib` plus the `pyproject.toml` shape the template's gates require) and license metadata, and opens a PR on a `rhiza_init_<date>` branch titled `chore: make repo rhiza-managed`. It never pushes to your default branch.
 
