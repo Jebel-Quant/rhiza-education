@@ -229,7 +229,8 @@ The sync is not a bulldozer. It is a proposal.
 
 ```yaml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v1.2.0                      # Which version (pinned tag — recommended)
+ref: v1.3.3                      # Which version (pinned tag — recommended)
+language: python                 # Which language layer (python / rust / go)
 
 profiles:                         # Curated bundle preset (recommended)
   - github-project
@@ -268,16 +269,19 @@ The canonical template is `Jebel-Quant/rhiza`. For most teams the right setup is
 
 | Bundle | What it includes |
 |--------|-----------------|
-| `core` | Makefile, ruff.toml, pre-commit config, editor config |
+| `core` | Makefile, `.rhiza/make.d/`, editor config — **language-neutral** |
+| `python-core` | Python layer: virtualenv, ruff, bandit, deptry, hook config |
 | `tests` | pytest config, coverage, type checking |
 | `docker` | Dockerfile and container configuration |
 | `marimo` | Interactive notebook support |
 | `presentation` | Slide generation from Markdown (Marp) |
 | `renovate` | Automated dependency update config |
 
+`core` defines no `install` and no `all` — a **language layer** (`python-core`, `rust-core`, `go-core`) supplies them. Pick exactly one.
+
 **Platform overlay bundles** layer CI/CD on top: `github-tests`, `github-book`, `gitlab-tests`, etc.
 
-**Profiles** (`github-project`, `gitlab-project`, `local`) expand to a sensible combination. Start here.
+**Profiles** (`github-project`, `gitlab-project`, `local`, `rust-local`, `go-local`) expand to a sensible combination. Start here.
 
 ---
 
@@ -328,11 +332,11 @@ Without Renovate, the `ref:` pin is frozen. Projects drift behind the template s
 
 <div style="display:flex;flex-direction:column;gap:0.45em;margin:0.9em 0;font-size:0.93em;">
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    template repo publishes <strong>v1.2.0</strong>
+    template repo publishes <strong>v1.3.3</strong>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓</div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    Renovate opens PR: <code>ref: v1.1.0 → v1.2.0</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
+    Renovate opens PR: <code>ref: v1.3.2 → v1.3.3</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you run <code>/rhiza:update</code></span></div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
@@ -347,14 +351,14 @@ Two separate steps: **should we upgrade?** (the ref-bump PR) then **here's what 
 ## The `ref:` pin in depth
 
 ```yaml
-ref: v1.2.0   # pinned tag — recommended for all production repos
+ref: v1.3.3   # pinned tag — recommended for all production repos
 ref: main     # tracks latest commit — useful during template development only
 ```
 
 **Pinning to a tag gives you:**
 - A known, auditable version — you can see exactly what each project is running
 - Safe upgrades — Renovate proposes the bump, you review before it lands
-- Easy rollback — if v1.2.0 breaks something, the cause is unambiguous
+- Easy rollback — if v1.3.3 breaks something, the cause is unambiguous
 
 **Tracking `main`** delivers template changes immediately with no review step. Use only when actively developing the template. Never in repos others depend on.
 
@@ -396,13 +400,14 @@ Running `/rhiza:init` walks you through a few questions:
 
 ```
 ? Host and repo (GitHub or GitLab, owner/name):  Jebel-Quant/rhiza
+? Language (python / rust / go):                  python
 ? Template repo:                                  Jebel-Quant/rhiza
-? Template ref (tag, branch, or commit):          v1.2.5
+? Template ref (tag, branch, or commit):          v1.3.3
 ```
 
-The template defaults to `Jebel-Quant/rhiza`; name any other `owner/repo` — a fork, or your own house template — and it is checked for reachability before being pinned.
+The template defaults to `Jebel-Quant/rhiza` for **all three languages** — it is multi-language, layering `python-core`, `rust-core` or `go-core` on a neutral `core`. Name any other `owner/repo` — a fork, or your own house template — and it is checked for reachability, and for whether it actually defines the profile, before being pinned.
 
-The profile follows from the platform, so it is not asked. The result is `.rhiza/template.yml` — one file, under version control, that describes everything Rhiza will manage in this project.
+The profile follows from the platform and language, so it is not asked. The result is `.rhiza/template.yml` — one file, under version control, that describes everything Rhiza will manage in this project.
 
 `/rhiza:init` opens a PR on a `rhiza_init_<date>` branch. It syncs **nothing**: no CI, no `Makefile`, no gates. Merge it, then run `/rhiza:update` for the content.
 
@@ -410,12 +415,12 @@ The profile follows from the platform, so it is not asked. The result is `.rhiza
 
 ## What you get on day one
 
-After syncing with `core + github + tests + renovate`:
+After syncing with the `github-project` profile (`core + python-core + github + tests + github-tests + book + marimo`):
 
 ```
 .github/workflows/rhiza_ci.yml          ← CI: test matrix on push and PRs
 .github/workflows/rhiza_release.yml     ← Build + publish to PyPI on a tag
-.pre-commit-config.yaml                 ← Local commit hooks (rhiza-hooks)
+.pre-commit-config.yaml                 ← Local commit hooks (rhiza-hooks, run by prek)
 ruff.toml                               ← Linting config
 Makefile                                ← make test · make lint
 .python-version                         ← Pinned Python version
@@ -551,34 +556,37 @@ Audit your exclude list when bumping the template version. Ask: *"Does the new t
 
 ---
 
-## rhiza-hooks — pre-commit checks
+## rhiza-hooks — the commit checks
 
-`rhiza-hooks` ships pre-commit hooks that catch config errors before they reach CI:
+`rhiza-hooks` ships hooks that catch config errors before they reach CI:
 
 | Hook | What it checks |
 |------|---------------|
 | `check-rhiza-config` | `template.yml` is valid; repo and ref resolve |
 | `check-rhiza-workflow-names` | Workflow files follow naming conventions |
 | `check-makefile-targets` | `make test`, `make lint`, `make release` are present |
-| `check-python-version-consistency` | `.python-version`, `pyproject.toml`, and CI matrix agree |
+| `check-{python,rust,go}-version-consistency` | The toolchain version agrees across manifest and CI |
+| `check-managed-files` | No template-owned file edited without an `exclude:` |
+| `check-license-metadata` | Manifest, `LICENSE`, and classifiers agree |
 | `update-readme-help` | Embeds `make help` output into `README.md` |
 
-Runs on every `git commit` — catching config errors locally, before anything reaches CI.
+Runs on every `git commit`, through **`prek`** — a faster drop-in for `pre-commit` reading the same config.
 
 ---
 
 ## Releasing — `/rhiza:release`
 
-`/rhiza:release` prepares a release straight from your conventional-commit history:
+`/rhiza:release` prepares a release straight from your conventional-commit history — in **two phases**:
 
-| Step | What it does |
-|------|-------------|
-| Derive version | Reads the conventional commits since the last tag (via git-cliff) to pick the next semver |
-| Bump | Updates the version in `pyproject.toml` |
-| Changelog | Regenerates `CHANGELOG.md`, folding the unreleased commits under the new tag |
-| Commit + tag | Commits and tags locally — then stops before pushing |
+| Phase | What it does |
+|-------|-------------|
+| **A** — offer | Reads the conventional commits since the last tag (git-cliff), tables the legal next versions, you pick |
+| **A** — bump | Writes it into every location declared under `[tool.bumpversion]`, regenerates `CHANGELOG.md` |
+| **A** — PR | Pushes a release branch and opens a PR. **No tag** |
+| *you merge* | The one human decision |
+| **B** — tag | Run `/rhiza:release` again: it tags the merged commit and pushes the tag |
 
-You review, then push the tag yourself. The pushed tag triggers `rhiza_release.yml`, which builds and publishes.
+Why two phases? A squash-merge replaces the branch's commits, so a tag cut before the merge names a SHA that never lands. The pushed tag triggers `rhiza_release.yml`, which builds and publishes.
 
 The old `version-matrix` and `coverage-badge` helpers are no longer user commands — that logic now lives **inside the reusable CI workflows** (`rhiza_ci.yml` derives the test matrix from `requires-python`; the coverage badge is generated during CI).
 
@@ -588,8 +596,8 @@ The old `version-matrix` and `coverage-badge` helpers are no longer user command
 
 | Tool | What it does |
 |------|-------------|
-| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `docs`, `release`, `status`, `uninstall`, `maffay`). The primary interface. |
-| **rhiza-hooks** | Pre-commit hooks: validate config, check version consistency |
+| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `docs`, `release`, `status`, `detach`, `maffay`). The primary interface. |
+| **rhiza-hooks** | Commit hooks (run via `prek`): validate config, check version consistency |
 | **rhiza-brainbug** | Cross-repo test harness: runs contract tests on upstream commits |
 
 ---
@@ -600,12 +608,14 @@ The old `version-matrix` and `coverage-badge` helpers are no longer user command
 
 **External projects:**
 
-| Project | Organisation | Bundles |
-|---------|-------------|---------|
-| `simulator` | Stanford CVXGRP | `core + github + tests` |
-| `jsharpe` | tschm | `core + github + marimo` |
-| `loman` | Janus Henderson | `core + github + tests + renovate` |
-| `chebpy` | chebpy | `core + github` |
+| Project | Organisation | Config |
+|---------|-------------|--------|
+| `simulator` | Stanford CVXGRP | `github-project` + `legal` |
+| `jsharpe` | tschm | `github-project` + `legal` |
+| `chebpy` | chebpy | `github-project` + `devcontainer` + `github-paper` |
+| `loman` | Janus Henderson | hand-listed bundles, several releases behind |
+
+Three of the four have converged on *profile + a short list of extras*.
 
 ---
 
@@ -616,6 +626,7 @@ Rhiza works on GitLab with the `gitlab` bundle replacing `github`:
 ```yaml
 templates:
   - core
+  - python-core
   - gitlab     # instead of github
   - tests
   - renovate

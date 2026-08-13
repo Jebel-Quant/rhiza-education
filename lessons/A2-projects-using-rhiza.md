@@ -29,7 +29,28 @@ The pre-commit hook repository. Because it is a Python package with its own CI a
 - Interactive Plotly visualisations for returns, drawdowns, and benchmarks
 - Support for both pandas and polars DataFrames
 
-jquantstats is a good example of adopting Rhiza for a scientific Python library — not a tooling project, but a domain library with its own test suite, docs, and release cycle. Its `template.yml` is worth reading if you work on that kind of project.
+jquantstats is a good example of adopting Rhiza for a scientific Python library — not a tooling project, but a domain library with its own test suite, docs, and release cycle:
+
+```yaml
+# .rhiza/template.yml (Jebel-Quant/jquantstats)
+repository: "jebel-quant/rhiza"
+ref: "v1.3.3"
+
+profiles:
+  - github-project
+templates:
+  - legal
+  - github-paper
+
+# Destination paths, as they land in this repo. Source-path entries
+# (bundles/github/...) are inert since the exclude semantics were fixed.
+exclude:
+  - .github/workflows/rhiza_fuzzing.yml
+  - .github/workflows/rhiza_weekly.yml
+  - .github/workflows/rhiza_scorecard.yml
+```
+
+The three `exclude:` entries are the instructive part: the profile brings a full set of GitHub workflows, and this project opts out of three of them by naming the paths they land at. The comment above them records a real trap — template v1.3.0's predecessor matched `exclude:` against *source* paths, and entries written the old way became silently inert when that was fixed in rhiza-claude v0.7.0. If an exclusion stops working after an update, check which end of the path it names.
 
 ## External projects
 
@@ -43,21 +64,17 @@ The following projects live outside the Jebel-Quant organisation and have indepe
 
 ```yaml
 # .rhiza/template.yml (cvxgrp/simulator)
-template-repository: "jebel-quant/rhiza"
-template-branch: "v0.9.5"
+repository: "jebel-quant/rhiza"
+ref: "v1.3.3"
+
+profiles:
+  - github-project
 
 templates:
-  - core
-  - github
   - legal
-  - tests
-  - book
-  - marimo
 ```
 
-Notable choices: the `legal` bundle (adds standard licence headers and notice files — common for projects from research institutions that need to be explicit about intellectual property) and the `marimo` bundle (interactive notebook demos of backtesting strategies published to GitHub Pages). The `book` bundle deploys API documentation on every push.
-
-> **Config format note:** This project uses the older `template-repository` / `template-branch` key names rather than the current `repository` / `ref`. Both key formats are still accepted.
+Notable choice: everything that used to be listed by hand — `core`, `github`, `tests`, `book`, `marimo` — is now covered by the `github-project` profile, leaving just one bundle to add explicitly. That bundle is `legal` (standard licence headers and notice files — common for projects from research institutions that need to be explicit about intellectual property). This is the profile-plus-extras pattern in its cleanest form, and it is worth comparing against the long hand-written `templates:` list this project used to carry.
 
 ---
 
@@ -70,21 +87,16 @@ Notable choices: the `legal` bundle (adds standard licence headers and notice fi
 ```yaml
 # .rhiza/template.yml (tschm/jsharpe)
 repository: "jebel-quant/rhiza"
-ref: "v0.9.5"
+ref: "v1.3.3"
+
+profiles:
+  - github-project
 
 templates:
-  - core
-  - github
-  - tests
   - legal
-  - book
-  - marimo
-
-exclude:
-  - ruff.toml
 ```
 
-The `exclude: ruff.toml` is the most instructive part of this config. The project has custom linting rules that diverge from Rhiza's defaults — rather than fighting the sync, the author added `ruff.toml` to `exclude:` and manages it locally. This is exactly the pattern described in [Lesson 10](./10-customizing-safely.md).
+jsharpe has converged on exactly the same shape as `cvxgrp/simulator`, which is itself the point: two unrelated projects, independently maintained, ending up with an identical four-line config is what the profile mechanism is for. It once carried an `exclude: ruff.toml` entry for custom linting rules that diverged from Rhiza's defaults; that divergence has since been resolved upstream and the exclusion dropped. Dropping an `exclude:` once you no longer need it is as much a part of the pattern in [Lesson 10](./10-customizing-safely.md) as adding one.
 
 ---
 
@@ -97,19 +109,24 @@ The `exclude: ruff.toml` is the most instructive part of this config. The projec
 ```yaml
 # .rhiza/template.yml (chebpy/chebpy)
 repository: "jebel-quant/rhiza"
-ref: "v0.9.5"
+ref: "v1.3.3"
+
+profiles:
+  - github-project
 
 templates:
   - devcontainer
-  - core
-  - github
-  - book
-  - marimo
-  - tests
-  - presentation
+  # Ships .github/workflows/rhiza_paper.yml, which compiles docs/paper/*.tex and
+  # publishes the PDF both as a workflow artifact and on the `paper` branch.
+  - github-paper
+
+exclude:
+  - book/marimo/notebooks/rhiza.py
 ```
 
-This is the most extensive bundle selection of any external project here. The `devcontainer` bundle adds a VS Code / GitHub Codespaces configuration — making it easy for contributors to open the project in a fully configured environment without any local setup. The `presentation` bundle generates slide decks from Markdown, used to produce shareable talks about the library. Worth looking at if you are building a project intended for community contribution.
+This is the most extensive selection of any external project here, and the best illustration of layering extras onto a profile. The `devcontainer` bundle adds a VS Code / GitHub Codespaces configuration — making it easy for contributors to open the project in a fully configured environment without any local setup. `github-paper` compiles the project's LaTeX paper in CI and publishes the PDF. Note also the comment left in the config: annotating *why* a bundle is there is good practice, since the next person to read the file is usually not the one who added the line.
+
+The `exclude:` entry names `book/marimo/notebooks/rhiza.py` — the path as it lands in the repo. Exclusions match destination paths, so a `bundles/marimo/...` source path there would silently do nothing.
 
 ---
 
@@ -121,20 +138,18 @@ This is the most extensive bundle selection of any external project here. The `d
 
 ```yaml
 # .rhiza/template.yml (janushendersonassetallocation/loman)
-template-repository: jebel-quant/rhiza
-template-branch: main
+template-repository: "jebel-quant/rhiza"
+template-branch: "v0.10.3"
 
 templates:
   - devcontainer
   - github
-  - core
   - book
   - marimo
   - tests
+```
 
-exclude:
-  - book/marimo/notebooks/rhiza.py
-``` 
+Loman is the useful counter-example on this page: it is the one project here still on the older `template-repository` / `template-branch` key names, still listing bundles by hand rather than using a profile, and pinned many releases behind the others. Both key formats are still accepted, so nothing is broken — but the config predates the `core`/language-layer split, so it names no language layer at all, and a `/rhiza:update` to a current `ref` is where that would get sorted out. Reading it next to the four-line configs above is a good way to see how much the format has absorbed.
 
 When you visit any of these projects, the following are worth inspecting
 
@@ -148,7 +163,9 @@ When you visit any of these projects, the following are worth inspecting
 
 ## A note on the configs you will find
 
-Not every project here uses the current config format or best practices — and that is useful. You will find `template-repository` / `template-branch` alongside `repository` / `ref`; projects tracking `main` rather than a pinned tag; `templates:` bundle lists rather than the newer `profiles:` shorthand; and `exclude:` entries that reflect real customisation decisions. Reading these configs as an outsider — asking "why did they exclude that?" or "why are they on `main`?" — is one of the best ways to build intuition for the trade-offs described in this curriculum.
+Not every project here uses the current config format or best practices — and that is useful. You will find `template-repository` / `template-branch` alongside `repository` / `ref`; projects several releases behind the current template; `templates:` bundle lists rather than the `profiles:` shorthand; configs written before the `core`/language-layer split that name no `language:` at all; and `exclude:` entries that reflect real customisation decisions. Reading these configs as an outsider — asking "why did they exclude that?" or "why are they still on that ref?" — is one of the best ways to build intuition for the trade-offs described in this curriculum.
+
+The direction of travel is visible across the page: the projects that keep current have converged on a profile plus a short list of extras, and the ones that have not are the ones still carrying a hand-maintained bundle list.
 
 ---
 

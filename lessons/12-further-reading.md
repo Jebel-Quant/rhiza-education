@@ -27,9 +27,10 @@ These live in [`rhiza/docs/`](https://github.com/Jebel-Quant/rhiza/tree/main/doc
 | [guides/QUICK_REFERENCE.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/guides/QUICK_REFERENCE.md) | Concise card of the most common Rhiza operations — good to bookmark |
 | [reference/GLOSSARY.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/GLOSSARY.md) | Definitions of every term used in the Rhiza ecosystem |
 | [reference/ARCHITECTURE.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/ARCHITECTURE.md) | Visual diagrams of system components and how they interact |
-| [reference/TOOLS_REFERENCE.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/TOOLS_REFERENCE.md) | Quick reference for all the external tools Rhiza-managed projects use (ruff, pytest, pre-commit, etc.) |
-| [reference/BUNDLE_TAXONOMY.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/BUNDLE_TAXONOMY.md) | Every bundle and profile, how they layer, and which depends on which |
+| [reference/TOOLS_REFERENCE.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/TOOLS_REFERENCE.md) | Quick reference for all the external tools Rhiza-managed projects use (ruff, pytest, prek, cargo, golangci-lint, etc.) |
+| [reference/BUNDLE_TAXONOMY.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/BUNDLE_TAXONOMY.md) | Every bundle and profile, how they layer, and which depends on which — including the `core` / language-layer split and the rule that a repo picks exactly one layer |
 | [reference/DEPENDENCIES.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/DEPENDENCIES.md) | What the template depends on and why |
+| [reference/SHELL_SCRIPTS.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/SHELL_SCRIPTS.md) | The shell scripts the template ships and what each one is for |
 | [reference/WHY_NOT_COPIER_CRUFT.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/WHY_NOT_COPIER_CRUFT.md) | Why Rhiza is not Copier or Cruft — the design argument behind Lesson 4 |
 | [troubleshooting.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/troubleshooting.md) | What to do when a sync, gate, or workflow misbehaves |
 
@@ -62,20 +63,20 @@ These live in [`rhiza/docs/`](https://github.com/Jebel-Quant/rhiza/tree/main/doc
 
 ## Command reference
 
-Each command has a dedicated page on the [rhiza-claude docs site](https://jebel-quant.github.io/rhiza-claude/). The eight below are the complete set as of `v0.6.1`.
+Each command has a dedicated page on the [rhiza-claude docs site](https://jebel-quant.github.io/rhiza-claude/). The eight below are the complete set as of `v0.8.2`. Note the URL path: since `v0.7.0` the commands ship as **skills**, and the docs moved from `/commands/` to `/skills/` with them — old bookmarks will 404.
 
 | Document | Command | What it covers |
 |----------|---------|---------------|
-| [init](https://jebel-quant.github.io/rhiza-claude/commands/init/) | `/rhiza:init` | Make a folder rhiza-managed: write the pointer, add a skeleton and license, open PR #1. Syncs nothing |
-| [update](https://jebel-quant.github.io/rhiza-claude/commands/update/) | `/rhiza:update` | Bump the ref, sync the template, resolve conflicts upstream-side, and open a PR of template-owned files |
-| [quality](https://jebel-quant.github.io/rhiza-claude/commands/quality/) | `/rhiza:quality` | Run the code-quality gate and score the repo; optionally file findings as issues |
-| [docs](https://jebel-quant.github.io/rhiza-claude/commands/docs/) | `/rhiza:docs` | Write or refresh `README.md`, `CLAUDE.md`, and `mkdocs.yml`, preserving hand-written prose |
-| [release](https://jebel-quant.github.io/rhiza-claude/commands/release/) | `/rhiza:release` | Offer the legal next versions as a table, bump every declared location, regenerate `CHANGELOG.md`, commit and tag locally |
-| [status](https://jebel-quant.github.io/rhiza-claude/commands/status/) | `/rhiza:status` | Validate the config and report the lock; `--files` for a tree, `--check` for whether you are behind |
-| [uninstall](https://jebel-quant.github.io/rhiza-claude/commands/uninstall/) | `/rhiza:uninstall` | Delete every file the lock records and the lock itself; destructive, prompts unless `--force` |
-| [maffay](https://jebel-quant.github.io/rhiza-claude/commands/maffay/) | `/rhiza:maffay` | A bonmot from a random Peter Maffay song |
+| [init](https://jebel-quant.github.io/rhiza-claude/skills/init/) | `/rhiza:init` | Make a folder rhiza-managed: write the pointer, add a Python/Rust/Go skeleton and license, open PR #1. Syncs nothing |
+| [update](https://jebel-quant.github.io/rhiza-claude/skills/update/) | `/rhiza:update` | Bump the ref, sync the template, resolve conflicts upstream-side, and open a PR of template-owned files |
+| [quality](https://jebel-quant.github.io/rhiza-claude/skills/quality/) | `/rhiza:quality` | Run the code-quality gates and score the repo; optionally file findings as issues. Degrades to a design-led assessment on an unmanaged repo rather than refusing |
+| [docs](https://jebel-quant.github.io/rhiza-claude/skills/docs/) | `/rhiza:docs` | Write or refresh `README.md`, `CLAUDE.md`, and `mkdocs.yml`, preserving hand-written prose |
+| [release](https://jebel-quant.github.io/rhiza-claude/skills/release/) | `/rhiza:release` | Offer the legal next versions as a table, bump every declared location, regenerate `CHANGELOG.md`, and open a release PR; run it again after the merge to tag |
+| [status](https://jebel-quant.github.io/rhiza-claude/skills/status/) | `/rhiza:status` | Validate the config and report the lock; `--files` for a tree, `--check` for whether you are behind |
+| [detach](https://jebel-quant.github.io/rhiza-claude/skills/detach/) | `/rhiza:detach` | Delete every file the lock records and the lock itself; destructive, prompts unless `--force` |
+| [maffay](https://jebel-quant.github.io/rhiza-claude/skills/maffay/) | `/rhiza:maffay` | A bonmot from a random Peter Maffay song |
 
-> **Retired commands.** `/rhiza:validate` is now part of `/rhiza:status`, and `/rhiza:revisit` was renamed `/rhiza:docs`. `/rhiza:stats`, `/rhiza:repos` and `/rhiza:new` are gone. The version-matrix and coverage-badge logic that used to be user-run `rhiza-tools` commands lives inside the template's reusable CI workflows (`rhiza_ci.yml`), so there is nothing to invoke by hand.
+> **Renamed and retired commands.** `/rhiza:uninstall` became `/rhiza:detach` in `v0.7.0`. `/rhiza:validate` is now part of `/rhiza:status`, and `/rhiza:revisit` was renamed `/rhiza:docs`. `/rhiza:stats`, `/rhiza:repos` and `/rhiza:new` are gone. The version-matrix and coverage-badge logic that used to be user-run `rhiza-tools` commands lives inside the template's reusable CI workflows (`rhiza_ci.yml`), so there is nothing to invoke by hand.
 
 ---
 
@@ -84,7 +85,7 @@ Each command has a dedicated page on the [rhiza-claude docs site](https://jebel-
 | Document | What it covers |
 |----------|---------------|
 | [rhiza-hooks docs site](https://jebel-quant.github.io/rhiza-hooks/) | The hooks, rendered and searchable |
-| [API reference](https://jebel-quant.github.io/rhiza-hooks/api-reference/) | A page per hook — `check_rhiza_config`, `check_makefile_targets`, `check_python_version`, `check_template_bundles`, `check_workflow_names`, `update_readme_help` — plus the shared internals |
+| [API reference](https://jebel-quant.github.io/rhiza-hooks/api-reference/) | A page per hook — config, Makefile-target, per-language version-consistency, bumpversion, template-bundle, managed-file, licence-metadata and README-help checks — plus the shared internals |
 | [rhiza-hooks README](https://github.com/Jebel-Quant/rhiza-hooks/blob/main/README.md) | Installing the hooks and wiring them into `.pre-commit-config.yaml` |
 
 ---
@@ -134,7 +135,7 @@ Rhiza once shipped a `.rhiza/docs/` set — `WORKFLOWS.md`, `RELEASING.md`, `TOK
 | [guides/QUICK_REFERENCE.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/guides/QUICK_REFERENCE.md) | The common operations, releasing among them |
 | [ops/CHANGELOG_GUIDE.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/ops/CHANGELOG_GUIDE.md) | Conventional commits, and how a release note is produced from them |
 | [troubleshooting.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/troubleshooting.md) | Debugging a failed sync, gate, or workflow |
-| [`/rhiza:release`](https://jebel-quant.github.io/rhiza-claude/commands/release/) | The release itself, start to finish |
+| [`/rhiza:release`](https://jebel-quant.github.io/rhiza-claude/skills/release/) | The release itself, start to finish |
 
 ---
 

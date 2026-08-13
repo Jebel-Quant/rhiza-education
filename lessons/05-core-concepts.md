@@ -8,7 +8,7 @@ Every Rhiza setup involves three things:
 
 **1. The template repository**
 
-This is a GitHub repo that holds the canonical versions of shared infrastructure files: CI workflows, a Makefile, linting config, pre-commit hooks, and so on. The canonical template repo is `Jebel-Quant/rhiza`, but you can fork it and use your own.
+This is a GitHub repo that holds the canonical versions of shared infrastructure files: CI workflows, a Makefile, linting config, commit hooks, and so on. The canonical template repo is `Jebel-Quant/rhiza`, but you can fork it and use your own.
 
 **2. The downstream project**
 
@@ -25,7 +25,8 @@ Every downstream project has exactly one Rhiza config file. Here is what it look
 ```yaml
 # .rhiza/template.yml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v1.2.5                      # Which version of the template to use
+ref: v1.3.3                      # Which version of the template to use
+language: python                 # Which language layer this repo uses
 
 profiles:                         # Curated bundle preset (recommended)
   - github-project
@@ -36,58 +37,73 @@ exclude: |                        # Files to never overwrite locally
 
 - `repository` — any GitHub repo, not just the canonical Rhiza repo.
 - `ref` — a tag or branch name. Tags are recommended because they enable automated version tracking (more on this in Lesson 8).
-- `profiles` — a curated preset that expands to a sensible bundle selection. `github-project` gives you `core`, `github`, `tests`, `github-tests`, `book`, `github-book`, `marimo`, and `github-marimo`. This is the recommended starting point. There are three profiles — `github-project`, `gitlab-project`, and `local` — and `renovate` belongs to none of them, so projects that want automated dependency updates add that bundle by hand.
+- `language` — `python`, `rust`, or `go`. Written by `/rhiza:init`, it records which language layer the repo follows. Since v1.3.0 the template is multi-language, and exactly one language layer belongs in a repo.
+- `profiles` — a curated preset that expands to a sensible bundle selection. `github-project` gives you `core`, `python-core`, `github`, `tests`, `github-tests`, `book`, `github-book`, `marimo`, and `github-marimo`. This is the recommended starting point. There are five profiles — `github-project`, `gitlab-project`, `local`, `rust-local`, and `go-local` — and `renovate` belongs to none of them, so projects that want automated dependency updates add that bundle by hand.
 - `templates` — explicit list of named bundles, for when you need finer control than a profile offers.
 - `include` — explicit glob patterns for files not covered by a bundle (optional).
-- `exclude` — glob patterns that protect files from being overwritten by the sync.
+- `exclude` — glob patterns that protect files from being overwritten by the sync. Patterns match **destination** paths — where a file lands in your repo — not the path it has inside the template.
 
 ## Bundles
 
-Listing every file path in `include` by hand gets tedious. Rhiza provides **bundles**: named groups of files with sensible defaults. Bundles come in two kinds:
+Listing every file path in `include` by hand gets tedious. Rhiza provides **bundles**: named groups of files with sensible defaults. Bundles come in three kinds:
+
+**`core` and the language layers.** Since v1.3.0, `core` is deliberately language-neutral: the thin `Makefile`, the `.rhiza/` modular make system, help and logo machinery, and `uv`/`uvx` as a tool runner. It defines no `install` and no `all`, so it is not a working repo on its own. Exactly one **language layer** supplies those, which is what lets a shared CI workflow call `make install` without knowing what language it is building.
+
+| Bundle | What it includes | Requires |
+|--------|-----------------|----------|
+| `core` | Makefile, `.rhiza/make.d/`, help machinery, uv as tool runner — language-neutral | — |
+| `python-core` | Python layer: virtualenv and `uv sync`, `.python-version`, `ruff.toml`, `.bandit`, `.pre-commit-config.yaml`, deptry and licence scans | `core` |
+| `rust-core` | Rust layer: rustup and `cargo fetch`, `rust-toolchain.toml`, `rustfmt.toml`, `clippy.toml`, `deny.toml`, clippy/nextest/llvm-cov gates | `core` |
+| `go-core` | Go layer: `go mod download`, `.golangci.yml`, `revive.toml`, a `version.Version` constant for the release flow, go test/govulncheck gates | `core` |
 
 **Feature bundles** — local tooling only, no CI/CD. They work independently of any platform.
 
-| Bundle | What it includes |
-|--------|-----------------|
-| `core` | Makefile, ruff.toml, pre-commit config, editor config, core scripts |
-| `tests` | pytest config, coverage, type checking |
-| `book` | API documentation generation |
-| `marimo` | Interactive notebook support |
-| `docker` | Dockerfile and container configuration |
-| `devcontainer` | VS Code / GitHub Codespaces dev container |
-| `presentation` | Slide generation from Markdown (via Marp) |
-| `paper` | Academic paper/research publishing |
-| `lfs` | Git Large File Storage configuration |
-| `legal` | Licence headers and IP notice files |
-| `renovate` | Automated dependency update config |
-| `benchmarks` | Performance testing infrastructure |
+| Bundle | What it includes | Requires |
+|--------|-----------------|----------|
+| `tests` | pytest config, coverage, type checking | `core`, `python-core`, `book` |
+| `book` | API documentation generation | `core` |
+| `marimo` | Interactive notebook support | `core`, `python-core`, `book` |
+| `benchmarks` | Performance testing infrastructure | `tests` |
+| `docker` | Dockerfile and container configuration | — |
+| `devcontainer` | VS Code / GitHub Codespaces dev container | — |
+| `vscode` | Recommended VS Code extensions and workspace settings | — |
+| `presentation` | Slide generation from Markdown (via Marp) | — |
+| `paper` | LaTeX paper compilation targets | — |
+| `lfs` | Git Large File Storage configuration | — |
+| `legal` | Licence headers and IP notice files | — |
+| `renovate` | Automated dependency update config | — |
 
 **Platform overlay bundles** — layer CI/CD workflows on top of a feature bundle. Each overlay is named `<platform>-<feature>`:
 
 | Bundle | What it adds |
 |--------|-------------|
-| `github` | Base GitHub Actions setup |
+| `github` | Base GitHub Actions setup (sync, release, dependabot) |
 | `github-tests` | Testing and security scan workflows on GitHub |
 | `github-book` | Documentation publication workflow on GitHub |
 | `github-docker` | Docker image build and publish on GitHub |
 | `github-marimo` | Notebook hosting workflow on GitHub |
 | `github-devcontainer` | Dev container image build on GitHub |
+| `github-paper` | LaTeX compilation and PDF publishing on GitHub |
+| `github-quality-review` | Advisory Claude design review of PR diffs (opt-in) |
 | `gitlab` | Base GitLab CI/CD setup |
 | `gitlab-tests` | Testing workflows on GitLab |
 | `gitlab-book` | Documentation publication workflow on GitLab |
 | `gitlab-marimo` | Notebook hosting workflow on GitLab |
+| `gitlab-quality-review` | Advisory Claude design review of MR diffs (opt-in) |
 
 **Profiles** are curated presets that expand to a sensible combination of bundles for common setups. For most projects, start with a profile rather than listing bundles individually:
 
 | Profile | Expands to |
 |---------|-----------|
-| `github-project` | `core`, `github`, `tests`, `github-tests`, `book`, `github-book`, `marimo`, `github-marimo` |
-| `gitlab-project` | `core`, `gitlab`, `tests`, `gitlab-tests`, `book`, `gitlab-book`, `marimo`, `gitlab-marimo` |
-| `local` | `core`, `tests`, `book`, `marimo` — everything local, no hosted workflows |
+| `github-project` | `core`, `python-core`, `github`, `tests`, `github-tests`, `book`, `github-book`, `marimo`, `github-marimo` |
+| `gitlab-project` | `core`, `python-core`, `gitlab`, `tests`, `gitlab-tests`, `book`, `gitlab-book`, `marimo`, `gitlab-marimo` |
+| `local` | `core`, `python-core`, `tests`, `book`, `marimo` — everything local, no hosted workflows |
+| `rust-local` | `core`, `rust-core`, `book` |
+| `go-local` | `core`, `go-core`, `book` |
 
-Each platform profile is the `local` set plus that platform's CI overlays, which is why switching between GitHub and GitLab changes the workflows and nothing else. Note that `renovate` is in **no** profile: automated dependency updates are opt-in, added as a bundle when you want them (Lesson 9).
+Each Python platform profile is the `local` set plus that platform's CI overlays, which is why switching between GitHub and GitLab changes the workflows and nothing else. Rust and Go currently have local-only profiles: hosted CI for those languages is not yet part of the template, so `rust-github-project` and `go-github-project` do **not** exist. Note also that `renovate` is in **no** profile: automated dependency updates are opt-in, added as a bundle when you want them (Lesson 9).
 
-Browse the `bundles/` directory in the template repo, or the [bundle taxonomy](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/BUNDLE_TAXONOMY.md), to see the full list with dependency information. The `core` bundle is required. All others are optional.
+Browse the `bundles/` directory in the template repo, or the [bundle taxonomy](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/BUNDLE_TAXONOMY.md), to see the full list with dependency information. Every bundle resolves its own dependencies, so selecting `tests` pulls in `core`, `python-core`, and `book` automatically. `core` plus one language layer is the minimum; all others are optional.
 
 ## The sync loop
 
@@ -106,7 +122,7 @@ This loop is human-initiated. You run `/rhiza:update` in Claude Code, which bump
 
 ## Version pinning and automated updates
 
-The `ref:` field in `template.yml` pins your project to a specific version of the template. When the template repo releases a new version, Renovate — a dependency automation tool — detects the new tag and opens a PR in your project that bumps `ref: v1.1.0` to `ref: v1.2.0`. That PR is a *notification* that a newer template exists; merging it no longer triggers a sync on its own. To actually apply the new version, run `/rhiza:update`, which bumps the `ref` and syncs the files in a single reviewable PR.
+The `ref:` field in `template.yml` pins your project to a specific version of the template. When the template repo releases a new version, Renovate — a dependency automation tool — detects the new tag and opens a PR in your project that bumps `ref: v1.3.2` to `ref: v1.3.3`. That PR is a *notification* that a newer template exists; merging it no longer triggers a sync on its own. To actually apply the new version, run `/rhiza:update`, which bumps the `ref` and syncs the files in a single reviewable PR.
 
 This gives you **opt-in updates**: the template can evolve quickly without forcing changes on you, but you can easily stay current when you choose to.
 

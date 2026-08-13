@@ -2,7 +2,7 @@
 
 Rhiza and its ecosystem are built by a small group of people. The current core repositories are `rhiza`, `rhiza-claude`, `rhiza-hooks`, and `rhiza-brainbug`. The now-archived `rhiza-cli` and `rhiza-tools` were core repositories earlier in the project's life, and the contribution counts below still include the work that went into them. This page lists every human contributor with their GitHub profiles and contribution counts.
 
-Contribution counts reflect commits to the default branch as of the time this page was written. Automated commits from Renovate, Copilot, and other bots are excluded.
+Contribution counts reflect commits to the default branch, refreshed **August 2026**. Automated commits from Renovate, Dependabot, Copilot, and other bots are excluded.
 
 ---
 
@@ -19,11 +19,13 @@ He later spent time as a Visiting Scholar at Stanford with Professor Stephen Boy
 
 | Repo | Contributions |
 |------|--------------|
-| rhiza | 761 |
-| rhiza-cli | 195 |
-| rhiza-tools | 61 |
-| rhiza-hooks | 54 |
-| **Total** | **1,071** |
+| rhiza | 1,115 |
+| rhiza-cli | 289 |
+| rhiza-hooks | 173 |
+| rhiza-tools | 162 |
+| rhiza-claude | 140 |
+| rhiza-brainbug | 31 |
+| **Total** | **1,910** |
 
 <br style="clear: both;">
 
@@ -37,11 +39,11 @@ Harry is the second-largest contributor to the ecosystem and has been involved a
 
 | Repo | Contributions |
 |------|--------------|
-| rhiza | 128 |
-| rhiza-tools | 47 |
-| rhiza-cli | 29 |
+| rhiza | 132 |
+| rhiza-tools | 50 |
+| rhiza-cli | 31 |
 | rhiza-hooks | 14 |
-| **Total** | **218** |
+| **Total** | **227** |
 
 <br style="clear: both;">
 
@@ -100,6 +102,21 @@ Armaan contributed to the core `rhiza` template repo.
 | Repo | Contributions |
 |------|--------------|
 | rhiza | 1 |
+| **Total** | **1** |
+
+<br style="clear: both;">
+
+---
+
+## ded-furby · [ded-furby](https://github.com/ded-furby)
+
+<img src="https://avatars.githubusercontent.com/u/190979964?v=4" width="80" style="border-radius: 50%; float: left; margin: 0 16px 16px 0;">
+
+Contributed to `rhiza-hooks`.
+
+| Repo | Contributions |
+|------|--------------|
+| rhiza-hooks | 1 |
 | **Total** | **1** |
 
 <br style="clear: both;">

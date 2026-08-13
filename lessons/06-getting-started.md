@@ -6,7 +6,7 @@ This lesson walks you through setting up Rhiza in a new project from scratch.
 
 You need:
 
-- **[uv](https://docs.astral.sh/uv/)** — Rhiza's bundled scripts run on `uv`, and `/rhiza:init` uses it to scaffold the project. Install it with:
+- **[uv](https://docs.astral.sh/uv/)** — Rhiza's bundled scripts run on `uv`, and it is the tool runner behind every gate regardless of language. `/rhiza:init` also uses it to scaffold the project. Install it with:
   ```bash
   curl -LsSf https://astral.sh/uv/install.sh | sh
   ```
@@ -26,7 +26,7 @@ Rhiza ships as a Claude Code plugin from the `rhiza-claude` marketplace. Inside 
 To pin a specific version, append a git tag when you add the marketplace:
 
 ```
-/plugin marketplace add Jebel-Quant/rhiza-claude#v0.6.1
+/plugin marketplace add Jebel-Quant/rhiza-claude#v0.8.2
 ```
 
 The plugin's bundled scripts are stdlib-only Python — there is no separate `rhiza` CLI to install. Everything you need beyond `uv`, `git`, and `make` comes from the plugin.
@@ -43,15 +43,16 @@ Navigate to your project directory and, in Claude Code, run:
 /rhiza:init
 ```
 
-`/rhiza:init` makes the current folder a rhiza-managed repo. If the folder already has an `origin`, it derives everything from that URL and asks nothing. Otherwise it will ask you:
+`/rhiza:init` makes the current folder a rhiza-managed repo. If the folder already has an `origin`, it derives the host and slug from that URL. Otherwise it will ask you:
 
 - **GitHub or GitLab** — this picks your project's profile, so a GitLab repo gets GitLab's CI
 - **Owner, name, and visibility** for the repo
-- **Template repository** — `Jebel-Quant/rhiza` by default, or any `owner/repo` you name. It checks the template is reachable before pointing at it, and pins its latest release as your starting `ref`
+- **Language** — `python` (the default), `rust`, or `go`. This chooses both the language layer you sync and the profile you get: Python repos get `github-project`/`gitlab-project`, Rust gets `rust-local`, and Go gets `go-local`
+- **Template repository** — `Jebel-Quant/rhiza` by default, or any `owner/repo` you name. That one template serves all three languages, layering `python-core`, `rust-core`, or `go-core` on the neutral `core`. It checks the template is reachable — and that it actually defines the profile it is about to write — before pointing at it, and pins its latest release as your starting `ref`
 
-It then writes `.rhiza/template.yml` — the pointer, and the only Rhiza config file your project needs — adds a Python skeleton (`uv init --lib` plus the `pyproject.toml` shape the template's gates require) and license metadata, and opens a PR on a `rhiza_init_<date>` branch titled `chore: make repo rhiza-managed`. It never pushes to your default branch.
+It then writes `.rhiza/template.yml` — the pointer, and the only Rhiza config file your project needs — adds a skeleton for the language you chose (`uv init --lib` plus the `pyproject.toml` shape the template's gates require, or a `Cargo.toml`, or a `go.mod`) and license metadata, and opens a PR on a `rhiza_init_<date>` branch titled `chore: make repo rhiza-managed`. It never pushes to your default branch.
 
-The skeleton is not optional, and not decoration: the template ships no `pyproject.toml`, so without one the gates in step 4 fail outright — `make test` depends on an install step, and the synced `.rhiza/tests/test_pyproject.py` asserts a specific `[project]` shape.
+The skeleton is not optional, and not decoration: the template ships no manifest of any kind, so without one the gates in step 4 fail outright — every `make` target that builds or tests needs a `pyproject.toml`, `Cargo.toml`, or `go.mod` to work with, and on Python the synced `.rhiza/tests/test_pyproject.py` asserts a specific `[project]` shape.
 
 **What is deliberately not in PR #1:** no CI workflows, no `Makefile`, no `.rhiza/rhiza.mk`, no docs, and no gates were run. Your package is empty by design. Review the PR and merge it.
 
@@ -81,16 +82,17 @@ Review that diff and merge it too. From here on, the same command is how you tak
 
 ## Step 4: Choose your bundles or profile
 
-`/rhiza:init` picks your profile from the platform you chose, so there is nothing to select during the interview. `github-project` is the GitHub default, and it expands to:
+`/rhiza:init` picks your profile from the platform and language you chose, so there is nothing extra to select. `github-project` is the default for a Python repo on GitHub, and it expands to:
 
-- `core` (always required)
+- `core` (always required, and language-neutral)
+- `python-core` (the Python language layer: `install`/`all`, virtualenv, ruff, bandit, deptry)
 - `github` (base GitHub Actions setup)
 - `tests` (pytest, coverage — local tooling)
 - `github-tests` (testing and security scan workflows on GitHub)
 - `book` and `github-book` (the MkDocs documentation site and its publishing workflow)
 - `marimo` and `github-marimo` (Marimo notebooks and their workflow)
 
-GitLab projects get `gitlab-project`, the same shape with GitLab's CI. There is also a `local` profile — `core`, `book`, `marimo`, `tests` — for experiments and early-stage work with no hosted automation at all.
+GitLab projects get `gitlab-project`, the same shape with GitLab's CI. There is also a `local` profile — `core`, `python-core`, `book`, `marimo`, `tests` — for experiments and early-stage work with no hosted automation at all. Rust and Go repos get `rust-local` and `go-local`, which pair `core` with that language's layer and `book`; hosted CI for those two languages has not shipped yet.
 
 Anything outside your profile is opt-in by editing `template.yml` and running `/rhiza:update`. `renovate`, for automated dependency updates, is the one most projects add first — it is a bundle in its own right, not part of any profile. To see every available bundle with its description and dependencies, browse the template repo's [`bundles/` directory](https://github.com/Jebel-Quant/rhiza/tree/main/bundles) or the [bundle taxonomy](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/BUNDLE_TAXONOMY.md).
 
@@ -112,7 +114,7 @@ Run `make install` to set up your development environment:
 make install
 ```
 
-This installs your project dependencies, sets up pre-commit hooks, and gets you ready to work.
+This installs your project dependencies, wires up the commit hooks, and gets you ready to work. The hooks themselves are run by [`prek`](https://github.com/j178/prek) — a faster drop-in runner for the same `.pre-commit-config.yaml` — which `make fmt` invokes as `uvx prek run --all-files`.
 
 ## Applying later template updates
 
@@ -138,7 +140,7 @@ Your project now has:
 
 - **CI/CD workflows** that run on push and pull requests — automatically testing your code across multiple Python versions.
 - **A modular Makefile** with targets for testing, linting, releasing, and more.
-- **Pre-commit hooks** that enforce code quality on every commit.
+- **Commit hooks** that enforce code quality on every commit, run through `prek`.
 - **A living-template link** to the upstream, kept current by running `/rhiza:update` when a new template version ships.
 
 None of this required manual configuration. It came from the template, and it stays up to date via the update mechanism described in Lesson 8.

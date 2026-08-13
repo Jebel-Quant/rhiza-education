@@ -196,7 +196,8 @@ The sync is not a bulldozer. It is a proposal.
 
 ```yaml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v1.2.0                      # Which version (pinned tag — recommended)
+ref: v1.3.3                      # Which version (pinned tag — recommended)
+language: python                 # Which language layer (python / rust / go)
 
 profiles:                         # Curated bundle preset (recommended)
   - github-project
@@ -216,16 +217,19 @@ One file. That's all Rhiza needs.
 
 | Bundle | What it includes |
 |--------|-----------------|
-| `core` | Makefile, ruff.toml, pre-commit config, editor config |
+| `core` | Makefile, `.rhiza/make.d/`, editor config — **language-neutral** |
+| `python-core` | Python layer: virtualenv, ruff, bandit, deptry, hook config |
 | `tests` | pytest config, coverage, type checking |
 | `docker` | Dockerfile and container configuration |
 | `marimo` | Interactive notebook support |
 | `presentation` | Slide generation from Markdown (Marp) |
 | `renovate` | Automated dependency update config |
 
+`core` defines no `install` and no `all` — a **language layer** (`python-core`, `rust-core`, `go-core`) supplies them. Pick exactly one.
+
 **Platform overlay bundles** layer CI/CD on top: `github-tests`, `github-book`, `gitlab-tests`, etc.
 
-**Profiles** (`github-project`, `gitlab-project`, `local`) expand to a sensible bundle combination. Start here.
+**Profiles** (`github-project`, `gitlab-project`, `local`, `rust-local`, `go-local`) expand to a sensible bundle combination. Start here.
 
 ---
 
@@ -256,11 +260,11 @@ Without Renovate, the `ref:` pin is frozen. Projects drift behind the template s
 
 <div style="display:flex;flex-direction:column;gap:0.45em;margin:0.9em 0;font-size:0.93em;">
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    template repo publishes <strong>v1.2.0</strong>
+    template repo publishes <strong>v1.3.3</strong>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓</div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    Renovate opens PR: <code>ref: v1.1.0 → v1.2.0</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
+    Renovate opens PR: <code>ref: v1.3.2 → v1.3.3</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you run <code>/rhiza:update</code></span></div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
@@ -305,12 +309,12 @@ That's it. Your project is now Rhiza-managed.
 
 ## What you get on day one
 
-After syncing with the `github-project` profile (`core + github + tests + github-tests + renovate`):
+After syncing with the `github-project` profile (`core + python-core + github + tests + github-tests + book + marimo` and their overlays):
 
 ```
 .github/workflows/rhiza_ci.yml          ← CI: test matrix on push and PRs
 .github/workflows/rhiza_release.yml     ← Build + publish to PyPI on a tag
-.pre-commit-config.yaml                 ← Local commit hooks (rhiza-hooks)
+.pre-commit-config.yaml                 ← Local commit hooks (rhiza-hooks, run by prek)
 ruff.toml                               ← Linting config
 Makefile                                ← make test · make lint
 .python-version                         ← Pinned Python version
@@ -382,8 +386,8 @@ The PR description usually explains what changed at a high level.
 
 | Tool | What it does |
 |------|-------------|
-| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `docs`, `release`, `status`, `uninstall`, `maffay`). The primary interface. |
-| **rhiza-hooks** | Pre-commit hooks: validate config, check version consistency |
+| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `docs`, `release`, `status`, `detach`, `maffay`). The primary interface. |
+| **rhiza-hooks** | Commit hooks (run via `prek`): validate config, check version consistency |
 | **rhiza-brainbug** | Cross-repo test harness: runs contract tests on upstream commits |
 
 ---
@@ -394,12 +398,14 @@ The PR description usually explains what changed at a high level.
 
 **External projects:**
 
-| Project | Organisation | Bundles |
-|---------|-------------|---------|
-| `simulator` | Stanford CVXGRP | `core + github + tests` |
-| `jsharpe` | tschm | `core + github + marimo` |
-| `loman` | Janus Henderson | `core + github + tests + renovate` |
-| `chebpy` | chebpy | `core + github` |
+| Project | Organisation | Config |
+|---------|-------------|--------|
+| `simulator` | Stanford CVXGRP | `github-project` + `legal` |
+| `jsharpe` | tschm | `github-project` + `legal` |
+| `chebpy` | chebpy | `github-project` + `devcontainer` + `github-paper` |
+| `loman` | Janus Henderson | hand-listed bundles, several releases behind |
+
+Three of the four have converged on *profile + a short list of extras*.
 
 ---
 
