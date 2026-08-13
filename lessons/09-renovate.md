@@ -4,7 +4,7 @@
 
 ## The problem Renovate solves for Rhiza
 
-Consider what happens after you first bring a project onto the template with `ref: v1.2.0` pinned in your `template.yml`. Everything is wired up — CI, linting, releases. Six months later the template has moved on with security fixes, updated runner versions, and a new linting rule. Your project is still on `v1.2.0`.
+Consider what happens after you first bring a project onto the template with `ref: v1.3.2` pinned in your `template.yml`. Everything is wired up — CI, linting, releases. Six months later the template has moved on with security fixes, updated runner versions, and a new linting rule. Your project is still on `v1.3.2`.
 
 Without Renovate, nothing tells you. The template has moved, but your `ref:` is still pinned to the old version. You have to notice the new release yourself and run `/rhiza:update`. Across a handful of projects this is manageable. Across twenty or thirty it becomes the same problem Rhiza was built to solve in the first place: inconsistency through neglect.
 
@@ -15,10 +15,10 @@ Renovate closes this gap. It opens a PR whenever a new template release is tagge
 Rhiza separates *knowing a new version exists* from *applying what changed in it*. Renovate handles the first part — the notification. You handle the second by running `/rhiza:update`.
 
 ```
-template repo publishes v1.2.0
+template repo publishes v1.3.3
          │
          ▼
-Renovate opens PR: ref: v1.1.0 → v1.2.0   (notification only)
+Renovate opens PR: ref: v1.3.2 → v1.3.3   (notification only)
          │
          ▼ (you learn a new version exists)
 you run /rhiza:update in Claude Code
@@ -34,7 +34,7 @@ The Renovate PR contains a single line change in `template.yml`. Merging it on i
 When a new template release is published, Renovate opens a PR with a title like:
 
 ```
-Update dependency Jebel-Quant/rhiza to v1.2.0
+Update dependency Jebel-Quant/rhiza to v1.3.3
 ```
 
 The diff is minimal:
@@ -42,8 +42,8 @@ The diff is minimal:
 ```diff
 # .rhiza/template.yml
  repository: Jebel-Quant/rhiza
--ref: v1.1.0
-+ref: v1.2.0
+-ref: v1.3.2
++ref: v1.3.3
 ```
 
 The PR body includes a changelog summary (when the template repo provides one), a confidence indicator based on how many other repos have already merged this update, and links to the release notes.

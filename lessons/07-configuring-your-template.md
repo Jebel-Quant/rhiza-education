@@ -9,7 +9,8 @@ The recommended approach is to use a **profile** — a curated preset that expan
 ```yaml
 # .rhiza/template.yml (profile-based — recommended)
 repository: Jebel-Quant/rhiza
-ref: v1.2.0
+ref: v1.3.3
+language: python
 
 profiles:
   - github-project
@@ -24,10 +25,12 @@ For finer control, you can list bundles explicitly:
 ```yaml
 # .rhiza/template.yml (explicit bundles)
 repository: Jebel-Quant/rhiza
-ref: v1.2.0
+ref: v1.3.3
+language: python
 
 templates:
   - core
+  - python-core
   - tests
   - github
   - github-tests
@@ -54,15 +57,25 @@ This is the GitHub repository that Rhiza treats as your template source. It can 
 ## `ref`
 
 ```yaml
-ref: v1.2.0
+ref: v1.3.3
 ```
 
 This pins your project to a specific version of the template. It accepts:
 
-- **A tag** (e.g. `v1.2.0`) — recommended. Gives you a stable, known version. Renovate can detect new releases and open version-bump PRs automatically.
+- **A tag** (e.g. `v1.3.3`) — recommended. Gives you a stable, known version. Renovate can detect new releases and open version-bump PRs automatically.
 - **A branch** (e.g. `main`) — always fetches the latest commit on that branch. Useful during active development of a template, but means your project can receive breaking changes without a PR review step.
 
 For production projects, always pin to a tag.
+
+## `language`
+
+```yaml
+language: python
+```
+
+Since template v1.3.0 Rhiza is multi-language, and this key records which of the three language layers your repo follows: `python`, `rust`, or `go`. `/rhiza:init` writes it for you from the language you pick during the interview, and it is what makes the `core` bundle able to stay language-neutral — `core` defines no `install` and no `all`, and the layer named here supplies them. That is why a shared CI workflow can call `make install` without knowing what it is building.
+
+Pick exactly one. A repo with two language layers has two definitions of the same `make` targets.
 
 ## `profiles` — curated bundle presets
 
@@ -75,11 +88,15 @@ profiles:
 
 | Profile | What it includes |
 |---------|-----------------|
-| `github-project` | `core`, `github`, `tests`, `github-tests`, `renovate` — the standard setup for a Python project on GitHub |
-| `gitlab-project` | `core`, `gitlab`, `tests`, `gitlab-tests`, `renovate` — the same for GitLab |
-| `local` | `core` only — for projects that only need local tooling, no CI/CD |
+| `github-project` | `core`, `python-core`, `github`, `tests`, `github-tests`, `book`, `github-book`, `marimo`, `github-marimo` — the standard setup for a Python project on GitHub |
+| `gitlab-project` | `core`, `python-core`, `gitlab`, `tests`, `gitlab-tests`, `book`, `gitlab-book`, `marimo`, `gitlab-marimo` — the same for GitLab |
+| `local` | `core`, `python-core`, `tests`, `book`, `marimo` — local tooling only, no hosted CI/CD |
+| `rust-local` | `core`, `rust-core`, `book` — local-first Rust |
+| `go-local` | `core`, `go-core`, `book` — local-first Go |
 
 Using a profile means your bundle selection automatically stays consistent with what Rhiza recommends for that setup. You can still add extra bundles via `templates:` alongside a profile.
+
+> **`renovate` is in no profile.** Automated dependency updates are opt-in — if you want them, add `renovate` to `templates:` yourself (Lesson 9). There are also no `rust-github-project` or `go-github-project` profiles: hosted CI for those languages has not shipped, and naming a profile the template does not define writes cleanly and then fails your *first* `/rhiza:update` with "Profile 'X' was not found".
 
 ## `templates` — explicit bundle selection
 
@@ -88,14 +105,15 @@ For finer control, the `templates` key lists bundles directly:
 ```yaml
 templates:
   - core
+  - python-core
   - tests
   - github
   - github-tests
 ```
 
-Bundles come in two kinds. **Feature bundles** contain local tooling only (`core`, `tests`, `book`, `marimo`, etc.). **Platform overlay bundles** layer CI/CD workflows on top (`github-tests`, `github-book`, `gitlab-tests`, etc.). When you want CI for a feature, you need both: for example, `tests` (pytest config) plus `github-tests` (the GitHub Actions workflow that runs it).
+Bundles come in three kinds. **`core`** is the required, language-neutral base. **Language layers** (`python-core`, `rust-core`, `go-core`) supply `install` and `all` — pick exactly one. **Feature bundles** contain local tooling only (`tests`, `book`, `marimo`, etc.), and **platform overlay bundles** layer CI/CD workflows on top (`github-tests`, `github-book`, `gitlab-tests`, etc.). When you want CI for a feature, you need both: for example, `tests` (pytest config) plus `github-tests` (the GitHub Actions workflow that runs it).
 
-Browse the template repo's [`bundles/` directory](https://github.com/Jebel-Quant/rhiza/tree/main/bundles) to see every available bundle with its description and dependencies.
+Dependencies resolve automatically, so listing `tests` already gives you `core`, `python-core`, and `book`. Browse the template repo's [`bundles/` directory](https://github.com/Jebel-Quant/rhiza/tree/main/bundles) to see every available bundle with its description and dependencies.
 
 ## `include` — explicit file patterns
 
@@ -115,7 +133,7 @@ You can use `templates` and `include` together in the same config.
 
 ## `exclude` — protecting local files
 
-The `exclude` block prevents Rhiza from overwriting files you own locally, even if they match an `include` pattern:
+The `exclude` block prevents Rhiza from overwriting files you own locally, even if they match an `include` pattern. Patterns match the **destination** path — where the file lands in your repo — not the path it has inside the template, so write `.github/workflows/rhiza_weekly.yml`, never `bundles/github/.github/workflows/rhiza_weekly.yml`:
 
 ```yaml
 exclude: |
@@ -140,9 +158,12 @@ For most projects, start with the `github-project` or `gitlab-project` profile a
 | API documentation | `+ book` (local), `+ github-book` (with GitHub Pages publish) |
 | Docker builds | `+ docker` (local), `+ github-docker` (with GitHub CI) |
 | Slide decks from Markdown | `+ presentation` |
+| A LaTeX paper built and published | `+ paper` (local), `+ github-paper` (with the PDF published from CI) |
 | Licence headers and IP notices | `+ legal` |
 | Git LFS support | `+ lfs` |
 | Performance benchmarks | `+ benchmarks` |
+| Automated dependency updates | `+ renovate` (in no profile — always opt-in) |
+| An advisory Claude review on every PR | `+ github-quality-review` / `+ gitlab-quality-review` |
 
 When in doubt, start with `profiles: [github-project]`. You can always add bundles later — add them to `templates:` and run `/rhiza:update`.
 

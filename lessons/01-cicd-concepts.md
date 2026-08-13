@@ -165,10 +165,12 @@ Rhiza's templates set the minimal permissions needed for each workflow.
 
 A typical Rhiza-managed project has this release flow:
 
-1. Developer runs `/rhiza:release` in Claude Code. It derives the next semantic version from the conventional commits since the last tag (via git-cliff), bumps the version in `pyproject.toml`, regenerates `CHANGELOG.md`, then commits and tags locally (e.g. `v1.2.3`). It stops before pushing.
-2. Developer pushes the tag (`git push --tags`).
-3. The tag push triggers the `rhiza_release.yml` workflow.
-4. The workflow builds a wheel, publishes to PyPI using OIDC Trusted Publishing (no token stored), and creates a GitHub Release.
+1. Developer runs `/rhiza:release` in Claude Code. It offers the legal next semantic versions derived from the conventional commits since the last tag (via git-cliff), writes the chosen one into every location the repo declares under `[tool.bumpversion]`, regenerates `CHANGELOG.md`, and opens a **release PR**. No tag yet.
+2. Developer reviews the PR, watches the checks, and merges it. That merge is the release decision.
+3. Developer runs `/rhiza:release` again. It recognises from the repo's state that it is in phase B, tags the merged commit, and pushes the tag.
+4. The tag push triggers the `rhiza_release.yml` workflow, which builds a wheel, publishes to PyPI using OIDC Trusted Publishing (no token stored), and creates a GitHub Release.
+
+The two-phase split is forced by squash-merge: a tag has to point at a commit that exists on the branch you publish from, and a squash-merge replaces the branch's commits with a new one — so the commit worth tagging does not exist until the human merges.
 
 Every step is audited in the Actions tab. If a publish fails, the log shows exactly why.
 
@@ -178,7 +180,8 @@ Rhiza's template bundles wire all of this up so you do not have to:
 
 | Bundle | What it provides |
 |--------|-----------------|
-| `core` | Makefile with `make test`, `make lint`, and the rest of the local tooling |
+| `core` | The Makefile and the modular `.rhiza/make.d/` system it includes — language-neutral, so CI can call `make install` without knowing the language |
+| `python-core` | The Python layer that fills those targets in: virtualenv, ruff, bandit, deptry (`rust-core` and `go-core` are the equivalents for Rust and Go) |
 | `github` | Workflow files: CI, release, CodeQL, scorecard, and quality review |
 | `tests` | pytest config, coverage reporting, coverage badge publishing |
 | `book` | API documentation build and Pages deployment |

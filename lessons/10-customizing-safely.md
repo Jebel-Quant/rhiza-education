@@ -55,7 +55,7 @@ When `Jebel-Quant/rhiza` releases a new version, you decide when and what to pul
 ```yaml
 # .rhiza/template.yml in a project from your org
 repository: your-org/rhiza
-ref: v1.2.0
+ref: v1.3.3
 ```
 
 This pattern scales well: one place to manage standards, automated propagation to all consuming repos, and full control over what gets adopted and when.

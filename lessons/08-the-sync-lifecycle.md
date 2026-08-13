@@ -21,7 +21,7 @@ Note what is *not* on that list: `/rhiza:update` runs no quality gates, produces
 
 **2. Renovate opens a `ref:` bump PR**
 
-Renovate watches the `ref: vX.Y.Z` line in your `.rhiza/template.yml`. When the template repository publishes a new release, Renovate opens a PR that bumps your `ref` to the new version — for example, changing `ref: v1.1.0` to `ref: v1.2.0`.
+Renovate watches the `ref: vX.Y.Z` line in your `.rhiza/template.yml`. When the template repository publishes a new release, Renovate opens a PR that bumps your `ref` to the new version — for example, changing `ref: v1.3.2` to `ref: v1.3.3`.
 
 This PR is a **notification only**. Merging it changes one line in `template.yml`, but it does *not* apply the new template files — there is no sync workflow to do that. Treat the Renovate PR as a prompt: a new template version is available. When you are ready to adopt it, run `/rhiza:update`, which bumps the ref and materialises the changed files together in a single reviewable PR.
 

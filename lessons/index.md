@@ -1,6 +1,8 @@
 # Rhiza Education
 
-Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, configure, and work with **Rhiza** — the living template system that keeps Python project boilerplate consistent and up to date across all your repos.
+Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, configure, and work with **Rhiza** — the living template system that keeps project boilerplate consistent and up to date across all your repos.
+
+The examples are Python throughout, which is where the template is most complete. Since template `v1.3.0` Rhiza is multi-language — `core` is language-neutral, and a language layer (`python-core`, `rust-core`, or `go-core`) supplies the build and test targets — so everything you learn here about config, bundles, and the sync lifecycle carries over to a Rust or Go repo unchanged.
 
 ## Curriculum
 

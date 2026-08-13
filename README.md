@@ -7,13 +7,15 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/jebel-quant/rhiza-education/badge)](https://www.codefactor.io/repository/github/jebel-quant/rhiza-education)
 [![Coverage](https://jebel-quant.github.io/rhiza-education/coverage-badge.svg)](https://jebel-quant.github.io/rhiza-education/reports/html-coverage/)
 
-Training for and with [Rhiza](https://github.com/Jebel-Quant/rhiza) — the living template system for Python projects.
+Training for and with [Rhiza](https://github.com/Jebel-Quant/rhiza) — the living template system for software projects.
 
 The companion website (rendered, searchable) is at **https://jebel-quant.github.io/rhiza-education/**.
 
 ## Who this is for
 
 Developers who are comfortable with Python, git, and basic CI/CD, and want to adopt Rhiza in a new or existing project.
+
+The curriculum teaches Rhiza through Python, which is where the template is most complete. Since template `v1.3.0` Rhiza is multi-language: `core` is language-neutral and a **language layer** — `python-core`, `rust-core`, or `go-core` — supplies the build and test targets on top of it. Everything about config, bundles, syncing, and the update lifecycle applies unchanged whichever layer you pick; only the toolchain behind `make install` and `make test` differs. Hosted CI has not shipped for Rust and Go yet, so those get local-first profiles.
 
 ## Curriculum
 

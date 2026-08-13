@@ -7,8 +7,9 @@ Rhiza has full GitLab CI/CD support. If your project lives on GitLab rather than
 Everything in lessons 1–6 applies equally to GitLab:
 
 - The `.rhiza/template.yml` config file works identically.
-- The rhiza-claude plugin commands (`/rhiza:init`, `/rhiza:update`) work identically — `/rhiza:init` asks whether your project is on GitHub or GitLab.
-- The `templates:`, `include:`, and `exclude:` keys work identically.
+- The rhiza-claude plugin commands (`/rhiza:init`, `/rhiza:update`) work identically — `/rhiza:init` asks whether your project is on GitHub or GitLab, and picks the matching profile from your answer.
+- The `templates:`, `include:`, `exclude:`, and `language:` keys work identically.
+- `core` plus one language layer is the base on either platform; only the CI overlays differ.
 - The update lifecycle — `/rhiza:update` → diff → review → merge — is the same.
 - The extension points (`custom-task.mk`, `custom-env.mk`, `exclude:`) are the same.
 
@@ -19,13 +20,26 @@ When configuring your `template.yml`, replace the `github` bundle with `gitlab`:
 ```yaml
 # .rhiza/template.yml
 repository: Jebel-Quant/rhiza
-ref: v1.2.0
+ref: v1.3.3
+language: python
 
 templates:
   - core
+  - python-core
   - gitlab       # <-- instead of github
   - tests
   - renovate
+```
+
+Or, more simply, use the `gitlab-project` profile, which expands to exactly the GitLab shape:
+
+```yaml
+repository: Jebel-Quant/rhiza
+ref: v1.3.3
+language: python
+
+profiles:
+  - gitlab-project
 ```
 
 The `gitlab` bundle provides GitLab CI/CD equivalents for the workflows in the `github` bundle: CI testing, the code-quality gates, documentation, releases, and Renovate.
@@ -47,7 +61,11 @@ After syncing, your project will have:
   rhiza_weekly.yml               # Weekly dependency-compatibility and link checks
 ```
 
-There is no `rhiza_sync.yml` — GitLab has no automated template-sync pipeline any more than GitHub does. Template updates are applied by running `/rhiza:update`. Pre-commit hooks run locally via [rhiza-hooks](https://github.com/Jebel-Quant/rhiza-hooks) rather than as a CI workflow.
+There is no `rhiza_sync.yml` — GitLab has no automated template-sync pipeline any more than GitHub does. Template updates are applied by running `/rhiza:update`. Commit hooks run locally via [rhiza-hooks](https://github.com/Jebel-Quant/rhiza-hooks), through `prek`, rather than as a CI workflow.
+
+GitLab also has a `gitlab-quality-review` overlay — an opt-in advisory Claude design review of merge-request diffs, the counterpart to `github-quality-review`. It is in no profile; add the bundle if you want it.
+
+> **Rust and Go are local-only for now.** The template's Rust and Go layers ship no hosted CI on either platform, so there is no `rust-gitlab-project` or `go-gitlab-project`. `/rhiza:init` writes `rust-local` or `go-local` regardless of host.
 
 ## Required CI/CD variables
 
@@ -62,7 +80,7 @@ Mark both as **Masked** in the variable settings so they are not exposed in pipe
 
 ## Keeping the template up to date
 
-There is no scheduled sync pipeline on GitLab (or on GitHub). To pull the latest template changes into your project, run `/rhiza:update` from Claude Code — it works identically regardless of platform, bumps the `ref:`, applies the changed files, and opens a merge request with a quality scorecard. Run `/rhiza:status --check` any time to see whether your pinned `ref:` is behind the latest release.
+There is no scheduled sync pipeline on GitLab (or on GitHub). To pull the latest template changes into your project, run `/rhiza:update` from Claude Code — it works identically regardless of platform, bumps the `ref:`, applies the changed files, and opens a merge request containing only template-owned files. It produces no scorecard; if you want the repo scored, run `/rhiza:quality` separately. Run `/rhiza:status --check` any time to see whether your pinned `ref:` is behind the latest release.
 
 Renovate (via the shipped `rhiza_renovate.yml` job) still opens a merge request bumping the `ref:` when a new template release is tagged, but that MR is only a notification that a new version exists — you apply the actual file changes with `/rhiza:update`.
 
