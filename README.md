@@ -15,7 +15,9 @@ The companion website (rendered, searchable) is at **https://jebel-quant.github.
 
 Developers who are comfortable with Python, git, and basic CI/CD, and want to adopt Rhiza in a new or existing project.
 
-The curriculum teaches Rhiza through Python, which is where the template is most complete. Since template `v1.3.0` Rhiza is multi-language: `core` is language-neutral and a **language layer** — `python-core`, `rust-core`, or `go-core` — supplies the build and test targets on top of it. Everything about config, bundles, syncing, and the update lifecycle applies unchanged whichever layer you pick; only the toolchain behind `make install` and `make test` differs. Hosted CI has not shipped for Rust and Go yet, so those get local-first profiles.
+The curriculum teaches Rhiza through Python, which is where the template is most complete. Since template `v1.3.0` Rhiza is multi-language: `core` is language-neutral and a **language layer** — `python-core`, `rust-core`, or `go-core` — supplies the build and test targets on top of it. Everything about config, bundles, syncing, and the update lifecycle applies unchanged whichever layer you pick; only the toolchain behind the `install` and `test` tasks differs. Hosted CI has not shipped for Rust and Go yet, so those get local-first profiles.
+
+The curriculum is current for **rhiza `v1.7.1`** and **rhiza-claude `v0.13.0`**. The largest change since the previous edition is template v1.4.0, which retired the synced make layer in favour of a pinned CLI, [`rhiza-task`](https://github.com/Jebel-Quant/rhiza-task); Lessons 5, 10 and 11 cover what that changes.
 
 ## Curriculum
 
@@ -31,8 +33,8 @@ The curriculum teaches Rhiza through Python, which is where the template is most
 | 7 | [Configuring Your Template](lessons/07-configuring-your-template.md) | Anatomy of `template.yml`, bundles, include/exclude patterns |
 | 8 | [The Sync Lifecycle](lessons/08-the-sync-lifecycle.md) | How automated sync PRs work and how to review them |
 | 9 | [Renovate](lessons/09-renovate.md) | How Renovate keeps your `ref:` pin current and why it is essential at scale |
-| 10 | [Customising Safely](lessons/10-customizing-safely.md) | Extend Rhiza-managed projects without fighting the sync |
-| 11 | [The Rhiza Ecosystem](lessons/11-the-rhiza-ecosystem.md) | rhiza-claude, rhiza-hooks, and rhiza-brainbug |
+| 10 | [Customising Safely](lessons/10-customizing-safely.md) | `local.mk`, `[tool.rhiza-task]`, `local-setup.sh` and `exclude:` — extend a project without fighting the sync |
+| 11 | [The Rhiza Ecosystem](lessons/11-the-rhiza-ecosystem.md) | rhiza-claude, rhiza-task, pytest-rhiza, rhiza-hooks, and rhiza-brainbug |
 | 12 | [Further Reading](lessons/12-further-reading.md) | Direct links to every doc file across the Rhiza repos, organised by topic |
 
 Work through the lessons in order — each one builds on the last.

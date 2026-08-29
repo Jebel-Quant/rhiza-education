@@ -37,7 +37,7 @@ Key fields:
 | `dependencies` | Runtime dependencies; what gets installed by `uv sync` |
 | `[project.optional-dependencies]` | Groups like `dev`, `test`, `docs` installed with `uv sync --extra dev` |
 
-> `pyproject.toml` also carries configuration for tools like `ruff`, `pytest`, and `mypy`. Rhiza's `core` bundle writes sensible defaults for these into the file (or alongside it) when you first sync.
+> `pyproject.toml` also carries configuration for tools like `ruff`, `pytest`, and `mypy`. Rhiza's `python-core` bundle writes sensible defaults for these into the file (or alongside it) when you first sync. It is also where you put `[tool.rhiza-task]`, the table that tells the task runner which folder to measure — that one stays yours (see [Lesson 10](./10-customizing-safely.md)).
 
 ## The src layout
 
@@ -93,13 +93,13 @@ tests/
     └── test_api.py
 ```
 
-Conventions Rhiza's `tests` bundle expects:
+Conventions the `python-core` bundle's pytest configuration expects:
 
 - Test files are named `test_*.py` (pytest default).
 - The `tests/` directory does **not** need an `__init__.py` — pytest finds tests without it.
 - `conftest.py` at the root of `tests/` is the right place for shared fixtures.
 
-The pytest configuration in `pyproject.toml` (written by the `core` bundle) includes:
+The pytest configuration in `pyproject.toml` (written by the `python-core` bundle) includes:
 
 ```toml
 [tool.pytest.ini_options]
@@ -119,13 +119,14 @@ my-project/
 │       └── __init__.py
 ├── tests/
 │   └── conftest.py
-├── pyproject.toml         # PEP 621 metadata + tool config
-├── .python-version        # written by Rhiza (core bundle)
-├── Makefile               # written by Rhiza (core bundle)
-└── ruff.toml              # written by Rhiza (core bundle)
+├── pyproject.toml         # PEP 621 metadata + tool config + [tool.rhiza-task]
+├── local.mk               # your own make targets — never synced
+├── .python-version        # written by Rhiza (python-core bundle)
+├── Makefile               # written by Rhiza (core bundle) — the task-runner shim
+└── ruff.toml              # written by Rhiza (python-core bundle)
 ```
 
-Files that Rhiza writes are managed by the sync; everything else is yours.
+Files that Rhiza writes are managed by the sync; everything else is yours. `local.mk` is optional — add it when you have targets of your own.
 
 ## What if my project doesn't follow these conventions yet?
 

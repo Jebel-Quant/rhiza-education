@@ -15,6 +15,7 @@ The primary interface is the `rhiza` plugin shipped by [`rhiza-claude`](https://
 | [rhiza-claude docs](https://jebel-quant.github.io/rhiza-claude/) | Installing the marketplace and the full `/rhiza:*` command set, one page per command |
 | [`jebel-quant/rhiza` README](https://github.com/Jebel-Quant/rhiza/blob/main/README.md) | The template repo itself — bundles, structure, and how the template files land in your project |
 | [rhiza docs site](https://jebel-quant.github.io/rhiza/) | The same `docs/` tree below, rendered and searchable |
+| [rhiza-claude headless guide](https://jebel-quant.github.io/rhiza-claude/headless/) | Running the plugin's mechanics without an LLM in the loop |
 
 ---
 
@@ -40,7 +41,7 @@ These live in [`rhiza/docs/`](https://github.com/Jebel-Quant/rhiza/tree/main/doc
 
 | Document | Repo | What it covers |
 |----------|------|---------------|
-| [guides/CUSTOMIZATION.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/guides/CUSTOMIZATION.md) | rhiza | Makefile hooks, `custom-task.mk`, `custom-env.mk`, and the full menu of extension points |
+| [guides/CUSTOMIZATION.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/guides/CUSTOMIZATION.md) | rhiza | `local.mk`, `local-setup.sh`, `[tool.rhiza-task]`, `.rhiza/.env` — the full menu of extension points, rewritten for the retired make layer |
 | [guides/EXTENDING_RHIZA.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/guides/EXTENDING_RHIZA.md) | rhiza | Comprehensive worked examples for extending Rhiza-based projects — patterns and best practices |
 | [guides/DEMO.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/guides/DEMO.md) | rhiza | A guided walkthrough of the template in action |
 
@@ -52,9 +53,10 @@ These live in [`rhiza/docs/`](https://github.com/Jebel-Quant/rhiza/tree/main/doc
 |----------|--------|---------------|
 | [development/DEVCONTAINER.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/development/DEVCONTAINER.md) | `devcontainer` | VS Code Dev Container and GitHub Codespaces configuration |
 | [development/DOCKER.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/development/DOCKER.md) | `docker` | Dockerfile structure and container CI workflow |
-| [development/MARIMO.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/development/MARIMO.md) | `marimo` | Marimo notebook conventions and folder layout |
+| [development/MARIMO.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/development/MARIMO.md) | `book` | Marimo notebook conventions and folder layout |
 | [development/PRESENTATION.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/development/PRESENTATION.md) | `presentation` | Slide generation from Markdown using Marp |
-| [development/TESTS.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/development/TESTS.md) | `tests` | The test layout the quality gate expects |
+| [development/TESTS.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/development/TESTS.md) | `python-core` | The property-based and load/stress testing infrastructure behind the `hypothesis-test` and `stress` tasks |
+| [development/PAPER.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/development/PAPER.md) | `github-paper` | The LaTeX layout the `paper` task and its workflow expect |
 | [development/VSCODE_EXTENSIONS.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/development/VSCODE_EXTENSIONS.md) | `vscode` | The recommended editor extension set |
 | [guides/BOOK.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/guides/BOOK.md) | `book` | The MkDocs documentation site, its reports, and the coverage badge |
 | [lfs/LFS.md](https://github.com/Jebel-Quant/rhiza/blob/main/docs/lfs/LFS.md) | `lfs` | Git LFS setup for repos carrying large files |
@@ -63,7 +65,7 @@ These live in [`rhiza/docs/`](https://github.com/Jebel-Quant/rhiza/tree/main/doc
 
 ## Command reference
 
-Each command has a dedicated page on the [rhiza-claude docs site](https://jebel-quant.github.io/rhiza-claude/). The eight below are the complete set as of `v0.8.2`. Note the URL path: since `v0.7.0` the commands ship as **skills**, and the docs moved from `/commands/` to `/skills/` with them — old bookmarks will 404.
+Each command has a dedicated page on the [rhiza-claude docs site](https://jebel-quant.github.io/rhiza-claude/). The ten below are the complete set as of `v0.13.0`. Note the URL path: since `v0.7.0` the commands ship as **skills**, and the docs moved from `/commands/` to `/skills/` with them — old bookmarks will 404.
 
 | Document | Command | What it covers |
 |----------|---------|---------------|
@@ -73,10 +75,24 @@ Each command has a dedicated page on the [rhiza-claude docs site](https://jebel-
 | [docs](https://jebel-quant.github.io/rhiza-claude/skills/docs/) | `/rhiza:docs` | Write or refresh `README.md`, `CLAUDE.md`, and `mkdocs.yml`, preserving hand-written prose |
 | [release](https://jebel-quant.github.io/rhiza-claude/skills/release/) | `/rhiza:release` | Offer the legal next versions as a table, bump every declared location, regenerate `CHANGELOG.md`, and open a release PR; run it again after the merge to tag |
 | [status](https://jebel-quant.github.io/rhiza-claude/skills/status/) | `/rhiza:status` | Validate the config and report the lock; `--files` for a tree, `--check` for whether you are behind |
+| [remote](https://jebel-quant.github.io/rhiza-claude/skills/remote/) | `/rhiza:remote` | Read CI on the origin for the open pull/merge requests, reproduce the red ones locally, and push fixes to their branches |
+| [completions](https://jebel-quant.github.io/rhiza-claude/skills/completions/) | `/rhiza:completions` | Install shell completions for the tasks the repo's pinned `rhiza-task` exposes |
 | [detach](https://jebel-quant.github.io/rhiza-claude/skills/detach/) | `/rhiza:detach` | Delete every file the lock records and the lock itself; destructive, prompts unless `--force` |
 | [maffay](https://jebel-quant.github.io/rhiza-claude/skills/maffay/) | `/rhiza:maffay` | A bonmot from a random Peter Maffay song |
 
 > **Renamed and retired commands.** `/rhiza:uninstall` became `/rhiza:detach` in `v0.7.0`. `/rhiza:validate` is now part of `/rhiza:status`, and `/rhiza:revisit` was renamed `/rhiza:docs`. `/rhiza:stats`, `/rhiza:repos` and `/rhiza:new` are gone. The version-matrix and coverage-badge logic that used to be user-run `rhiza-tools` commands lives inside the template's reusable CI workflows (`rhiza_ci.yml`), so there is nothing to invoke by hand.
+
+---
+
+## The task runner and the checks
+
+Both are pip-installable packages rather than synced files, so their documentation lives with them rather than in the template.
+
+| Document | Repo | What it covers |
+|----------|------|---------------|
+| [rhiza-task README](https://github.com/Jebel-Quant/rhiza-task/blob/main/README.md) | rhiza-task | The task registry, `[tool.rhiza-task]` settings and their resolution order, and how a repo adds a task of its own through an entry point |
+| [pytest-rhiza README](https://github.com/Jebel-Quant/pytest-rhiza/blob/main/README.md) | pytest-rhiza | The conformance checks the `rhiza-test` gate runs, and why they became a dependency instead of a synced folder |
+| [ADR-0011](https://github.com/Jebel-Quant/rhiza/blob/main/docs/adr/0011-replace-the-synced-make-layer-with-a-pinned-cli.md) | rhiza | The decision behind both, including the amendment that moved the `Makefile` shim back into `core` |
 
 ---
 
@@ -85,7 +101,7 @@ Each command has a dedicated page on the [rhiza-claude docs site](https://jebel-
 | Document | What it covers |
 |----------|---------------|
 | [rhiza-hooks docs site](https://jebel-quant.github.io/rhiza-hooks/) | The hooks, rendered and searchable |
-| [API reference](https://jebel-quant.github.io/rhiza-hooks/api-reference/) | A page per hook — config, Makefile-target, per-language version-consistency, bumpversion, template-bundle, managed-file, licence-metadata and README-help checks — plus the shared internals |
+| [API reference](https://jebel-quant.github.io/rhiza-hooks/api-reference/) | A page per hook — config, Makefile-target, workflow-task, per-language version-consistency, bumpversion, template-bundle, managed-file, test-layout, licence-metadata and README-help checks — plus the shared internals |
 | [rhiza-hooks README](https://github.com/Jebel-Quant/rhiza-hooks/blob/main/README.md) | Installing the hooks and wiring them into `.pre-commit-config.yaml` |
 
 ---
@@ -106,15 +122,16 @@ Each command has a dedicated page on the [rhiza-claude docs site](https://jebel-
 
 ## Design decisions
 
-Rhiza records its architectural decisions as ADRs, in [`docs/adr/`](https://github.com/Jebel-Quant/rhiza/blob/main/docs/adr/README.md). They are the best available answer to "why is it like this?" — including several questions this curriculum raises.
+Rhiza records its architectural decisions as ADRs, in [`docs/adr/`](https://github.com/Jebel-Quant/rhiza/blob/main/docs/adr/index.md). They are the best available answer to "why is it like this?" — including several questions this curriculum raises.
 
 | ADR | What it decides |
 |-----|----------------|
 | [0002](https://github.com/Jebel-Quant/rhiza/blob/main/docs/adr/0002-use-uv-for-python-package-management.md) | Use `uv` for Python package management — the background to Lesson 2 |
-| [0004](https://github.com/Jebel-Quant/rhiza/blob/main/docs/adr/0004-adopt-modular-makefile-architecture.md) | Adopt a modular Makefile architecture — why `make.d/` exists |
+| [0004](https://github.com/Jebel-Quant/rhiza/blob/main/docs/adr/0004-adopt-modular-makefile-architecture.md) | Adopt a modular Makefile architecture — **superseded by 0011**, kept because the problem it names recurs |
 | [0005](https://github.com/Jebel-Quant/rhiza/blob/main/docs/adr/0005-separate-rhiza-template-from-cli.md) | Separate the template from the CLI — the decision that eventually led to `rhiza-claude` |
 | [0006](https://github.com/Jebel-Quant/rhiza/blob/main/docs/adr/0006-organise-templates-into-bundles.md) | Organise templates into bundles — the model taught in Lesson 5 |
 | [0010](https://github.com/Jebel-Quant/rhiza/blob/main/docs/adr/0010-layered-bundle-profile-model.md) | The layered bundle and profile model |
+| [0011](https://github.com/Jebel-Quant/rhiza/blob/main/docs/adr/0011-replace-the-synced-make-layer-with-a-pinned-cli.md) | Replace the synced make layer with a pinned CLI — the v1.4.0 change behind Lessons 5, 10 and 11, and the best single explanation of why a template should distribute config but not code |
 
 ---
 
@@ -141,13 +158,14 @@ Rhiza once shipped a `.rhiza/docs/` set — `WORKFLOWS.md`, `RELEASING.md`, `TOK
 
 ## Contributing to Rhiza
 
-Each repo keeps its contributor guide under `.rhiza/`, alongside the rest of its managed files — except `rhiza-claude`, which is a plugin marketplace rather than a managed project and keeps its own at the root.
+A rhiza-managed repo keeps its contributor guide under `.rhiza/`, alongside the rest of its managed files. `rhiza-claude` and `rhiza-task` are not managed repos — a plugin marketplace and a published package respectively — so theirs sit at the root.
 
 | Document | Repo | What it covers |
 |----------|------|---------------|
 | [.rhiza/CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza/blob/main/.rhiza/CONTRIBUTING.md) | rhiza | How to contribute to the core template repo |
 | [CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-claude/blob/main/CONTRIBUTING.md) | rhiza-claude | How to contribute to the `rhiza` plugin and its commands |
 | [.rhiza/CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-hooks/blob/main/.rhiza/CONTRIBUTING.md) | rhiza-hooks | How to contribute pre-commit hooks |
+| [CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-task/blob/main/CONTRIBUTING.md) | rhiza-task | How to add or change a developer task |
 
 ---
 

@@ -2,7 +2,9 @@
 
 Welcome to the Rhiza training curriculum. These lessons teach you how to adopt, configure, and work with **Rhiza** — the living template system that keeps project boilerplate consistent and up to date across all your repos.
 
-The examples are Python throughout, which is where the template is most complete. Since template `v1.3.0` Rhiza is multi-language — `core` is language-neutral, and a language layer (`python-core`, `rust-core`, or `go-core`) supplies the build and test targets — so everything you learn here about config, bundles, and the sync lifecycle carries over to a Rust or Go repo unchanged.
+The examples are Python throughout, which is where the template is most complete. Since template `v1.3.0` Rhiza is multi-language — `core` is language-neutral, and a language layer (`python-core`, `rust-core`, or `go-core`) supplies the build and test tasks — so everything you learn here about config, bundles, and the sync lifecycle carries over to a Rust or Go repo unchanged.
+
+This edition is current for **rhiza `v1.7.1`** and **rhiza-claude `v0.13.0`**. If you are coming from material written against v1.3.x, the change to read first is v1.4.0: the synced make layer was replaced by a pinned CLI, [`rhiza-task`](https://github.com/Jebel-Quant/rhiza-task). Lesson 5 introduces it, Lesson 10 covers what that means for customisation, and Lesson 11 explains why.
 
 ## Curriculum
 
@@ -18,8 +20,8 @@ The examples are Python throughout, which is where the template is most complete
 | 7 | [Configuring Your Template](07-configuring-your-template.md) | Every field in `.rhiza/template.yml` explained |
 | 8 | [The Sync Lifecycle](08-the-sync-lifecycle.md) | What triggers a sync PR, what it contains, and how to handle it |
 | 9 | [Renovate](09-renovate.md) | How Renovate keeps your `ref:` pin current, the two-part update flow, and how to configure it |
-| 10 | [Customising Safely](10-customizing-safely.md) | How to modify Rhiza-managed files without conflicting with future syncs |
-| 11 | [The Rhiza Ecosystem](11-the-rhiza-ecosystem.md) | rhiza-claude, rhiza-hooks, and rhiza-brainbug |
+| 10 | [Customising Safely](10-customizing-safely.md) | `local.mk`, `[tool.rhiza-task]`, `local-setup.sh` and `exclude:` — extending a project without fighting the sync |
+| 11 | [The Rhiza Ecosystem](11-the-rhiza-ecosystem.md) | rhiza-claude, rhiza-task, pytest-rhiza, rhiza-hooks, and rhiza-brainbug |
 | 12 | [Further Reading](12-further-reading.md) | Direct links to every doc file across the Rhiza repos, organised by topic |
 
 ## Appendices

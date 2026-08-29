@@ -26,10 +26,10 @@ Rhiza ships as a Claude Code plugin from the `rhiza-claude` marketplace. Inside 
 To pin a specific version, append a git tag when you add the marketplace:
 
 ```
-/plugin marketplace add Jebel-Quant/rhiza-claude#v0.8.2
+/plugin marketplace add Jebel-Quant/rhiza-claude#v0.13.0
 ```
 
-The plugin's bundled scripts are stdlib-only Python — there is no separate `rhiza` CLI to install. Everything you need beyond `uv`, `git`, and `make` comes from the plugin.
+The plugin's bundled scripts are stdlib-only Python — there is no separate `rhiza` CLI to install. Everything you need beyond `uv`, `git`, and `make` comes from the plugin, and the tasks your project runs come from `rhiza-task`, which `uvx` fetches on demand at the version the template pins.
 
 Once installed, you have the full `/rhiza:*` command set available. Getting running takes both of the first two: `/rhiza:init` makes the repo rhiza-managed, and `/rhiza:update` brings the template content in.
 
@@ -52,9 +52,9 @@ Navigate to your project directory and, in Claude Code, run:
 
 It then writes `.rhiza/template.yml` — the pointer, and the only Rhiza config file your project needs — adds a skeleton for the language you chose (`uv init --lib` plus the `pyproject.toml` shape the template's gates require, or a `Cargo.toml`, or a `go.mod`) and license metadata, and opens a PR on a `rhiza_init_<date>` branch titled `chore: make repo rhiza-managed`. It never pushes to your default branch.
 
-The skeleton is not optional, and not decoration: the template ships no manifest of any kind, so without one the gates in step 4 fail outright — every `make` target that builds or tests needs a `pyproject.toml`, `Cargo.toml`, or `go.mod` to work with, and on Python the synced `.rhiza/tests/test_pyproject.py` asserts a specific `[project]` shape.
+The skeleton is not optional, and not decoration: the template ships no manifest of any kind, so without one the gates in step 4 fail outright — every task that builds or tests needs a `pyproject.toml`, `Cargo.toml`, or `go.mod` to work with, and on Python the `pytest-rhiza` checks assert a specific `[project]` shape.
 
-**What is deliberately not in PR #1:** no CI workflows, no `Makefile`, no `.rhiza/rhiza.mk`, no docs, and no gates were run. Your package is empty by design. Review the PR and merge it.
+**What is deliberately not in PR #1:** no CI workflows, no `Makefile`, no docs, and no gates were run. Your package is empty by design. Review the PR and merge it.
 
 ## Step 3: Pull in the template content (PR #2)
 
@@ -73,10 +73,12 @@ PR #2 is where the infrastructure shows up:
 .pre-commit-config.yaml
 ruff.toml
 Makefile
-.rhiza/rhiza.mk
 .python-version
 .editorconfig
+cliff.toml
 ```
+
+Note how short that list is, and what is *missing* from it: no `.rhiza/rhiza.mk`, no `.rhiza/make.d/`, no `.rhiza/tests/`. Since v1.4.0 the template syncs configuration only; the tasks arrive from the pinned `rhiza-task` package and the conformance checks from `pytest-rhiza` (Lesson 11). The `Makefile` here is a 71-line shim whose job is to pin `RHIZA_TASK` and forward to that CLI.
 
 Review that diff and merge it too. From here on, the same command is how you take every later template release — the mechanism described in Lesson 8.
 
@@ -85,14 +87,13 @@ Review that diff and merge it too. From here on, the same command is how you tak
 `/rhiza:init` picks your profile from the platform and language you chose, so there is nothing extra to select. `github-project` is the default for a Python repo on GitHub, and it expands to:
 
 - `core` (always required, and language-neutral)
-- `python-core` (the Python language layer: `install`/`all`, virtualenv, ruff, bandit, deptry)
+- `python-core` (the Python language layer: `install`/`all`, virtualenv, ruff, bandit, deptry, pytest and coverage config)
 - `github` (base GitHub Actions setup)
-- `tests` (pytest, coverage — local tooling)
-- `github-tests` (testing and security scan workflows on GitHub)
+- `github-tests` (CI, CodeQL and benchmark workflows on GitHub)
 - `book` and `github-book` (the MkDocs documentation site and its publishing workflow)
-- `marimo` and `github-marimo` (Marimo notebooks and their workflow)
+- `github-marimo` (the Marimo notebook publishing workflow)
 
-GitLab projects get `gitlab-project`, the same shape with GitLab's CI. There is also a `local` profile — `core`, `python-core`, `book`, `marimo`, `tests` — for experiments and early-stage work with no hosted automation at all. Rust and Go repos get `rust-local` and `go-local`, which pair `core` with that language's layer and `book`; hosted CI for those two languages has not shipped yet.
+GitLab projects get `gitlab-project`, the same shape with GitLab's CI. There is also a `local` profile — `core`, `python-core`, `book` — for experiments and early-stage work with no hosted automation at all. Rust and Go repos get `rust-local` and `go-local`, which pair `core` with that language's layer and `book`; hosted CI for those two languages has not shipped yet.
 
 Anything outside your profile is opt-in by editing `template.yml` and running `/rhiza:update`. `renovate`, for automated dependency updates, is the one most projects add first — it is a bundle in its own right, not part of any profile. To see every available bundle with its description and dependencies, browse the template repo's [`bundles/` directory](https://github.com/Jebel-Quant/rhiza/tree/main/bundles) or the [bundle taxonomy](https://github.com/Jebel-Quant/rhiza/blob/main/docs/reference/BUNDLE_TAXONOMY.md).
 
@@ -106,15 +107,22 @@ To check what Rhiza synced and confirm your configuration, ask in Claude Code:
 
 One command answers both halves of the question. It validates that `.rhiza/template.yml` exists, parses, and is well-typed, then reports what `.rhiza/template.lock` says you actually got: template repository, pinned `ref`, synced commit SHA, timestamp, strategy, and the files materialized. Add `--files` to see those as a tree, or `--check` to find out whether a newer template release is out. Start here whenever something seems wrong — intent and outcome can disagree, and this is the command that shows you both.
 
-Run `make help` to see all the Makefile targets now available — grouped by category: testing, quality, docs, releasing, and more.
-
-Run `make install` to set up your development environment:
+To see the tasks now available — grouped by section: Python, Quality, Book, Testing extras, and more — run either of:
 
 ```bash
-make install
+uv run rhiza-task list      # the documented interface
+make help                   # the same list, through the shim
 ```
 
-This installs your project dependencies, wires up the commit hooks, and gets you ready to work. The hooks themselves are run by [`prek`](https://github.com/j178/prek) — a faster drop-in runner for the same `.pre-commit-config.yaml` — which `make fmt` invokes as `uvx prek run --all-files`.
+Then set up your development environment:
+
+```bash
+uv run rhiza-task install    # or: make install
+```
+
+This installs your project dependencies, runs `local-setup.sh` if you have one, wires up the commit hooks, and gets you ready to work. The hooks themselves are run by [`prek`](https://github.com/j178/prek) — a faster drop-in runner for the same `.pre-commit-config.yaml` — which the `fmt` task invokes as `uvx prek run --all-files`.
+
+> **`make` or `rhiza-task`?** Both reach the same code. `uv run rhiza-task <task>` is the documented interface; `make <task>` goes through the shim that `core` ships, which exists for CI pinned at older tags and for repos with no Python project to hold the pin. This curriculum uses whichever reads more clearly, and they are interchangeable.
 
 ## Applying later template updates
 
@@ -133,13 +141,15 @@ It bumps your `ref:` to the latest release (or one you name), syncs the changed 
 | A quality scorecard, optionally filed as issues | `/rhiza:quality` |
 | `README.md`, `CLAUDE.md`, `mkdocs.yml` written or refreshed | `/rhiza:docs` |
 | To know what you have and whether you are behind | `/rhiza:status` |
+| Red CI on an open PR diagnosed and fixed on its branch | `/rhiza:remote` |
+| Shell completions for the tasks your pin exposes | `/rhiza:completions` |
 
 ## What you just got
 
 Your project now has:
 
 - **CI/CD workflows** that run on push and pull requests — automatically testing your code across multiple Python versions.
-- **A modular Makefile** with targets for testing, linting, releasing, and more.
+- **A pinned task runner** (`rhiza-task`, reachable as `make <task>`) with tasks for testing, linting, docs, benchmarking and more.
 - **Commit hooks** that enforce code quality on every commit, run through `prek`.
 - **A living-template link** to the upstream, kept current by running `/rhiza:update` when a new template version ships.
 

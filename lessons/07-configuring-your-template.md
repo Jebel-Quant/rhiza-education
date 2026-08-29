@@ -9,15 +9,15 @@ The recommended approach is to use a **profile** — a curated preset that expan
 ```yaml
 # .rhiza/template.yml (profile-based — recommended)
 repository: Jebel-Quant/rhiza
-ref: v1.3.3
+ref: v1.7.1
 language: python
 
 profiles:
   - github-project
 
 exclude: |
-  .rhiza/scripts/customisations/*
-  Makefile.local
+  .github/CONFIG.md
+  SECURITY.md
 ```
 
 For finer control, you can list bundles explicitly:
@@ -25,20 +25,19 @@ For finer control, you can list bundles explicitly:
 ```yaml
 # .rhiza/template.yml (explicit bundles)
 repository: Jebel-Quant/rhiza
-ref: v1.3.3
+ref: v1.7.1
 language: python
 
 templates:
   - core
   - python-core
-  - tests
   - github
   - github-tests
   - renovate
 
 exclude: |
-  .rhiza/scripts/customisations/*
-  Makefile.local
+  .github/CONFIG.md
+  SECURITY.md
 ```
 
 ## `repository`
@@ -57,12 +56,12 @@ This is the GitHub repository that Rhiza treats as your template source. It can 
 ## `ref`
 
 ```yaml
-ref: v1.3.3
+ref: v1.7.1
 ```
 
 This pins your project to a specific version of the template. It accepts:
 
-- **A tag** (e.g. `v1.3.3`) — recommended. Gives you a stable, known version. Renovate can detect new releases and open version-bump PRs automatically.
+- **A tag** (e.g. `v1.7.1`) — recommended. Gives you a stable, known version. Renovate can detect new releases and open version-bump PRs automatically.
 - **A branch** (e.g. `main`) — always fetches the latest commit on that branch. Useful during active development of a template, but means your project can receive breaking changes without a PR review step.
 
 For production projects, always pin to a tag.
@@ -73,9 +72,9 @@ For production projects, always pin to a tag.
 language: python
 ```
 
-Since template v1.3.0 Rhiza is multi-language, and this key records which of the three language layers your repo follows: `python`, `rust`, or `go`. `/rhiza:init` writes it for you from the language you pick during the interview, and it is what makes the `core` bundle able to stay language-neutral — `core` defines no `install` and no `all`, and the layer named here supplies them. That is why a shared CI workflow can call `make install` without knowing what it is building.
+Since template v1.3.0 Rhiza is multi-language, and this key records which of the three language layers your repo follows: `python`, `rust`, or `go`. `/rhiza:init` writes it for you from the language you pick during the interview, and it is what makes the `core` bundle able to stay language-neutral — `core` defines no `install` and no `all`, and the layer named here supplies them. That is why a shared CI workflow can ask for `install` without knowing what it is building, and why `rhiza-task` offers one set of task names across all three languages.
 
-Pick exactly one. A repo with two language layers has two definitions of the same `make` targets.
+Pick exactly one. A repo with two language layers has two definitions of the same tasks.
 
 ## `profiles` — curated bundle presets
 
@@ -88,9 +87,9 @@ profiles:
 
 | Profile | What it includes |
 |---------|-----------------|
-| `github-project` | `core`, `python-core`, `github`, `tests`, `github-tests`, `book`, `github-book`, `marimo`, `github-marimo` — the standard setup for a Python project on GitHub |
-| `gitlab-project` | `core`, `python-core`, `gitlab`, `tests`, `gitlab-tests`, `book`, `gitlab-book`, `marimo`, `gitlab-marimo` — the same for GitLab |
-| `local` | `core`, `python-core`, `tests`, `book`, `marimo` — local tooling only, no hosted CI/CD |
+| `github-project` | `core`, `python-core`, `github`, `book`, `github-book`, `github-marimo`, `github-tests` — the standard setup for a Python project on GitHub |
+| `gitlab-project` | `core`, `python-core`, `gitlab`, `book`, `gitlab-book`, `gitlab-marimo`, `gitlab-tests` — the same for GitLab |
+| `local` | `core`, `python-core`, `book` — local tooling only, no hosted CI/CD |
 | `rust-local` | `core`, `rust-core`, `book` — local-first Rust |
 | `go-local` | `core`, `go-core`, `book` — local-first Go |
 
@@ -106,14 +105,15 @@ For finer control, the `templates` key lists bundles directly:
 templates:
   - core
   - python-core
-  - tests
   - github
   - github-tests
 ```
 
-Bundles come in three kinds. **`core`** is the required, language-neutral base. **Language layers** (`python-core`, `rust-core`, `go-core`) supply `install` and `all` — pick exactly one. **Feature bundles** contain local tooling only (`tests`, `book`, `marimo`, etc.), and **platform overlay bundles** layer CI/CD workflows on top (`github-tests`, `github-book`, `gitlab-tests`, etc.). When you want CI for a feature, you need both: for example, `tests` (pytest config) plus `github-tests` (the GitHub Actions workflow that runs it).
+Bundles come in three kinds. **`core`** is the required, language-neutral base. **Language layers** (`python-core`, `rust-core`, `go-core`) supply `install` and `all` — pick exactly one. **Feature bundles** contain local config only (`book`, `benchmarks`, `docker`, `presentation`, …), and **platform overlay bundles** layer CI/CD workflows on top (`github-tests`, `github-book`, `gitlab-tests`, …). When you want CI for a feature, you need both: for example, `book` (the MkDocs site) plus `github-book` (the workflow that publishes it).
 
-Dependencies resolve automatically, so listing `tests` already gives you `core`, `python-core`, and `book`. Browse the template repo's [`bundles/` directory](https://github.com/Jebel-Quant/rhiza/tree/main/bundles) to see every available bundle with its description and dependencies.
+Dependencies resolve automatically, so listing `github-tests` already gives you `core`, `python-core`, and `github`. Browse the template repo's [`bundles/` directory](https://github.com/Jebel-Quant/rhiza/tree/main/bundles) to see all 26 bundles with their descriptions and dependencies.
+
+> **`tests`, `marimo` and `paper` are no longer bundle names.** Naming one writes cleanly and then fails your next `/rhiza:update`, the same way a non-existent profile does. Pytest and coverage config belongs to `python-core`, notebooks and the docs site to `book`, and LaTeX papers to the `github-paper` overlay. Configs written against v1.3.x still list them — see [Appendix A2](./A2-projects-using-rhiza.md) for one that does.
 
 ## `include` — explicit file patterns
 
@@ -137,9 +137,9 @@ The `exclude` block prevents Rhiza from overwriting files you own locally, even 
 
 ```yaml
 exclude: |
-  .rhiza/scripts/customisations/*
-  Makefile.local
-  .env
+  .github/CONFIG.md
+  SECURITY.md
+  .github/rulesets/main-branch-protection.json
 ```
 
 This is how you customise a file that Rhiza would otherwise manage. Add it to `exclude`, make your local edits, and the next update will skip it.
@@ -154,11 +154,11 @@ For most projects, start with the `github-project` or `gitlab-project` profile a
 |-------------|----------|
 | A working GitHub project from day one | `profiles: [github-project]` |
 | A working GitLab project from day one | `profiles: [gitlab-project]` |
-| Interactive notebooks | `+ marimo` (local), `+ github-marimo` (with GitHub CI) |
+| Interactive notebooks | `+ book` (local), `+ github-marimo` (published from GitHub CI) |
 | API documentation | `+ book` (local), `+ github-book` (with GitHub Pages publish) |
 | Docker builds | `+ docker` (local), `+ github-docker` (with GitHub CI) |
 | Slide decks from Markdown | `+ presentation` |
-| A LaTeX paper built and published | `+ paper` (local), `+ github-paper` (with the PDF published from CI) |
+| A LaTeX paper built and published | `+ github-paper` (compiled in CI, PDF published on the `paper` branch) |
 | Licence headers and IP notices | `+ legal` |
 | Git LFS support | `+ lfs` |
 | Performance benchmarks | `+ benchmarks` |
@@ -176,6 +176,19 @@ After editing `template.yml`, always run:
 ```
 
 This applies any changes — new bundles, updated include/exclude patterns, or a new `ref` — to your project, and opens a PR of template-owned files for review.
+
+## What does *not* go in `template.yml`
+
+Two things that used to be config-by-sync are now config in your own `pyproject.toml`, and they are not Rhiza config at all:
+
+```toml
+[tool.rhiza-task]
+source-folder = "src/my_project"   # which folder the scoped gates measure
+typechecker = "both"               # ty | mypy | both
+pytest-rhiza = "pytest-rhiza==0.5.0"
+```
+
+`[tool.rhiza-task]` is read by the task CLI, not by the sync, and the template never overwrites it. Rust and Go projects put the same settings in a `rhiza.toml` instead, since a Go module has no manifest to hold a table. See [Lesson 10](./10-customizing-safely.md) for the full set of extension points and their precedence.
 
 ---
 
