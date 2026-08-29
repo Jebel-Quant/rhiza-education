@@ -11,7 +11,8 @@ Everything in lessons 1–6 applies equally to GitLab:
 - The `templates:`, `include:`, `exclude:`, and `language:` keys work identically.
 - `core` plus one language layer is the base on either platform; only the CI overlays differ.
 - The update lifecycle — `/rhiza:update` → diff → review → merge — is the same.
-- The extension points (`custom-task.mk`, `custom-env.mk`, `exclude:`) are the same.
+- The extension points (`local.mk`, `[tool.rhiza-task]`, `local-setup.sh`, `exclude:`) are the same.
+- The tasks come from the same pinned `rhiza-task` CLI, so `uv run rhiza-task test` means the same thing on either platform.
 
 ## What changes: use the `gitlab` bundle
 
@@ -20,14 +21,14 @@ When configuring your `template.yml`, replace the `github` bundle with `gitlab`:
 ```yaml
 # .rhiza/template.yml
 repository: Jebel-Quant/rhiza
-ref: v1.3.3
+ref: v1.7.1
 language: python
 
 templates:
   - core
   - python-core
   - gitlab       # <-- instead of github
-  - tests
+  - gitlab-tests
   - renovate
 ```
 
@@ -35,7 +36,7 @@ Or, more simply, use the `gitlab-project` profile, which expands to exactly the 
 
 ```yaml
 repository: Jebel-Quant/rhiza
-ref: v1.3.3
+ref: v1.7.1
 language: python
 
 profiles:

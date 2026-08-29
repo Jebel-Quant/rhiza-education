@@ -1,8 +1,8 @@
 # Appendix A3 — Contributors
 
-Rhiza and its ecosystem are built by a small group of people. The current core repositories are `rhiza`, `rhiza-claude`, `rhiza-hooks`, and `rhiza-brainbug`. The now-archived `rhiza-cli` and `rhiza-tools` were core repositories earlier in the project's life, and the contribution counts below still include the work that went into them. This page lists every human contributor with their GitHub profiles and contribution counts.
+Rhiza and its ecosystem are built by a small group of people. The current core repositories are `rhiza`, `rhiza-claude`, `rhiza-task`, `rhiza-hooks`, `pytest-rhiza`, and `rhiza-brainbug` — the last three of those did not all exist a year ago, and `rhiza-task` and `pytest-rhiza` now hold content that used to live inside `rhiza` itself (Lesson 11). The archived `rhiza-cli` and `rhiza-tools` were core repositories earlier in the project's life, and the counts below still include the work that went into them. This page lists every human contributor with their GitHub profiles and contribution counts.
 
-Contribution counts reflect commits to the default branch, refreshed **August 2026**. Automated commits from Renovate, Dependabot, Copilot, and other bots are excluded.
+Contribution counts reflect commits to the default branch, refreshed **29 August 2026**. Automated commits from Renovate, Dependabot, Copilot, and other bots are excluded.
 
 ---
 
@@ -19,13 +19,15 @@ He later spent time as a Visiting Scholar at Stanford with Professor Stephen Boy
 
 | Repo | Contributions |
 |------|--------------|
-| rhiza | 1,115 |
-| rhiza-cli | 289 |
-| rhiza-hooks | 173 |
-| rhiza-tools | 162 |
-| rhiza-claude | 140 |
+| rhiza | 1,187 |
+| rhiza-cli *(archived)* | 289 |
+| rhiza-task | 215 |
+| rhiza-hooks | 194 |
+| rhiza-claude | 167 |
+| rhiza-tools *(archived)* | 162 |
+| pytest-rhiza | 93 |
 | rhiza-brainbug | 31 |
-| **Total** | **1,910** |
+| **Total** | **2,338** |
 
 <br style="clear: both;">
 
@@ -40,8 +42,8 @@ Harry is the second-largest contributor to the ecosystem and has been involved a
 | Repo | Contributions |
 |------|--------------|
 | rhiza | 132 |
-| rhiza-tools | 50 |
-| rhiza-cli | 31 |
+| rhiza-tools *(archived)* | 50 |
+| rhiza-cli *(archived)* | 31 |
 | rhiza-hooks | 14 |
 | **Total** | **227** |
 
@@ -130,6 +132,7 @@ Rhiza is open source and welcomes contributions. The best entry points are:
 - **[rhiza CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza/blob/main/.rhiza/CONTRIBUTING.md)** — for template changes
 - **[rhiza-claude CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-claude/blob/main/CONTRIBUTING.md)** — for the Claude Code plugin and the `/rhiza:*` commands
 - **[rhiza-hooks CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-hooks/blob/main/.rhiza/CONTRIBUTING.md)** — for pre-commit hooks
+- **[rhiza-task CONTRIBUTING.md](https://github.com/Jebel-Quant/rhiza-task/blob/main/CONTRIBUTING.md)** — for the developer tasks every managed repo runs
 
 ---
 

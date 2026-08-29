@@ -196,15 +196,15 @@ The sync is not a bulldozer. It is a proposal.
 
 ```yaml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v1.3.3                      # Which version (pinned tag — recommended)
+ref: v1.7.1                      # Which version (pinned tag — recommended)
 language: python                 # Which language layer (python / rust / go)
 
 profiles:                         # Curated bundle preset (recommended)
   - github-project
 
 exclude: |                        # Files you own locally — never overwritten
-  ruff.toml
-  Makefile.local
+  SECURITY.md
+  .github/CONFIG.md
 ```
 
 One file. That's all Rhiza needs.
@@ -217,15 +217,16 @@ One file. That's all Rhiza needs.
 
 | Bundle | What it includes |
 |--------|-----------------|
-| `core` | Makefile, `.rhiza/make.d/`, editor config — **language-neutral** |
-| `python-core` | Python layer: virtualenv, ruff, bandit, deptry, hook config |
-| `tests` | pytest config, coverage, type checking |
+| `core` | `Makefile` shim (pins `rhiza-task`), editor config — **language-neutral** |
+| `python-core` | Python layer: virtualenv, ruff, bandit, deptry, pytest, hook config |
+| `book` | Docs site, notebooks, coverage badge |
 | `docker` | Dockerfile and container configuration |
-| `marimo` | Interactive notebook support |
 | `presentation` | Slide generation from Markdown (Marp) |
 | `renovate` | Automated dependency update config |
 
 `core` defines no `install` and no `all` — a **language layer** (`python-core`, `rust-core`, `go-core`) supplies them. Pick exactly one.
+
+Since **v1.4.0** bundles ship *configuration only*. The tasks live in a pinned CLI, `rhiza-task`.
 
 **Platform overlay bundles** layer CI/CD on top: `github-tests`, `github-book`, `gitlab-tests`, etc.
 
@@ -260,11 +261,11 @@ Without Renovate, the `ref:` pin is frozen. Projects drift behind the template s
 
 <div style="display:flex;flex-direction:column;gap:0.45em;margin:0.9em 0;font-size:0.93em;">
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    template repo publishes <strong>v1.3.3</strong>
+    template repo publishes <strong>v1.7.1</strong>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓</div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    Renovate opens PR: <code>ref: v1.3.2 → v1.3.3</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
+    Renovate opens PR: <code>ref: v1.7.0 → v1.7.1</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you run <code>/rhiza:update</code></span></div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
@@ -297,7 +298,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 /rhiza:update
 
 # 4. Install dev environment
-make install
+uv run rhiza-task install     # or: make install
 ```
 
 The `/rhiza:*` commands come from the rhiza Claude Code plugin — install it once with
@@ -309,19 +310,19 @@ That's it. Your project is now Rhiza-managed.
 
 ## What you get on day one
 
-After syncing with the `github-project` profile (`core + python-core + github + tests + github-tests + book + marimo` and their overlays):
+After syncing with the `github-project` profile (`core + python-core + github + book` and their GitHub overlays):
 
 ```
 .github/workflows/rhiza_ci.yml          ← CI: test matrix on push and PRs
 .github/workflows/rhiza_release.yml     ← Build + publish to PyPI on a tag
 .pre-commit-config.yaml                 ← Local commit hooks (rhiza-hooks, run by prek)
 ruff.toml                               ← Linting config
-Makefile                                ← make test · make lint
+Makefile                                ← 71-line shim: pins RHIZA_TASK, forwards to it
 .python-version                         ← Pinned Python version
 .editorconfig                           ← Editor consistency
 ```
 
-None of this required manual configuration.
+Config files, all of them. The **tasks** behind `make test` come from `rhiza-task`, fetched by `uvx` at the pinned version — not copied into your repo.
 
 ---
 
@@ -365,13 +366,17 @@ The PR description usually explains what changed at a high level.
 
 | Need | Mechanism |
 |------|-----------|
-| Custom `make` targets | Edit `custom-task.mk` (never overwritten) |
-| Project-specific env vars | Edit `custom-env.mk` (never overwritten) |
+| Your own `make` targets | `local.mk` — `-include`d, never synced |
+| How a task behaves (folders, typechecker, thresholds) | `[tool.rhiza-task]` in `pyproject.toml` |
+| A native binary every gate needs | Executable `local-setup.sh` at the repo root |
+| A per-developer setting override | `.rhiza/.env` (gitignored) |
 | Permanently own a specific file | Add to `exclude:` in `template.yml` |
 | Custom standards for your whole org | Fork the template repo |
 
-> **Never edit template-managed files directly** unless you also add them to `exclude:`.
-> Your change will be overwritten on the next sync.
+> **Never edit template-managed files directly.** Since v1.5.0 `check-managed-files`
+> refuses the commit — so you find out now, not in the next sync PR.
+
+*(`custom-task.mk` and `custom-env.mk` retired with the make layer in v1.4.0.)*
 
 ---
 
@@ -386,7 +391,9 @@ The PR description usually explains what changed at a high level.
 
 | Tool | What it does |
 |------|-------------|
-| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `docs`, `release`, `status`, `detach`, `maffay`). The primary interface. |
+| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `docs`, `release`, `remote`, `status`, `completions`, `detach`, `maffay`). The primary interface. |
+| **rhiza-task** | The developer tasks as a pinned CLI — what `make test` actually runs |
+| **pytest-rhiza** | The repository conformance checks, as a pytest plugin |
 | **rhiza-hooks** | Commit hooks (run via `prek`): validate config, check version consistency |
 | **rhiza-brainbug** | Cross-repo test harness: runs contract tests on upstream commits |
 
@@ -394,7 +401,7 @@ The PR description usually explains what changed at a high level.
 
 ## Who's using it
 
-**The Rhiza tools themselves** — rhiza-claude and rhiza-hooks all sync from rhiza. The system eats its own cooking.
+**The Rhiza tools themselves** — rhiza and rhiza-hooks sync from the template; rhiza-claude and rhiza-task run its gates through the pinned CLI. The system eats its own cooking.
 
 **External projects:**
 

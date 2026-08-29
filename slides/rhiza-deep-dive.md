@@ -229,15 +229,15 @@ The sync is not a bulldozer. It is a proposal.
 
 ```yaml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v1.3.3                      # Which version (pinned tag — recommended)
+ref: v1.7.1                      # Which version (pinned tag — recommended)
 language: python                 # Which language layer (python / rust / go)
 
 profiles:                         # Curated bundle preset (recommended)
   - github-project
 
 exclude: |                        # Files you own locally — never overwritten
-  ruff.toml
-  Makefile.local
+  SECURITY.md
+  .github/CONFIG.md
 ```
 
 One file, under version control. That's all Rhiza needs.
@@ -269,15 +269,16 @@ The canonical template is `Jebel-Quant/rhiza`. For most teams the right setup is
 
 | Bundle | What it includes |
 |--------|-----------------|
-| `core` | Makefile, `.rhiza/make.d/`, editor config — **language-neutral** |
-| `python-core` | Python layer: virtualenv, ruff, bandit, deptry, hook config |
-| `tests` | pytest config, coverage, type checking |
+| `core` | `Makefile` shim (pins `rhiza-task`), editor config — **language-neutral** |
+| `python-core` | Python layer: virtualenv, ruff, bandit, deptry, pytest, hook config |
+| `book` | Docs site, notebooks, coverage badge |
 | `docker` | Dockerfile and container configuration |
-| `marimo` | Interactive notebook support |
 | `presentation` | Slide generation from Markdown (Marp) |
 | `renovate` | Automated dependency update config |
 
 `core` defines no `install` and no `all` — a **language layer** (`python-core`, `rust-core`, `go-core`) supplies them. Pick exactly one.
+
+26 bundles in v1.7.1. `tests`, `marimo` and `paper` are **not** among them any more — their config folded into `python-core`, `book` and `github-paper`.
 
 **Platform overlay bundles** layer CI/CD on top: `github-tests`, `github-book`, `gitlab-tests`, etc.
 
@@ -301,7 +302,7 @@ The `github-tests` overlay adds testing CI on top:
 |------|---------|
 | `rhiza_ci.yml` | Test matrix across Python versions on push and PRs (matrix derived from `requires-python`) |
 
-Other bundles layer in more workflows — benchmarks, mutation testing, fuzzing, a weekly dependency/link check, and a quality review. There is **no sync workflow**: template changes are applied by running `/rhiza:update`.
+Other bundles layer in more workflows — benchmarks, a weekly dependency/link check, a LaTeX paper build, and an advisory quality review. Mutation testing and fuzzing were retired in v1.5.0. There is **no sync workflow**: template changes are applied by running `/rhiza:update`.
 
 ---
 
@@ -332,11 +333,11 @@ Without Renovate, the `ref:` pin is frozen. Projects drift behind the template s
 
 <div style="display:flex;flex-direction:column;gap:0.45em;margin:0.9em 0;font-size:0.93em;">
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    template repo publishes <strong>v1.3.3</strong>
+    template repo publishes <strong>v1.7.1</strong>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓</div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    Renovate opens PR: <code>ref: v1.3.2 → v1.3.3</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
+    Renovate opens PR: <code>ref: v1.7.0 → v1.7.1</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you run <code>/rhiza:update</code></span></div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
@@ -351,14 +352,14 @@ Two separate steps: **should we upgrade?** (the ref-bump PR) then **here's what 
 ## The `ref:` pin in depth
 
 ```yaml
-ref: v1.3.3   # pinned tag — recommended for all production repos
+ref: v1.7.1   # pinned tag — recommended for all production repos
 ref: main     # tracks latest commit — useful during template development only
 ```
 
 **Pinning to a tag gives you:**
 - A known, auditable version — you can see exactly what each project is running
 - Safe upgrades — Renovate proposes the bump, you review before it lands
-- Easy rollback — if v1.3.3 breaks something, the cause is unambiguous
+- Easy rollback — if v1.7.1 breaks something, the cause is unambiguous
 
 **Tracking `main`** delivers template changes immediately with no review step. Use only when actively developing the template. Never in repos others depend on.
 
@@ -384,7 +385,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 /rhiza:update
 
 # 4. Install dev environment
-make install
+uv run rhiza-task install     # or: make install
 ```
 
 The `/rhiza:*` commands come from the rhiza Claude Code plugin — install it once with
@@ -402,7 +403,7 @@ Running `/rhiza:init` walks you through a few questions:
 ? Host and repo (GitHub or GitLab, owner/name):  Jebel-Quant/rhiza
 ? Language (python / rust / go):                  python
 ? Template repo:                                  Jebel-Quant/rhiza
-? Template ref (tag, branch, or commit):          v1.3.3
+? Template ref (tag, branch, or commit):          v1.7.1
 ```
 
 The template defaults to `Jebel-Quant/rhiza` for **all three languages** — it is multi-language, layering `python-core`, `rust-core` or `go-core` on a neutral `core`. Name any other `owner/repo` — a fork, or your own house template — and it is checked for reachability, and for whether it actually defines the profile, before being pinned.
@@ -415,19 +416,20 @@ The profile follows from the platform and language, so it is not asked. The resu
 
 ## What you get on day one
 
-After syncing with the `github-project` profile (`core + python-core + github + tests + github-tests + book + marimo`):
+After syncing with the `github-project` profile (`core + python-core + github + book` and their GitHub overlays):
 
 ```
 .github/workflows/rhiza_ci.yml          ← CI: test matrix on push and PRs
 .github/workflows/rhiza_release.yml     ← Build + publish to PyPI on a tag
 .pre-commit-config.yaml                 ← Local commit hooks (rhiza-hooks, run by prek)
 ruff.toml                               ← Linting config
-Makefile                                ← make test · make lint
+Makefile                                ← 71-line shim: pins RHIZA_TASK, forwards to it
 .python-version                         ← Pinned Python version
 .editorconfig                           ← Editor consistency
 ```
 
-None of this required manual configuration.
+Config files, all of them — no `.rhiza/rhiza.mk`, no `make.d/`, no `.rhiza/tests/`.
+The **tasks** come from `rhiza-task`, the **checks** from `pytest-rhiza`, both via `uvx` at the pinned version.
 
 ---
 
@@ -505,13 +507,17 @@ The PR description explains what changed at a high level. If Renovate bumped the
 
 | Need | Mechanism |
 |------|-----------|
-| Custom `make` targets | Edit `custom-task.mk` (never overwritten) |
-| Project-specific env vars | Edit `custom-env.mk` (never overwritten) |
+| Your own `make` targets | `local.mk` — `-include`d, never synced |
+| How a task behaves (folders, typechecker, thresholds) | `[tool.rhiza-task]` in `pyproject.toml` |
+| A native binary every gate needs | Executable `local-setup.sh` at the repo root |
+| A per-developer setting override | `.rhiza/.env` (gitignored) |
 | Permanently own a specific file | Add to `exclude:` in `template.yml` |
 | Custom standards for your whole org | Fork the template repo |
 
-> **Never edit template-managed files directly** unless you also add them to `exclude:`.
-> Your change will be overwritten on the next sync.
+> **Never edit template-managed files directly.** Since v1.5.0 `check-managed-files`
+> refuses the commit — so you find out now, not in the next sync PR.
+
+*(`custom-task.mk` and `custom-env.mk` retired with the make layer in v1.4.0.)*
 
 ---
 
@@ -536,10 +542,12 @@ Take what's useful from the template update and your local edit. Most effort, cl
 
 ```yaml
 exclude: |
-  ruff.toml                            # our lint rules differ from template defaults
+  SECURITY.md                          # claims about THIS repo's posture — ours to make
   .github/workflows/rhiza_ci.yml       # we use a custom test matrix
-  Makefile.local                       # project-specific targets
+  .github/rulesets/tag-protection.json # our required checks, not the template's
 ```
+
+Excluding a file does **not** delete it: an excluded path is never treated as an orphan, so your version stays and simply stops being overwritten.
 
 **Exclude deliberately, not defensively.**
 
@@ -556,6 +564,30 @@ Audit your exclude list when bumping the template version. Ask: *"Does the new t
 
 ---
 
+## rhiza-task — the tasks left the template
+
+Up to v1.3.x, `core` synced `.rhiza/rhiza.mk` + a `make.d/` fragment per bundle — **~1,500 lines of make, copied into every consumer.**
+
+Because **make cannot `include` a remote file**:
+
+- "You are on v1.3.3" meant "copied at v1.3.3, and nobody checked since"
+- A bug in a gate was found, fixed, released and re-synced **per repo**
+- The recipes were shell — `make -n` proves the text of a command, never its flags
+
+**v1.4.0:** the tasks are a pinned package, `rhiza-task`, fetched by `uvx` per invocation.
+
+```bash
+uv run rhiza-task test        # the documented interface
+make test                     # the shim core still ships — same code
+```
+
+`RHIZA_TASK` lives in the synced `Makefile`, so the version **travels with the sync**.
+Same move for the checks: `.rhiza/tests/` → `pytest-rhiza` (v1.3.4).
+
+> A template distributes **configuration**. A package manager distributes **code**. — [ADR-0011](https://github.com/Jebel-Quant/rhiza/blob/main/docs/adr/0011-replace-the-synced-make-layer-with-a-pinned-cli.md)
+
+---
+
 ## rhiza-hooks — the commit checks
 
 `rhiza-hooks` ships hooks that catch config errors before they reach CI:
@@ -564,11 +596,11 @@ Audit your exclude list when bumping the template version. Ask: *"Does the new t
 |------|---------------|
 | `check-rhiza-config` | `template.yml` is valid; repo and ref resolve |
 | `check-rhiza-workflow-names` | Workflow files follow naming conventions |
-| `check-makefile-targets` | `make test`, `make lint`, `make release` are present |
+| `check-makefile-targets` | The front door still resolves the tasks CI depends on |
 | `check-{python,rust,go}-version-consistency` | The toolchain version agrees across manifest and CI |
 | `check-managed-files` | No template-owned file edited without an `exclude:` |
 | `check-license-metadata` | Manifest, `LICENSE`, and classifiers agree |
-| `update-readme-help` | Embeds `make help` output into `README.md` |
+| `update-readme-help` | Embeds `make help` — now generated by `rhiza-task list` — into `README.md` |
 
 Runs on every `git commit`, through **`prek`** — a faster drop-in for `pre-commit` reading the same config.
 
@@ -596,7 +628,9 @@ The old `version-matrix` and `coverage-badge` helpers are no longer user command
 
 | Tool | What it does |
 |------|-------------|
-| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `docs`, `release`, `status`, `detach`, `maffay`). The primary interface. |
+| **rhiza-claude** | Claude Code plugin — the `/rhiza:*` command set (`init`, `update`, `quality`, `docs`, `release`, `remote`, `status`, `completions`, `detach`, `maffay`). The primary interface. |
+| **rhiza-task** | The developer tasks as a pinned CLI: one set of names across Python, Rust and Go |
+| **pytest-rhiza** | The repository conformance checks, as a pytest plugin |
 | **rhiza-hooks** | Commit hooks (run via `prek`): validate config, check version consistency |
 | **rhiza-brainbug** | Cross-repo test harness: runs contract tests on upstream commits |
 
@@ -604,7 +638,7 @@ The old `version-matrix` and `coverage-badge` helpers are no longer user command
 
 ## Who's using it
 
-**The Rhiza tools themselves** — rhiza-claude and rhiza-hooks all sync from rhiza. The system eats its own cooking.
+**The Rhiza tools themselves** — rhiza and rhiza-hooks sync from the template; rhiza-claude and rhiza-task run its gates through the pinned CLI without being synced by it. The system eats its own cooking.
 
 **External projects:**
 
@@ -652,7 +686,7 @@ templates:
 ```bash
 /rhiza:init      # config + skeleton, PR #1
 /rhiza:update    # after #1 merges: the template content, PR #2
-make install
+make install     # → uvx rhiza-task install
 ```
 
 Done. Rhiza-managed from day one.
@@ -672,11 +706,12 @@ PR #1 is nearly empty on an existing repo. The sync in PR #2 is where the diff a
 ## The migration path
 
 1. **Audit your current setup** — list your CI files, linting configs, and Makefiles
-2. **Start conservative** — begin with `core` only; add `github` once you've reviewed the workflow files
-3. **Exclude what you own** — add locally-maintained files to `exclude:` before syncing
-4. **Review the first sync PR carefully** — that is PR #2, from `/rhiza:update`; treat it as a code review, not a forced update
-5. **Add Renovate** — add the `renovate` bundle and install the GitHub App
-6. **Expand bundles gradually** — add `tests`, `docker`, etc. as your team gains confidence
+2. **Start conservative** — begin with `core` plus a language layer; add `github` once you've reviewed the workflow files
+3. **Move your own targets to `local.mk`** — the root `Makefile` is template-owned and gets overwritten
+4. **Exclude what you own** — add locally-maintained files to `exclude:` before syncing
+5. **Review the first sync PR carefully** — that is PR #2, from `/rhiza:update`; treat it as a code review, not a forced update
+6. **Add Renovate** — add the `renovate` bundle and install the GitHub App
+7. **Expand bundles gradually** — add `book`, `docker`, `benchmarks` as your team gains confidence
 
 > Don't try to adopt everything at once. The goal of the first PR is to get Rhiza in place with minimal disruption.
 
@@ -706,7 +741,7 @@ PR #1 is nearly empty on an existing repo. The sync in PR #2 is where the diff a
 
 4. **Setup is four commands.** Ongoing maintenance is reviewing a weekly PR.
 
-5. **You stay in control.** `exclude:`, extension files, and org forks give full flexibility.
+5. **You stay in control.** `exclude:`, `local.mk`, `[tool.rhiza-task]` and org forks give full flexibility.
 
 6. **Renovate closes the loop.** Without it, the `ref:` pin is frozen and drift returns.
 

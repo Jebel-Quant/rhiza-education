@@ -15,10 +15,10 @@ Renovate closes this gap. It opens a PR whenever a new template release is tagge
 Rhiza separates *knowing a new version exists* from *applying what changed in it*. Renovate handles the first part — the notification. You handle the second by running `/rhiza:update`.
 
 ```
-template repo publishes v1.3.3
+template repo publishes v1.7.1
          │
          ▼
-Renovate opens PR: ref: v1.3.2 → v1.3.3   (notification only)
+Renovate opens PR: ref: v1.7.0 → v1.7.1   (notification only)
          │
          ▼ (you learn a new version exists)
 you run /rhiza:update in Claude Code
@@ -34,7 +34,7 @@ The Renovate PR contains a single line change in `template.yml`. Merging it on i
 When a new template release is published, Renovate opens a PR with a title like:
 
 ```
-Update dependency Jebel-Quant/rhiza to v1.3.3
+Update dependency Jebel-Quant/rhiza to v1.7.1
 ```
 
 The diff is minimal:
@@ -42,8 +42,8 @@ The diff is minimal:
 ```diff
 # .rhiza/template.yml
  repository: Jebel-Quant/rhiza
--ref: v1.3.2
-+ref: v1.3.3
+-ref: v1.7.0
++ref: v1.7.1
 ```
 
 The PR body includes a changelog summary (when the template repo provides one), a confidence indicator based on how many other repos have already merged this update, and links to the release notes.
@@ -55,7 +55,7 @@ When you see this PR:
 
 ## How Rhiza ships Renovate configuration
 
-The `renovate` bundle in Rhiza provides a `renovate.json` file at the root of your project. This file is the Renovate configuration. It does two things:
+The `renovate` bundle in Rhiza provides a `renovate.json` file at the root of your project. This file is the Renovate configuration. It does three things:
 
 **1. Extends a base configuration**
 
@@ -95,6 +95,19 @@ This tells Renovate:
 - Open a PR when one is found
 
 You do not need to write or maintain this regex yourself — it ships with the `renovate` bundle and is kept up to date by Rhiza.
+
+**3. Teaches Renovate to read the `pytest-rhiza` pin**
+
+Since template v1.3.4 the repository conformance checks are a package rather than a synced folder, pinned in `[tool.rhiza-task]`:
+
+```toml
+[tool.rhiza-task]
+pytest-rhiza = "pytest-rhiza==0.5.0"
+```
+
+No built-in manager reads that table — `pep621` sees only the dependency arrays — so the bundle ships a second custom manager, with a `pypi` datasource, that matches it. Without one, that pin would only ever age.
+
+> **A custom manager whose file pattern matches nothing reports no error.** It just quietly stops finding updates. This one used to target `RHIZA_CHECKS_VERSION` in `.rhiza/make.d/quality.mk`, and went silently dead when the make layer retired in v1.4.0 — nothing failed; the pin simply stopped moving until someone noticed. It is worth checking, after any update that relocates files, that your custom managers still match something.
 
 ## Enabling Renovate
 

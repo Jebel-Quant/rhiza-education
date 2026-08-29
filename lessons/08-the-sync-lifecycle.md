@@ -21,7 +21,7 @@ Note what is *not* on that list: `/rhiza:update` runs no quality gates, produces
 
 **2. Renovate opens a `ref:` bump PR**
 
-Renovate watches the `ref: vX.Y.Z` line in your `.rhiza/template.yml`. When the template repository publishes a new release, Renovate opens a PR that bumps your `ref` to the new version — for example, changing `ref: v1.3.2` to `ref: v1.3.3`.
+Renovate watches the `ref: vX.Y.Z` line in your `.rhiza/template.yml`. When the template repository publishes a new release, Renovate opens a PR that bumps your `ref` to the new version — for example, changing `ref: v1.7.0` to `ref: v1.7.1`.
 
 This PR is a **notification only**. Merging it changes one line in `template.yml`, but it does *not* apply the new template files — there is no sync workflow to do that. Treat the Renovate PR as a prompt: a new template version is available. When you are ready to adopt it, run `/rhiza:update`, which bumps the ref and materialises the changed files together in a single reviewable PR.
 
@@ -59,7 +59,9 @@ Occasionally an update will run into a conflict — usually because you edited a
 2. **Keep your local version and exclude the file**: Add the file to `exclude:` in `template.yml` so future updates skip it, then keep your version.
 3. **Merge both sets of changes manually**: Edit the file to incorporate what you need from both the template and your local version, then push to the PR branch.
 
-The cleanest long-term approach is to avoid editing template-managed files directly. If you need custom behaviour, use the extension points described in Lesson 10.
+The cleanest long-term approach is to avoid editing template-managed files directly. Since template v1.5.0 the `check-managed-files` hook makes that hard to do by accident: it refuses a commit that touches a path the lock records, and tells you what to do instead. `/rhiza:update`'s own sync commit bypasses it, since that commit is precisely the one allowed to write those files. If you need custom behaviour, use the extension points described in Lesson 10.
+
+> **Crossing v1.4.0.** An update that spans template v1.3.x → v1.4.0 or later is the one that is not routine. The synced make layer (`Makefile`, `.rhiza/rhiza.mk`, `.rhiza/make.d/`) and the synced check suite (`.rhiza/tests/`) are deleted, and their settings have to be carried across by hand into `[tool.rhiza-task]` — `SOURCE_FOLDER` becomes `source-folder`, `TYPECHECKER` becomes `typechecker`, and so on. Anything a repo had appended to its `Makefile` moves to `local.mk`. Read the diff on that one rather than skimming it; every later update goes back to being routine.
 
 ## Running an update
 

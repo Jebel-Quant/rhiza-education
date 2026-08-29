@@ -62,7 +62,9 @@ Global installs cause dependency conflicts. If two tools you install globally ne
 
 ## How the Rhiza ecosystem uses uv
 
-All Rhiza-managed projects adopt uv as the standard package manager. The template provides a `.python-version` file, which tells uv which Python version the project targets, and the Makefile it ships uses `uv sync` to set up the development environment. The `rhiza-claude` plugin also expects `uv` on your PATH.
+All Rhiza-managed projects adopt uv as the standard package manager. The template provides a `.python-version` file, which tells uv which Python version the project targets, and the `install` task uses `uv sync` to set up the development environment. The `rhiza-claude` plugin also expects `uv` on your PATH.
+
+Since template v1.4.0 `uvx` carries more weight than that. The developer tasks are no longer files synced into your repo — they are a pinned Python package, [`rhiza-task`](https://github.com/Jebel-Quant/rhiza-task), that `uvx` provisions per invocation at the version your `Makefile` names in `RHIZA_TASK`. This is exactly the property from the section above — running a tool without installing it, at a version you control — used as a *distribution mechanism* rather than a convenience. Lesson 11 covers why the template moved its executable content out this way; the `Makefile` even bootstraps `uv` itself if the runner has none, so a fresh CI machine needs nothing preinstalled.
 
 In CI, Rhiza's template workflows install uv with the official `astral-sh/setup-uv` action and then call `uv sync` or `uvx` — no manual pip steps required.
 

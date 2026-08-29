@@ -145,7 +145,7 @@ A job can upload files as *artifacts* that other jobs (or humans) can download:
     path: site/
 ```
 
-A subsequent deploy job then picks up that artifact and pushes it to GitHub Pages. This is the pattern used by Rhiza's `book` bundle (API docs), `marimo` bundle (notebooks), and by this very site.
+A subsequent deploy job then picks up that artifact and pushes it to GitHub Pages. This is the pattern used by Rhiza's `book` bundle (docs and notebooks), its `github-book` and `github-marimo` overlays, and by this very site.
 
 ### Permissions
 
@@ -180,12 +180,12 @@ Rhiza's template bundles wire all of this up so you do not have to:
 
 | Bundle | What it provides |
 |--------|-----------------|
-| `core` | The Makefile and the modular `.rhiza/make.d/` system it includes — language-neutral, so CI can call `make install` without knowing the language |
-| `python-core` | The Python layer that fills those targets in: virtualenv, ruff, bandit, deptry (`rust-core` and `go-core` are the equivalents for Rust and Go) |
+| `core` | The `Makefile` front door, which pins the `rhiza-task` CLI that holds the tasks — language-neutral, so CI can ask for `install` without knowing the language |
+| `python-core` | The Python layer that fills those tasks in: virtualenv, ruff, bandit, deptry, pytest and coverage config (`rust-core` and `go-core` are the equivalents for Rust and Go) |
 | `github` | Workflow files: CI, release, CodeQL, scorecard, and quality review |
-| `tests` | pytest config, coverage reporting, coverage badge publishing |
-| `book` | API documentation build and Pages deployment |
-| `marimo` | Notebook export and Pages deployment |
+| `github-tests` | The CI, CodeQL and benchmark workflow stubs, and coverage badge publishing |
+| `book` | Documentation site, notebooks, and Pages deployment |
+| `github-book` | The workflow that publishes it |
 | `devcontainer` | Ready-to-use development environment for VS Code / Codespaces |
 
 When you bootstrap a project with `/rhiza:init` and keep it current with `/rhiza:update`, you get a fully wired CI/CD pipeline committed to your repo. The rest of the curriculum explains how to configure, extend, and keep it up to date.
