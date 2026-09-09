@@ -32,12 +32,41 @@ Key fields:
 | Field | Purpose |
 |-------|---------|
 | `name` | The package name — must be unique on PyPI if you publish |
-| `version` | Current version — can also be read dynamically from a `__version__` variable |
+| `version` | Current version — a literal string, or omitted in favour of `dynamic = ["version"]` (see below) |
 | `requires-python` | Minimum Python version; sets expectations for CI |
 | `dependencies` | Runtime dependencies; what gets installed by `uv sync` |
 | `[project.optional-dependencies]` | Groups like `dev`, `test`, `docs` installed with `uv sync --extra dev` |
 
 > `pyproject.toml` also carries configuration for tools like `ruff`, `pytest`, and `mypy`. Rhiza's `python-core` bundle writes sensible defaults for these into the file (or alongside it) when you first sync. It is also where you put `[tool.rhiza-task]`, the table that tells the task runner which folder to measure — that one stays yours (see [Lesson 10](./10-customizing-safely.md)).
+
+## Two legal shapes for the version
+
+`version = "0.1.0"` above is one of two shapes a Rhiza-managed Python project may use. The other is to **not write the number down at all** and let the build backend derive it from the git tag:
+
+```toml
+[project]
+name = "my-project"
+dynamic = ["version"]
+requires-python = ">=3.11"
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+```
+
+This is recent, and it is recent in a specific way: until `pytest-rhiza` v0.6.0 the `test_pyproject` check **rejected** it. `version` sat among the required `[project]` fields and was matched against a semver pattern, so the conformance check Rhiza ships failed any project that adopted the shape. Six of that check's assertions are about a *written* version and now skip on a derived one, which costs nothing — every one of them catches a disagreement between a number in a file and a number in git, and a version derived from git cannot disagree with git. Declaring neither, or both, is still an error.
+
+**What it buys is the version existing in exactly one place.** `rhiza-task` itself used to carry it in three — `[project].version`, `__version__`, and `uv.lock` — and a release had to update all three before tagging. v1.0.0 shipped with `uv.lock` left behind, and every gate failed, because `uv lock --check` is the first thing `install` runs. With a derived version there is no copy left to fall behind, and `uv` stops recording a version for the root package at all.
+
+Two things do **not** follow from it, and both are worth knowing before you reach for it:
+
+- **It does not make a release one step.** Anything the repo pins to *its own* version — a `rhiza-task@X.Y.Z` in a README, a `@vX.Y.Z` in a self-referencing CI workflow — is a documentation pin that has to be correct in the commit the tag names, so it cannot be derived from a tag that does not exist yet. Those keep their `[[tool.bumpversion.files]]` entries.
+- **The failure mode gets quieter, not louder.** `hatch-vcs` and `setuptools-scm` fall back rather than fail. A clone with no tags derives `0.1.dev1+g<sha>`, so a distribution built from a shallow checkout gets published at a version nobody asked for — green build, no error anywhere. **Any job that builds a distribution needs `fetch-depth: 0`**, and since template v1.8.0 the release workflow checks that rather than only documenting it: a `Verify built distribution matches the tag` step parses the version out of what `uv build` actually wrote into `dist/`.
+
+Rhiza itself derives its version this way as of v1.8.0. Rust and Go have always worked like this — their synced `.bumpversion.toml` deliberately omits `current_version`, so the newest tag answers instead — which makes the Python shape the odd one out finally catching up rather than a new idea. [Lesson 11](./11-the-rhiza-ecosystem.md) covers what it means for `/rhiza:release`, which had to learn to tell its phases apart without a written number to compare against.
 
 ## The src layout
 

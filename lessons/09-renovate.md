@@ -15,10 +15,10 @@ Renovate closes this gap. It opens a PR whenever a new template release is tagge
 Rhiza separates *knowing a new version exists* from *applying what changed in it*. Renovate handles the first part — the notification. You handle the second by running `/rhiza:update`.
 
 ```
-template repo publishes v1.7.1
+template repo publishes v1.8.0
          │
          ▼
-Renovate opens PR: ref: v1.7.0 → v1.7.1   (notification only)
+Renovate opens PR: ref: v1.7.3 → v1.8.0   (notification only)
          │
          ▼ (you learn a new version exists)
 you run /rhiza:update in Claude Code
@@ -34,7 +34,7 @@ The Renovate PR contains a single line change in `template.yml`. Merging it on i
 When a new template release is published, Renovate opens a PR with a title like:
 
 ```
-Update dependency Jebel-Quant/rhiza to v1.7.1
+Update dependency Jebel-Quant/rhiza to v1.8.0
 ```
 
 The diff is minimal:
@@ -42,8 +42,8 @@ The diff is minimal:
 ```diff
 # .rhiza/template.yml
  repository: Jebel-Quant/rhiza
--ref: v1.7.0
-+ref: v1.7.1
+-ref: v1.7.3
++ref: v1.8.0
 ```
 
 The PR body includes a changelog summary (when the template repo provides one), a confidence indicator based on how many other repos have already merged this update, and links to the release notes.

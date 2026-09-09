@@ -26,7 +26,7 @@ Rhiza ships as a Claude Code plugin from the `rhiza-claude` marketplace. Inside 
 To pin a specific version, append a git tag when you add the marketplace:
 
 ```
-/plugin marketplace add Jebel-Quant/rhiza-claude#v0.13.0
+/plugin marketplace add Jebel-Quant/rhiza-claude#v0.14.0
 ```
 
 The plugin's bundled scripts are stdlib-only Python — there is no separate `rhiza` CLI to install. Everything you need beyond `uv`, `git`, and `make` comes from the plugin, and the tasks your project runs come from `rhiza-task`, which `uvx` fetches on demand at the version the template pins.

@@ -16,7 +16,7 @@ The Claude Code plugin marketplace that ships the `rhiza` plugin — the primary
 
 [github.com/Jebel-Quant/rhiza-hooks](https://github.com/Jebel-Quant/rhiza-hooks)
 
-The pre-commit hook repository, and the fullest example here: `profiles: [github-project]` plus `legal`, pinned at `v1.7.1`, with four annotated exclusions. Because it is a Python package with its own CI and release pipeline, it uses the same Rhiza template as any other project, and the `check-rhiza-config` hook it provides validates its own `template.yml` — so every commit to rhiza-hooks runs Rhiza validation on itself.
+The pre-commit hook repository, and the fullest example here: `profiles: [github-project]` plus `legal`, pinned at `v1.8.0`, with four annotated exclusions. Because it is a Python package with its own CI and release pipeline, it uses the same Rhiza template as any other project, and the `check-rhiza-config` hook it provides validates its own `template.yml` — so every commit to rhiza-hooks runs Rhiza validation on itself.
 
 Its `exclude:` block is worth reading in full, because every entry carries a comment explaining the trade-off it accepts. One of them is a fossil of the migration this curriculum describes: `.rhiza/.env` is excluded with a note that it only ever restated two `?=` defaults, which is exactly the class of setting that moved into `[tool.rhiza-task]`.
 
@@ -42,7 +42,7 @@ jquantstats is a good example of adopting Rhiza for a scientific Python library 
 ```yaml
 # .rhiza/template.yml (Jebel-Quant/jquantstats)
 repository: "jebel-quant/rhiza"
-ref: "v1.7.1"
+ref: "v1.8.0"
 
 profiles:
   - github-project
@@ -74,7 +74,7 @@ The following projects live outside the Jebel-Quant organisation and have indepe
 ```yaml
 # .rhiza/template.yml (cvxgrp/simulator)
 repository: "jebel-quant/rhiza"
-ref: "v1.7.1"
+ref: "v1.8.0"
 
 profiles:
   - github-project
@@ -113,7 +113,7 @@ The `exclude:` block is the model to copy, and not for its contents: every entry
 ```yaml
 # .rhiza/template.yml (tschm/jsharpe)
 repository: "jebel-quant/rhiza"
-ref: "v1.6.0"
+ref: "v1.8.0"
 
 profiles:
   - github-project
@@ -134,7 +134,7 @@ exclude:
 
 jsharpe has converged on nearly the same shape as `cvxgrp/simulator`, which is itself the point: two unrelated projects, independently maintained, arriving at the same profile-plus-extras pattern and the same two exclusions is what the mechanism is for. It once carried an `exclude: ruff.toml` entry for custom linting rules that diverged from Rhiza's defaults; that divergence has since been resolved upstream and the exclusion dropped. Dropping an `exclude:` once you no longer need it is as much a part of the pattern in [Lesson 10](./10-customizing-safely.md) as adding one.
 
-Note also that it sits at `v1.6.0` while `cvxgrp/simulator` is at `v1.7.1`. Both are fine. Being a release behind is the normal resting state of a project that adopts updates deliberately rather than automatically — the `ref` is a decision, not a race.
+Note also what the `ref` lines on this page now have in common: jsharpe, `cvxgrp/simulator`, jquantstats and rhiza-hooks are all at `v1.8.0`. That is worth reading for what it is — a snapshot, not a rule. When the previous edition of this appendix was written jsharpe sat at `v1.6.0` and the simulator a release ahead of it, and both were fine. Being a release behind is the normal resting state of a project that adopts updates deliberately rather than automatically; converging happens when several maintainers each decide the same update is worth taking. The `ref` is a decision, not a race.
 
 ---
 
@@ -182,19 +182,33 @@ This config used to carry a second exclusion, `book/marimo/notebooks/rhiza.py`, 
 ```yaml
 # .rhiza/template.yml (janushendersonassetallocation/loman)
 template-repository: "jebel-quant/rhiza"
-template-branch: "v0.10.3"
+template-branch: "v1.7.3"
 
+# rhiza 1.x replaced the flat bundle list with two layers: profiles, which name a
+# stable intent, and bundles, which own files. `github-project` expands to exactly
+# what the old list meant --- core, python-core, github, book, github-book,
+# github-marimo, github-tests --- so the four entries that used to be spelled out
+# here are covered by the profile rather than dropped.
+#
+# The rename that forced this: 1.x split each feature into a platform-neutral
+# bundle and a `github-`/`gitlab-` overlay carrying its workflow files, so the old
+# `marimo` and `tests` names no longer exist. Syncing v1.7.2 against the 0.x list
+# failed with "Bundle 'marimo' does not exist".
+profiles:
+  - github-project
+
+# Not in the profile, but this repo has a .devcontainer and the workflow that
+# builds it, so both are kept as explicit extras.
 templates:
   - devcontainer
-  - github
-  - book
-  - marimo
-  - tests
+  - github-devcontainer
 ```
 
-Loman is the useful counter-example on this page, and it has become a sharper one with every release. It is the one project here still on the older `template-repository` / `template-branch` key names, still listing bundles by hand rather than using a profile, and pinned at `v0.10.3` — many releases behind the others. Both key formats are still accepted, so nothing is broken today.
+Loman was the long-deferred counter-example on this page, and **it has since caught up** — which makes it a more useful example than it was as a warning. Earlier editions of this appendix showed it pinned at `v0.10.3`, many releases behind, listing `marimo` and `tests` by hand: names that no longer exist in the template, so a sync against them fails outright with `Bundle 'marimo' does not exist`. That is exactly what happened, and the comments now in the file record it — a config that documents the migration it went through.
 
-But look at the bundle list against the 26 bundles that exist in v1.7.1: `book` still exists, and **`marimo` and `tests` do not** — they are not deprecated names, they are names the current template would reject. The config also predates the `core`/language-layer split, so it names no language layer. A `/rhiza:update` to a current `ref` is where all of that gets sorted out, and it would not be a quiet update: it crosses v1.4.0, which deletes the synced make layer this repo is still running on. Reading it next to the configs above is a good way to see how much the format has absorbed — and a fair picture of what deferring updates for a year actually costs.
+What the catch-up cost is legible in the config itself, and it is less than the gap suggests. The hand-written bundle list collapsed to `profiles: [github-project]`, which expands to what the old four entries meant; `devcontainer` stayed an explicit extra, joined by the `github-devcontainer` overlay that the platform split moved its workflow into. The update also crossed v1.4.0, so the synced make layer this repo had been running on is gone. Read against the 26 bundles that exist in v1.8.0, nothing in the file now names a bundle that isn't there any more.
+
+**One thing deliberately did not change: the key names.** Loman is still on `template-repository` / `template-branch` rather than `repository` / `ref`, and it is the only project here that is. Both formats are accepted, so this is not debt left unpaid — it is the compatibility promise [Lesson 7](./07-configuring-your-template.md) describes, visible in a real file. A repo catching up on many template releases does not have to rename its keys in the same PR, and this one didn't.
 
 When you visit any of these projects, the following are worth inspecting
 
@@ -209,9 +223,11 @@ When you visit any of these projects, the following are worth inspecting
 
 ## A note on the configs you will find
 
-Not every project here uses the current config format or best practices — and that is useful. You will find `template-repository` / `template-branch` alongside `repository` / `ref`; projects several releases behind the current template; `templates:` bundle lists rather than the `profiles:` shorthand; bundle names that no longer exist (`tests`, `marimo`, `paper`); configs written before the `core`/language-layer split that name no `language:` at all; and `exclude:` entries that reflect real customisation decisions — including one or two that stopped matching anything years ago. Reading these configs as an outsider — asking "why did they exclude that?" or "why are they still on that ref?" — is one of the best ways to build intuition for the trade-offs described in this curriculum.
+Not every project here uses the current config format, and that is useful. You will find `template-repository` / `template-branch` alongside `repository` / `ref`; `templates:` bundle lists rather than the `profiles:` shorthand; configs that name no `language:` at all because the layer they predate is inferred for them; and `exclude:` entries that reflect real customisation decisions — plus, in the history of these files, one that had stopped matching anything years before someone deleted it. Reading these configs as an outsider — asking "why did they exclude that?" or "why are they still on that ref?" — is one of the best ways to build intuition for the trade-offs described in this curriculum.
 
-The direction of travel is visible across the page: the projects that keep current have converged on a profile plus a short list of well-commented extras, and the ones that have not are the ones still carrying a hand-maintained bundle list. Note too what is *absent* from every current config on this page — nothing here configures the tasks. Since v1.4.0 that lives in `[tool.rhiza-task]` in each project's own `pyproject.toml`, outside Rhiza's reach entirely.
+What you will **not** find here any more is a config naming a bundle the template has dropped. Earlier editions of this page had one — loman's `marimo` and `tests` — and that entry is worth knowing about even though the file no longer shows it: a stale bundle name is not a deprecation warning, it is a sync that refuses to run at all. The section on loman above records what fixing it took.
+
+The direction of travel is visible across the page: every config here has converged on a profile plus a short list of well-commented extras, loman's included, and the hand-maintained bundle list has gone from the last file that had one. Note too what is *absent* from every current config on this page — nothing here configures the tasks. Since v1.4.0 that lives in `[tool.rhiza-task]` in each project's own `pyproject.toml`, outside Rhiza's reach entirely.
 
 ---
 
