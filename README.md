@@ -17,7 +17,7 @@ Developers who are comfortable with Python, git, and basic CI/CD, and want to ad
 
 The curriculum teaches Rhiza through Python, which is where the template is most complete. Since template `v1.3.0` Rhiza is multi-language: `core` is language-neutral and a **language layer** — `python-core`, `rust-core`, or `go-core` — supplies the build and test targets on top of it. Everything about config, bundles, syncing, and the update lifecycle applies unchanged whichever layer you pick; only the toolchain behind the `install` and `test` tasks differs. Hosted CI has not shipped for Rust and Go yet, so those get local-first profiles.
 
-The curriculum is current for **rhiza `v1.7.1`** and **rhiza-claude `v0.13.0`**. The largest change since the previous edition is template v1.4.0, which retired the synced make layer in favour of a pinned CLI, [`rhiza-task`](https://github.com/Jebel-Quant/rhiza-task); Lessons 5, 10 and 11 cover what that changes.
+The curriculum is current for **rhiza `v1.8.0`** and **rhiza-claude `v0.14.0`**. Two changes land in this edition: a Python project may now derive its version from the git tag instead of writing it down (Lesson 3), and `/rhiza:release` opens its PR, waits for the merge and tags in a **single run** rather than asking you to invoke it twice (Lesson 11). `rhiza-task` also grew `update` and `test-lowest`, which put the template sync and the dependency-floor gate inside the task graph (Lessons 8 and 11). If you are coming from material written against v1.3.x, the change to read first is still v1.4.0, which retired the synced make layer in favour of the pinned [`rhiza-task`](https://github.com/Jebel-Quant/rhiza-task) CLI; Lessons 5, 10 and 11 cover it.
 
 ## Curriculum
 

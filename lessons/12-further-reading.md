@@ -65,7 +65,7 @@ These live in [`rhiza/docs/`](https://github.com/Jebel-Quant/rhiza/tree/main/doc
 
 ## Command reference
 
-Each command has a dedicated page on the [rhiza-claude docs site](https://jebel-quant.github.io/rhiza-claude/). The ten below are the complete set as of `v0.13.0`. Note the URL path: since `v0.7.0` the commands ship as **skills**, and the docs moved from `/commands/` to `/skills/` with them — old bookmarks will 404.
+Each command has a dedicated page on the [rhiza-claude docs site](https://jebel-quant.github.io/rhiza-claude/). The ten below are the complete set as of `v0.14.0`. Note the URL path: since `v0.7.0` the commands ship as **skills**, and the docs moved from `/commands/` to `/skills/` with them — old bookmarks will 404.
 
 | Document | Command | What it covers |
 |----------|---------|---------------|
@@ -73,7 +73,7 @@ Each command has a dedicated page on the [rhiza-claude docs site](https://jebel-
 | [update](https://jebel-quant.github.io/rhiza-claude/skills/update/) | `/rhiza:update` | Bump the ref, sync the template, resolve conflicts upstream-side, and open a PR of template-owned files |
 | [quality](https://jebel-quant.github.io/rhiza-claude/skills/quality/) | `/rhiza:quality` | Run the code-quality gates and score the repo; optionally file findings as issues. Degrades to a design-led assessment on an unmanaged repo rather than refusing |
 | [docs](https://jebel-quant.github.io/rhiza-claude/skills/docs/) | `/rhiza:docs` | Write or refresh `README.md`, `CLAUDE.md`, and `mkdocs.yml`, preserving hand-written prose |
-| [release](https://jebel-quant.github.io/rhiza-claude/skills/release/) | `/rhiza:release` | Offer the legal next versions as a table, bump every declared location, regenerate `CHANGELOG.md`, and open a release PR; run it again after the merge to tag |
+| [release](https://jebel-quant.github.io/rhiza-claude/skills/release/) | `/rhiza:release` | Offer the legal next versions as a table, bump every declared location, regenerate `CHANGELOG.md`, open a release PR, wait for its merge and tag the merged commit — one run since `v0.14.0` |
 | [status](https://jebel-quant.github.io/rhiza-claude/skills/status/) | `/rhiza:status` | Validate the config and report the lock; `--files` for a tree, `--check` for whether you are behind |
 | [remote](https://jebel-quant.github.io/rhiza-claude/skills/remote/) | `/rhiza:remote` | Read CI on the origin for the open pull/merge requests, reproduce the red ones locally, and push fixes to their branches |
 | [completions](https://jebel-quant.github.io/rhiza-claude/skills/completions/) | `/rhiza:completions` | Install shell completions for the tasks the repo's pinned `rhiza-task` exposes |

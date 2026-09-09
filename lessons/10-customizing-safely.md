@@ -49,10 +49,24 @@ Settings that used to be make variables are now a table in your `pyproject.toml`
 source-folder = "lib"          # default: "src"
 typechecker = "both"           # ty | mypy | both (default: ty)
 coverage-fail-under = 85       # default: 90
+docs-coverage-fail-under = 90  # default: 100
+complexity-max = 20            # default: 15 (radon's number, not its A-F rank)
+ty-version = ""                # default: "==0.0.78"; empty means "newest"
+deploy-pages = false           # default: true
 mkdocs-extra-packages = ["mkdocstrings[python]"]
 ```
 
+> **Both spellings work.** `rhiza-task` normalises `-` to `_` when it reads the table, so `source-folder` and `source_folder` are the same setting. The upstream README documents the snake_case form; this curriculum uses kebab-case, which is the more common TOML convention. Pick one and be consistent — nothing enforces which.
+
 `source-folder` is the load-bearing one. The scoped gates — `typecheck`, `security`, `deps`, `docs-coverage`, `semgrep` — all read it, and if it points at nothing they exit **green having measured nothing**. A standard `src/` layout needs no setting at all; a project whose code lives elsewhere must say so, or its gates quietly stop being gates. Rhiza's own repo hit exactly this and fixed it by naming the folder.
+
+Three of those settings are newer than the table and exist for reasons worth knowing, because each replaces a *worse* workaround:
+
+- **`docs-coverage-fail-under`** was a literal `100` until `rhiza-task` v1.5.0. A codebase arriving at 89% had one gate it could not pass and no way to say so, and the two remaining answers were both worse than a number: write docstrings for every nested helper in one sitting, or shadow the whole recipe in `local.mk` — which CI never invokes, so the gate then passes locally and fails in CI. Both were observed on the same upgrade. Treat a lowered value as **a ratchet to raise again**, not a destination; the default is unchanged, so a repo that says nothing is gated exactly as before.
+- **`ty-version`** pins what `typecheck` provisions the checker *as*. `ty` is still 0.0.x and its diagnostics change between patch releases, so an unpinned `--with ty` makes the verdict a fact about the day the job ran: one consumer saw a single warning locally, where the project's lock happened to supply ty 0.0.18 for `--with ty` to reuse, and twenty-four errors on a runner with no ty to reuse — same commit, different checker. `mypy-version` exists too and is deliberately left empty, because mypy is post-1.0 and moves slowly enough that a pin would mostly buy staleness. Set either empty for "whatever is newest".
+- **`deploy-pages`** turns off the reusable book workflow's publish to GitHub Pages. No task reads it — a *workflow* does, and that is the point. `rhiza_book.yml` takes a `deploy-pages` input, so before this setting the only place to answer was the caller: the `github-book` bundle's workflow stub, a template-owned file. Editing it worked, got reviewed, got merged, and got overwritten by the next sync — and `check-managed-files` now refuses the commit outright. The toggle existed with nowhere to live short of excluding the file from management.
+
+There is also **`template-ref`**, which is not a gate setting at all: it is the ref that the `update` task moves `.rhiza/template.yml` to (see [Lesson 11](./11-the-rhiza-ecosystem.md)). Empty means "re-sync at whatever the file already names".
 
 For per-developer overrides that should not be committed, `.rhiza/.env` still works — and since the template stopped shipping the `.gitignore` negation that kept it tracked, it is now genuinely developer-local: a CI checkout never contains it.
 
@@ -112,7 +126,7 @@ When `Jebel-Quant/rhiza` releases a new version, you decide when and what to pul
 ```yaml
 # .rhiza/template.yml in a project from your org
 repository: your-org/rhiza
-ref: v1.7.1
+ref: v1.8.0
 ```
 
 This pattern scales well: one place to manage standards, automated propagation to all consuming repos, and full control over what gets adopted and when.
@@ -131,6 +145,7 @@ This pattern scales well: one place to manage standards, automated propagation t
 |------|-----------|------------|
 | Your own `make` targets, or extending a task you invoke | `local.mk` at the repo root | Yes |
 | Change how a template task behaves (folders, typechecker, thresholds) | `[tool.rhiza-task]` in `pyproject.toml` | Yes |
+| Change what a *reusable workflow* does (e.g. stop publishing to Pages) | `deploy-pages` in `[tool.rhiza-task]` — **not** the workflow stub, which is managed | Yes |
 | A native binary every gate needs | Executable `local-setup.sh` at the repo root | Yes |
 | A per-developer override of one setting | `.rhiza/.env` | No — gitignored |
 | Permanently own a specific file | Add to `exclude:` in `template.yml` | Yes |

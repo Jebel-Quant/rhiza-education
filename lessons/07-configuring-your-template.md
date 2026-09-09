@@ -9,7 +9,7 @@ The recommended approach is to use a **profile** — a curated preset that expan
 ```yaml
 # .rhiza/template.yml (profile-based — recommended)
 repository: Jebel-Quant/rhiza
-ref: v1.7.1
+ref: v1.8.0
 language: python
 
 profiles:
@@ -25,7 +25,7 @@ For finer control, you can list bundles explicitly:
 ```yaml
 # .rhiza/template.yml (explicit bundles)
 repository: Jebel-Quant/rhiza
-ref: v1.7.1
+ref: v1.8.0
 language: python
 
 templates:
@@ -56,12 +56,12 @@ This is the GitHub repository that Rhiza treats as your template source. It can 
 ## `ref`
 
 ```yaml
-ref: v1.7.1
+ref: v1.8.0
 ```
 
 This pins your project to a specific version of the template. It accepts:
 
-- **A tag** (e.g. `v1.7.1`) — recommended. Gives you a stable, known version. Renovate can detect new releases and open version-bump PRs automatically.
+- **A tag** (e.g. `v1.8.0`) — recommended. Gives you a stable, known version. Renovate can detect new releases and open version-bump PRs automatically.
 - **A branch** (e.g. `main`) — always fetches the latest commit on that branch. Useful during active development of a template, but means your project can receive breaking changes without a PR review step.
 
 For production projects, always pin to a tag.

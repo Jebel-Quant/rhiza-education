@@ -4,7 +4,7 @@ Once Rhiza is set up, you largely stop thinking about it — until it is time to
 
 ## How updates reach your project
 
-There is no automated CI job that materialises template files into your repo. Template file changes are applied by a human running `/rhiza:update` in Claude Code. What you receive automatically is a *signal* that a new template version exists — and there are two ways that signal arrives.
+There is no automated CI job that materialises template files into your repo. Template file changes are applied when a human asks for them — normally by running `/rhiza:update` in Claude Code. What you receive automatically is a *signal* that a new template version exists, and there are two ways that signal arrives; a third section below covers driving the sync without Claude Code at all.
 
 **1. You run `/rhiza:update` yourself**
 
@@ -21,9 +21,19 @@ Note what is *not* on that list: `/rhiza:update` runs no quality gates, produces
 
 **2. Renovate opens a `ref:` bump PR**
 
-Renovate watches the `ref: vX.Y.Z` line in your `.rhiza/template.yml`. When the template repository publishes a new release, Renovate opens a PR that bumps your `ref` to the new version — for example, changing `ref: v1.7.0` to `ref: v1.7.1`.
+Renovate watches the `ref: vX.Y.Z` line in your `.rhiza/template.yml`. When the template repository publishes a new release, Renovate opens a PR that bumps your `ref` to the new version — for example, changing `ref: v1.7.3` to `ref: v1.8.0`.
 
 This PR is a **notification only**. Merging it changes one line in `template.yml`, but it does *not* apply the new template files — there is no sync workflow to do that. Treat the Renovate PR as a prompt: a new template version is available. When you are ready to adopt it, run `/rhiza:update`, which bumps the ref and materialises the changed files together in a single reviewable PR.
+
+**3. Neither: `rhiza-task update`**
+
+The sync itself is not the slash command's to own. Since `rhiza-task` v1.5.0 the same four steps are a task, so a `Makefile`, a shell script or a CI job can drive them with no LLM in the loop:
+
+```bash
+TEMPLATE_REF=v1.8.0 uv run rhiza-task update
+```
+
+It bumps the pointer if you gave it a ref, syncs, resolves conflicts by taking the template's side, and stages exactly the delivered paths — then stops, leaving the commit to you and printing the command that commits precisely that set. This is the *same code path* `/rhiza:update` drives; what the command adds on top is working out which ref to move to and writing the PR body. [Lesson 11](./11-the-rhiza-ecosystem.md) covers the task, and the plugin's headless guide covers the underlying scripts.
 
 ## Reading a `/rhiza:update` PR
 

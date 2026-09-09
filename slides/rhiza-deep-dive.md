@@ -229,7 +229,7 @@ The sync is not a bulldozer. It is a proposal.
 
 ```yaml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v1.7.1                      # Which version (pinned tag — recommended)
+ref: v1.8.0                      # Which version (pinned tag — recommended)
 language: python                 # Which language layer (python / rust / go)
 
 profiles:                         # Curated bundle preset (recommended)
@@ -278,7 +278,7 @@ The canonical template is `Jebel-Quant/rhiza`. For most teams the right setup is
 
 `core` defines no `install` and no `all` — a **language layer** (`python-core`, `rust-core`, `go-core`) supplies them. Pick exactly one.
 
-26 bundles in v1.7.1. `tests`, `marimo` and `paper` are **not** among them any more — their config folded into `python-core`, `book` and `github-paper`.
+26 bundles in v1.8.0. `tests`, `marimo` and `paper` are **not** among them any more — their config folded into `python-core`, `book` and `github-paper`.
 
 **Platform overlay bundles** layer CI/CD on top: `github-tests`, `github-book`, `gitlab-tests`, etc.
 
@@ -333,11 +333,11 @@ Without Renovate, the `ref:` pin is frozen. Projects drift behind the template s
 
 <div style="display:flex;flex-direction:column;gap:0.45em;margin:0.9em 0;font-size:0.93em;">
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    template repo publishes <strong>v1.7.1</strong>
+    template repo publishes <strong>v1.8.0</strong>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓</div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    Renovate opens PR: <code>ref: v1.7.0 → v1.7.1</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
+    Renovate opens PR: <code>ref: v1.7.3 → v1.8.0</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you run <code>/rhiza:update</code></span></div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
@@ -352,14 +352,14 @@ Two separate steps: **should we upgrade?** (the ref-bump PR) then **here's what 
 ## The `ref:` pin in depth
 
 ```yaml
-ref: v1.7.1   # pinned tag — recommended for all production repos
+ref: v1.8.0   # pinned tag — recommended for all production repos
 ref: main     # tracks latest commit — useful during template development only
 ```
 
 **Pinning to a tag gives you:**
 - A known, auditable version — you can see exactly what each project is running
 - Safe upgrades — Renovate proposes the bump, you review before it lands
-- Easy rollback — if v1.7.1 breaks something, the cause is unambiguous
+- Easy rollback — if v1.8.0 breaks something, the cause is unambiguous
 
 **Tracking `main`** delivers template changes immediately with no review step. Use only when actively developing the template. Never in repos others depend on.
 
@@ -403,7 +403,7 @@ Running `/rhiza:init` walks you through a few questions:
 ? Host and repo (GitHub or GitLab, owner/name):  Jebel-Quant/rhiza
 ? Language (python / rust / go):                  python
 ? Template repo:                                  Jebel-Quant/rhiza
-? Template ref (tag, branch, or commit):          v1.7.1
+? Template ref (tag, branch, or commit):          v1.8.0
 ```
 
 The template defaults to `Jebel-Quant/rhiza` for **all three languages** — it is multi-language, layering `python-core`, `rust-core` or `go-core` on a neutral `core`. Name any other `owner/repo` — a fork, or your own house template — and it is checked for reachability, and for whether it actually defines the profile, before being pinned.
@@ -588,6 +588,21 @@ Same move for the checks: `.rhiza/tests/` → `pytest-rhiza` (v1.3.4).
 
 ---
 
+## Two tasks that arrived later
+
+```bash
+TEMPLATE_REF=v1.8.0 uv run rhiza-task update   # the template sync, no LLM required
+uv run rhiza-task test-lowest                  # run the suite at your declared floors
+```
+
+**`update`** (v1.5.0) runs the four steps `/rhiza:update` drives — bump, sync, resolve upstream-side, stage — and stops before the commit. Same code path; the slash command adds ref resolution and the PR body.
+
+**`test-lowest`** (v1.6.0) resolves every *direct* dependency to its declared floor. A `typer>=0.15` is a claim, and `--frozen` everywhere means nothing reads it back. It resolves `--isolated`, or the gate would leave your `.venv` and `uv.lock` downgraded behind it.
+
+Why a task and not a CI step? A caller that bypasses the task graph bypasses `install` — and with it `local-setup.sh`. That produced a green `test` and a red `lowest-deps` on identical code: a missing `dot` on the runner, reported as a resolution problem.
+
+---
+
 ## rhiza-hooks — the commit checks
 
 `rhiza-hooks` ships hooks that catch config errors before they reach CI:
@@ -608,17 +623,20 @@ Runs on every `git commit`, through **`prek`** — a faster drop-in for `pre-com
 
 ## Releasing — `/rhiza:release`
 
-`/rhiza:release` prepares a release straight from your conventional-commit history — in **two phases**:
+`/rhiza:release` runs a release straight from your conventional-commit history — since **v0.14.0, in a single invocation**:
 
-| Phase | What it does |
-|-------|-------------|
-| **A** — offer | Reads the conventional commits since the last tag (git-cliff), tables the legal next versions, you pick |
-| **A** — bump | Writes it into every location declared under `[tool.bumpversion]`, regenerates `CHANGELOG.md` |
-| **A** — PR | Pushes a release branch and opens a PR. **No tag** |
-| *you merge* | The one human decision |
-| **B** — tag | Run `/rhiza:release` again: it tags the merged commit and pushes the tag |
+| Step | What it does |
+|------|-------------|
+| offer | Reads the conventional commits since the last tag (git-cliff), tables the legal next versions, you pick |
+| bump | Writes it into every location declared under `[tool.bumpversion]`, regenerates `CHANGELOG.md` |
+| PR | Pushes a release branch and opens a PR. **No tag yet** |
+| merge | Handed to the forge — `gh pr merge --squash --auto` |
+| wait | Polls `origin/<default>` for the bump landing. 9 min per call, at most 3 |
+| tag | Tags the commit that actually landed, **by SHA**, and pushes it |
 
-Why two phases? A squash-merge replaces the branch's commits, so a tag cut before the merge names a SHA that never lands. The pushed tag triggers `rhiza_release.yml`, which builds and publishes.
+Why the wait, rather than tagging straight away? A squash-merge replaces the branch's commits, so a tag cut before the merge names a SHA that never lands. The pushed tag triggers `rhiza_release.yml`, which builds and publishes.
+
+**Running out of wait is a normal outcome, not a failure** — you get the open PR and no tag, and re-running finishes the release. The command reads which half it is in off the repo, so the merge can happen days later in another session.
 
 The old `version-matrix` and `coverage-badge` helpers are no longer user commands — that logic now lives **inside the reusable CI workflows** (`rhiza_ci.yml` derives the test matrix from `requires-python`; the coverage badge is generated during CI).
 
@@ -647,9 +665,9 @@ The old `version-matrix` and `coverage-badge` helpers are no longer user command
 | `simulator` | Stanford CVXGRP | `github-project` + `legal` |
 | `jsharpe` | tschm | `github-project` + `legal` |
 | `chebpy` | chebpy | `github-project` + `devcontainer` + `github-paper` |
-| `loman` | Janus Henderson | hand-listed bundles, several releases behind |
+| `loman` | Janus Henderson | `github-project` + `devcontainer` — caught up, legacy key names |
 
-Three of the four have converged on *profile + a short list of extras*.
+All four have converged on *profile + a short list of extras*. Loman was the outlier for a long time; the sync that fixed it failed first, because its hand-listed `marimo` and `tests` are names the template no longer has.
 
 ---
 

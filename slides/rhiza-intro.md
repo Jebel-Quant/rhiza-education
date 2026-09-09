@@ -196,7 +196,7 @@ The sync is not a bulldozer. It is a proposal.
 
 ```yaml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v1.7.1                      # Which version (pinned tag — recommended)
+ref: v1.8.0                      # Which version (pinned tag — recommended)
 language: python                 # Which language layer (python / rust / go)
 
 profiles:                         # Curated bundle preset (recommended)
@@ -261,11 +261,11 @@ Without Renovate, the `ref:` pin is frozen. Projects drift behind the template s
 
 <div style="display:flex;flex-direction:column;gap:0.45em;margin:0.9em 0;font-size:0.93em;">
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    template repo publishes <strong>v1.7.1</strong>
+    template repo publishes <strong>v1.8.0</strong>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓</div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
-    Renovate opens PR: <code>ref: v1.7.0 → v1.7.1</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
+    Renovate opens PR: <code>ref: v1.7.3 → v1.8.0</code> &nbsp;<span style="color:#888;">(a notification — one line diff)</span>
   </div>
   <div style="padding-left:1.1em;color:#2e86c1;">↓ <span style="color:#888;font-size:0.88em;">you run <code>/rhiza:update</code></span></div>
   <div style="background:#eaf4fc;border-left:4px solid #2e86c1;border-radius:0 7px 7px 0;padding:0.6em 1.1em;">
@@ -410,9 +410,9 @@ The PR description usually explains what changed at a high level.
 | `simulator` | Stanford CVXGRP | `github-project` + `legal` |
 | `jsharpe` | tschm | `github-project` + `legal` |
 | `chebpy` | chebpy | `github-project` + `devcontainer` + `github-paper` |
-| `loman` | Janus Henderson | hand-listed bundles, several releases behind |
+| `loman` | Janus Henderson | `github-project` + `devcontainer` — caught up, legacy key names |
 
-Three of the four have converged on *profile + a short list of extras*.
+All four have converged on *profile + a short list of extras*. Loman was the outlier for a long time; the sync that fixed it failed first, because its hand-listed `marimo` and `tests` are names the template no longer has.
 
 ---
 

@@ -25,7 +25,7 @@ Every downstream project has exactly one Rhiza config file. Here is what it look
 ```yaml
 # .rhiza/template.yml
 repository: Jebel-Quant/rhiza   # Which template repo to sync from
-ref: v1.7.1                      # Which version of the template to use
+ref: v1.8.0                      # Which version of the template to use
 language: python                 # Which language layer this repo uses
 
 profiles:                         # Curated bundle preset (recommended)
@@ -72,7 +72,7 @@ Listing every file path in `include` by hand gets tedious. Rhiza provides **bund
 | `legal` | Licence headers and IP notice files | — |
 | `renovate` | Automated dependency update config | — |
 
-> **Bundles you may read about elsewhere are gone.** `tests`, `marimo` and `paper` no longer exist as standalone bundles. Their *configuration* moved into the bundle that already owned it — pytest and coverage settings are `python-core`'s, notebooks and the docs site are `book`'s — and their *tasks* were never files to begin with once the make layer retired. LaTeX papers are now the `github-paper` overlay alone. There are **26 bundles** in v1.7.1, down from the longer list earlier material shows.
+> **Bundles you may read about elsewhere are gone.** `tests`, `marimo` and `paper` no longer exist as standalone bundles. Their *configuration* moved into the bundle that already owned it — pytest and coverage settings are `python-core`'s, notebooks and the docs site are `book`'s — and their *tasks* were never files to begin with once the make layer retired. LaTeX papers are now the `github-paper` overlay alone. There are **26 bundles** in v1.8.0, down from the longer list earlier material shows.
 
 **Platform overlay bundles** — layer CI/CD workflows on top of a feature bundle. Each overlay is named `<platform>-<feature>`:
 
@@ -123,7 +123,7 @@ This loop is human-initiated. You run `/rhiza:update` in Claude Code, which bump
 
 ## Version pinning and automated updates
 
-The `ref:` field in `template.yml` pins your project to a specific version of the template. When the template repo releases a new version, Renovate — a dependency automation tool — detects the new tag and opens a PR in your project that bumps `ref: v1.7.0` to `ref: v1.7.1`. That PR is a *notification* that a newer template exists; merging it no longer triggers a sync on its own. To actually apply the new version, run `/rhiza:update`, which bumps the `ref` and syncs the files in a single reviewable PR.
+The `ref:` field in `template.yml` pins your project to a specific version of the template. When the template repo releases a new version, Renovate — a dependency automation tool — detects the new tag and opens a PR in your project that bumps `ref: v1.7.3` to `ref: v1.8.0`. That PR is a *notification* that a newer template exists; merging it no longer triggers a sync on its own. To actually apply the new version, run `/rhiza:update`, which bumps the `ref` and syncs the files in a single reviewable PR.
 
 This gives you **opt-in updates**: the template can evolve quickly without forcing changes on you, but you can easily stay current when you choose to.
 

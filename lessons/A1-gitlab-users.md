@@ -21,7 +21,7 @@ When configuring your `template.yml`, replace the `github` bundle with `gitlab`:
 ```yaml
 # .rhiza/template.yml
 repository: Jebel-Quant/rhiza
-ref: v1.7.1
+ref: v1.8.0
 language: python
 
 templates:
@@ -36,7 +36,7 @@ Or, more simply, use the `gitlab-project` profile, which expands to exactly the 
 
 ```yaml
 repository: Jebel-Quant/rhiza
-ref: v1.7.1
+ref: v1.8.0
 language: python
 
 profiles:
